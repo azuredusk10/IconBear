@@ -5,6 +5,7 @@ import Adw from 'gi://Adw?version=1';
 import Gio from 'gi://Gio';
 
 import './MainPanelView.js';
+import './SidebarView.js';
 import { Window } from './Window.js';
 
 export const Application = GObject.registerClass({
@@ -14,6 +15,7 @@ export const Application = GObject.registerClass({
   vfunc_startup() {
 		super.vfunc_startup();
 		this.#loadSettings();
+		this.#loadStylesheet();
 	}
 
 	vfunc_activate() {
@@ -24,6 +26,19 @@ export const Application = GObject.registerClass({
 	#loadSettings() {
     globalThis.settings = new Gio.Settings({ schemaId: this.applicationId })
   }
+
+  #loadStylesheet() {
+		// Load the stylesheet in a CssProvider
+		const provider = new Gtk.CssProvider();
+		provider.load_from_resource('/com/github/azuredusk10/IconManager/css/style.css');
+
+		// Add the provider to the StyleContext of the default display
+		Gtk.StyleContext.add_provider_for_display(
+			Gdk.Display.get_default(),
+			provider,
+			Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+		);
+	}
 
 });
 

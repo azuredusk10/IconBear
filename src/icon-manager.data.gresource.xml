@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/com/github/azuredusk10/IconManager">
+    <file>css/style.css</file>
     <file preprocess="xml-stripblanks">ui/MainPanelView.ui</file>
+    <file preprocess="xml-stripblanks">ui/SidebarView.ui</file>
     <file preprocess="xml-stripblanks">ui/Window.ui</file>
     <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
   </gresource>

@@ -4,6 +4,7 @@
     <file>main.js</file>
     <file>Application.js</file>
     <file>MainPanelView.js</file>
+    <file>SidebarView.js</file>
     <file>Window.js</file>
   </gresource>
 </gresources>

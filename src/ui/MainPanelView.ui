@@ -7,45 +7,48 @@
 			</object>
 		</property>
     <child>
-
-          <object class="GtkBox">
-            <property name="orientation">vertical</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="label">Icon set name</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkFlowBox" id="iconsFlowbox">
-                <property name="orientation">0</property>
-                <property name="row-spacing">6</property>
-                <property name="column-spacing">6</property>
-                <property name="homogeneous">false</property>
-                <property name="max-children-per-line">6</property>
-                <property name="min-children-per-line">3</property>
-                <property name="selection-mode">single</property>
-                <child>
-                  <object class="GtkFlowBoxChild">
-                    <child>
-                      <object class="GtkBox">
-                        <property name="orientation">vertical</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="label">Icon name</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="label">Icon name</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="label">Icon set name</property>
+            <property name="halign">1</property>
+            <style>
+		          <class name="heading-2"/>
+	          </style>
           </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label"># of icons</property>
+            <property name="halign">1</property>
+            <style>
+
+	          </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label">Licence</property>
+            <property name="halign">1</property>
+            <style>
+
+  		          <class name="mb-8"/>
+	          </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkFlowBox" id="iconsFlowbox">
+            <property name="orientation">0</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">6</property>
+            <property name="homogeneous">false</property>
+            <property name="max-children-per-line">6</property>
+            <property name="min-children-per-line">1</property>
+            <property name="selection-mode">single</property>
+          </object>
+        </child>
+      </object>
     </child>
   </template>
 </interface>

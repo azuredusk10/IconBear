@@ -19,16 +19,31 @@ export const MainPanelView = GObject.registerClass({
 
     icons.forEach(icon => {
       // FlowBoxChild -> GtkBox -> GtkLabel, GtkLabel
-       this._iconsFlowbox.append(new Gtk.Label({
+      const newItem = new Gtk.Box({
+        css_classes: ["card", "card--icon"],
+        spacing: 4,
+        orientation: 1,
+      });
 
+      newItem.append(new Gtk.Label({
           vexpand: true,
           hexpand: true,
           label: String.fromCodePoint(icon),
           css_classes: ["emoji"],
-        width_request: 100,
-        height_request: 100,
-        css_classes: ["card"],
-      }))
+          width_request: 60,
+          height_request: 60,
+      }));
+
+      newItem.append(new Gtk.Label({
+          vexpand: true,
+          label: 'icon label',
+          css_classes: ["icon-label"],
+          width_request: 100,
+      }));
+
+
+
+      this._iconsFlowbox.append(newItem);
 
     });
 

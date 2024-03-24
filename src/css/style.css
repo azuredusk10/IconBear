@@ -1,0 +1,17 @@
+.card--icon {
+  padding: 0.5rem 0.25rem;
+}
+.heading-2 {
+  font-size: 2rem;
+}
+.mb-8 {
+  margin-bottom: 2rem;
+}
+.sets-list {
+  background: none;
+}
+.sets-list__row {
+  padding: 1rem 0.5rem;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+}

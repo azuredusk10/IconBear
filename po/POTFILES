@@ -1,0 +1,6 @@
+data/com.github.azuredusk10.IconManager.desktop.in
+data/com.github.azuredusk10.IconManager.metainfo.xml.in
+data/com.github.azuredusk10.IconManager.gschema.xml
+src/main.js
+src/window.js
+src/window.ui

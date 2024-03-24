@@ -1,0 +1,6 @@
+{
+	name: "Carbon",
+	licence: "MIT",
+	author: "IBM",
+	directory: "resource:///com/github/azuredusk10/IconManager/icon-sets/carbon/window.ui"
+}

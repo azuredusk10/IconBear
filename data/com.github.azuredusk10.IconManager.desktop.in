@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=icon-manager
+Exec=com.github.azuredusk10.IconManager
+Icon=com.github.azuredusk10.IconManager
+Terminal=false
+Type=Application
+Categories=GTK;
+StartupNotify=true

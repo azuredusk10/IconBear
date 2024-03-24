@@ -1,11 +1,19 @@
 .card--icon {
   padding: 0.5rem 0.25rem;
+  border-radius: 0.5rem;
+}
+.icon-label {
+  font-size: 0.875rem;
+  opacity: 0.6;
 }
 .heading-2 {
   font-size: 2rem;
 }
 .mb-8 {
   margin-bottom: 2rem;
+}
+.mb-2 {
+  margin-bottom: 0.5rem;
 }
 .sets-list {
   background: none;

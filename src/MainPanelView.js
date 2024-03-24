@@ -14,7 +14,7 @@ export const MainPanelView = GObject.registerClass({
   }
 
   #initializeIcons() {
-    const icons = [128513, 128514, 128515, 128516, 128517, 128518, 128519, 128520, 128521, 128522, 128523, 128524, 128525, 128526];
+    const icons = ['ico-grid-large-symbolic', 'ico-grid-large-symbolic', 'ico-grid-large-symbolic','ico-grid-large-symbolic','ico-grid-large-symbolic','ico-grid-large-symbolic','ico-grid-large-symbolic','ico-grid-large-symbolic','ico-grid-large-symbolic','ico-grid-large-symbolic','ico-grid-large-symbolic','ico-grid-large-symbolic'];
 
 
     icons.forEach(icon => {
@@ -25,10 +25,10 @@ export const MainPanelView = GObject.registerClass({
         orientation: 1,
       });
 
-      newItem.append(new Gtk.Label({
+      newItem.append(new Gtk.Image({
           vexpand: true,
           hexpand: true,
-          label: String.fromCodePoint(icon),
+          icon_name: icon,
           css_classes: ["emoji"],
           width_request: 60,
           height_request: 60,

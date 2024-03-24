@@ -7,4 +7,7 @@
     <file preprocess="xml-stripblanks">ui/MainPanelView.ui</file>
     <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
   </gresource>
+   <gresource prefix="/com/github/azuredusk10/IconManager/icons/scalable/actions">
+	  <file alias="ico-grid-large-symbolic.svg">icons/grid-large-symbolic.svg</file>
+  </gresource>
 </gresources>

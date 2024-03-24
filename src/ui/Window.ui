@@ -21,13 +21,19 @@
       <object class="AdwNavigationSplitView" id="split_view">
         <property name="sidebar">
           <object class="AdwNavigationPage">
-          <property name="title" translatable="true">Sidebar</property>
+          <property name="title" translatable="true">Icon sets</property>
           <property name="tag">sidebar</property>
           <property name="child">
             <object class="AdwToolbarView">
               <child type="top">
                 <object class="AdwHeaderBar">
-                  <property name="show-title">false</property>
+                  <property name="show-title">true</property>
+                  <child type="end">
+                      <object class="GtkButton">
+                        <property name="icon-name">list-add-symbolic</property>
+                        <property name="tooltip-text" translatable="true">Add icon set</property>
+                      </object>
+                    </child>
                 </object>
               </child>
               <property name="content">
@@ -68,8 +74,37 @@
                 <child type="top">
                   <object class="AdwHeaderBar">
                     <property name="show-title">false</property>
+                    <child type="start">
+                      <object class="GtkButton">
+                        <property name="icon-name">sidebar-show-symbolic</property>
+                        <property name="tooltip-text" translatable="true">Toggle sidebar</property>
+                      </object>
+                    </child>
+                    <child type="end">
+                      <object class="GtkMenuButton">
+                        <property name="icon-name">open-menu-symbolic</property>
+                        <property name="tooltip-text" translatable="true">Main Menu</property>
+                        <property name="primary">true</property>
+                        <property name="menu-model">primary_menu</property>
+                      </object>
+                    </child>
+                    <child type="end">
+                      <object class="GtkButton">
+                        <property name="icon-name">edit-find-symbolic</property>
+                        <property name="tooltip-text" translatable="true">Search icons</property>
+                      </object>
+                    </child>
+                    <child type="end">
+                      <object class="GtkMenuButton">
+                        <property name="icon-name">view-reveal-symbolic</property>
+                        <property name="always-show-arrow">true</property>
+                        <property name="tooltip-text" translatable="true">Icon appearance</property>
+                        <property name="popover">icon_appearance_popover</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
+
                 <property name="content">
                   <object class="AdwStatusPage">
                     <child>
@@ -101,5 +136,54 @@
       </item>
     </section>
   </menu>
+  <object class="GtkPopover" id="icon_appearance_popover">
+    <property name="has-arrow">true</property>
+    <property name="name">icon_appearance_popover</property>
+    <property name="child">
+      <object class="GtkBox" id="icon-appearance-popover-box">
+        <property name="name">plain-popover-box</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="true">Size</property>
+            <style>
+              <class name="mb-2"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScale" id="icon_size">
+            <property name="orientation">0</property>
+            <property name="margin-bottom">18</property>
+            <property name="width-request">200</property>
+            <property name="hexpand">true</property>
+            <property name="draw-value">true</property>
+            <property name="digits">0</property>
+            <property name="adjustment">
+              <object class="GtkAdjustment">
+                <property name="lower">16</property>
+                <property name="upper">188</property>
+                <property name="value">48</property>
+
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="true">Color</property>
+            <style>
+              <class name="mb-2"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkColorDialogButton" id="color_dialog_button">
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+
 </interface>
 

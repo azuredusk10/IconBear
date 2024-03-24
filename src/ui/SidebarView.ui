@@ -27,8 +27,8 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkLabel">
-                    <property name="label">56</property>
+                  <object class="GtkImage">
+                    <property name="icon-name">ico-grid-large-symbolic</property>
                   </object>
                 </child>
               </object>

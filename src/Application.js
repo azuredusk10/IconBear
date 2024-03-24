@@ -4,6 +4,7 @@ import Gdk from 'gi://Gdk';
 import Adw from 'gi://Adw?version=1';
 import Gio from 'gi://Gio';
 
+import './MainPanelView.js';
 import { Window } from './Window.js';
 
 export const Application = GObject.registerClass({

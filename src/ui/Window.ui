@@ -21,40 +21,49 @@
       <object class="AdwNavigationSplitView" id="split_view">
         <property name="sidebar">
           <object class="AdwNavigationPage">
-            <property name="title" translatable="true">Sidebar</property>
-            <property name="tag">sidebar</property>
-            <property name="child">
-              <object class="AdwToolbarView">
-                <child type="top">
-                  <object class="AdwHeaderBar">
-                    <property name="show-title">false</property>
-                  </object>
-                </child>
-                <property name="content">
-                  <object class="AdwStatusPage">
-                    <property name="title" translatable="true">Sidebar</property>
-                    <child>
-                      <object class="GtkButton" id="button">
-                        <property name="visible">false</property>
-                        <property name="halign">3</property>
-                        <property name="can-shrink">true</property>
-                        <property name="label" translatable="true">Open Content</property>
-                        <property name="action-name">navigation.push</property>
-                        <property name="action-target">'content'</property>
-                        <style>
-                          <class name="pill"/>
-                        </style>
-                      </object>
-                    </child>
-                  </object>
-                </property>
-              </object>
-            </property>
-          </object>
+          <property name="title" translatable="true">Sidebar</property>
+          <property name="tag">sidebar</property>
+          <property name="child">
+            <object class="AdwToolbarView">
+              <child type="top">
+                <object class="AdwHeaderBar">
+                  <property name="show-title">false</property>
+                </object>
+              </child>
+              <property name="content">
+                <object class="AdwStatusPage">
+                  <property name="title" translatable="true">Sidebar</property>
+                  <child>
+                    <object class="GtkButton" id="button">
+                      <property name="visible">false</property>
+                      <property name="halign">3</property>
+                      <property name="can-shrink">true</property>
+                      <property name="label" translatable="true">Open Content</property>
+                      <property name="action-name">navigation.push</property>
+                      <property name="action-target">'content'</property>
+                      <style>
+                        <class name="pill"/>
+                      </style>
+                    </object>
+                  </child>
+                  <child>
+                    <object class="GtkBox">
+                      <child>
+                        <object class="GtkLabel">
+                          <property name="label" translatable="true">Sidebare</property>
+                        </object>
+                      </child>
+                    </object>
+                  </child>
+                </object>
+              </property>
+            </object>
+          </property>
+        </object>
         </property>
         <property name="content">
           <object class="AdwNavigationPage">
-            <property name="title" translatable="true">Content</property>
+            <property name="title" translatable="true">Icon thumbnails</property>
             <property name="tag">content</property>
             <property name="child">
               <object class="AdwToolbarView">
@@ -65,12 +74,8 @@
                 </child>
                 <property name="content">
                   <object class="AdwStatusPage">
-                    <property name="title" translatable="true">Content</property>
                     <child>
-                      <object class="GtkLinkButton">
-                        <property name="label" translatable="true">API Reference</property>
-                        <property name="uri">https://gnome.pages.gitlab.gnome.org/libadwaita/doc/1.5/class.NavigationSplitView.html</property>
-                      </object>
+                      <object class="IcoMainPanelView"></object>
                     </child>
                   </object>
                 </property>

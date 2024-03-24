@@ -3,6 +3,7 @@
   <gresource prefix="/com/github/azuredusk10/IconManager/js">
     <file>main.js</file>
     <file>Application.js</file>
+    <file>MainPanelView.js</file>
     <file>Window.js</file>
   </gresource>
 </gresources>

@@ -9,30 +9,34 @@
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
+        <property name="margin-start">16</property>
+        <property name="margin-end">16</property>
+        <property name="margin-top">16</property>
+        <property name="margin-bottom">16</property>
         <child>
           <object class="GtkLabel">
-            <property name="label">Icon set name</property>
+            <property name="label">Set 1</property>
             <property name="halign">1</property>
             <style>
-		          <class name="heading-2"/>
+		          <class name="title-1"/>
 	          </style>
           </object>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="label"># of icons</property>
+            <property name="label">52 icons</property>
             <property name="halign">1</property>
             <style>
-
+              <class name="opacity-7"/>
 	          </style>
           </object>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="label">Licence</property>
+            <property name="label">MIT licence</property>
             <property name="halign">1</property>
             <style>
-
+              <class name="opacity-7"/>
   		          <class name="mb-8"/>
 	          </style>
           </object>
@@ -46,7 +50,12 @@
             <property name="max-children-per-line">6</property>
             <property name="min-children-per-line">1</property>
             <property name="selection-mode">single</property>
+            <property name="vexpand">0</property>
+            <signal name="child-activated" handler="onIconActivated"/>
           </object>
+        </child>
+        <child>
+          <object class="GtkBox"></object>
         </child>
       </object>
     </child>

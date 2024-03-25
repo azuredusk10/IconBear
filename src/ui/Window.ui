@@ -21,7 +21,7 @@
       <object class="AdwNavigationSplitView" id="split_view">
         <property name="sidebar">
           <object class="AdwNavigationPage">
-          <property name="title" translatable="true">Icon sets</property>
+          <property name="title" translatable="true">Sets</property>
           <property name="tag">sidebar</property>
           <property name="child">
             <object class="AdwToolbarView">
@@ -29,9 +29,11 @@
                 <object class="AdwHeaderBar">
                   <property name="show-title">true</property>
                   <child type="end">
-                      <object class="GtkButton">
-                        <property name="icon-name">list-add-symbolic</property>
-                        <property name="tooltip-text" translatable="true">Add icon set</property>
+                      <object class="GtkMenuButton">
+                        <property name="icon-name">open-menu-symbolic</property>
+                        <property name="tooltip-text" translatable="true">Main Menu</property>
+                        <property name="primary">true</property>
+                        <property name="menu-model">primary_menu</property>
                       </object>
                     </child>
                 </object>
@@ -74,41 +76,43 @@
                 <child type="top">
                   <object class="AdwHeaderBar">
                     <property name="show-title">false</property>
-                    <child type="start">
+
+
+                    <child>
                       <object class="GtkButton">
-                        <property name="icon-name">sidebar-show-symbolic</property>
-                        <property name="tooltip-text" translatable="true">Toggle sidebar</property>
-                      </object>
-                    </child>
-                    <child type="end">
-                      <object class="GtkMenuButton">
-                        <property name="icon-name">open-menu-symbolic</property>
-                        <property name="tooltip-text" translatable="true">Main Menu</property>
-                        <property name="primary">true</property>
-                        <property name="menu-model">primary_menu</property>
-                      </object>
-                    </child>
-                    <child type="end">
-                      <object class="GtkButton">
+                        <property name="hexpand">0</property>
                         <property name="icon-name">edit-find-symbolic</property>
                         <property name="tooltip-text" translatable="true">Search icons</property>
                       </object>
                     </child>
-                    <child type="end">
+                    <!-- TODO: Put a search bar in the centre of the panel. Ensure it doesn't overlap the "Close" button when window decorations are on the right. -->
+
+                    <!-- <child type="end">
                       <object class="GtkMenuButton">
                         <property name="icon-name">view-reveal-symbolic</property>
                         <property name="always-show-arrow">true</property>
                         <property name="tooltip-text" translatable="true">Icon appearance</property>
                         <property name="popover">icon_appearance_popover</property>
                       </object>
-                    </child>
+                    </child> -->
+
+
                   </object>
                 </child>
 
                 <property name="content">
-                  <object class="AdwStatusPage">
+                  <object class="GtkBox">
+                    <property name="orientation">horizontal</property>
                     <child>
-                      <object class="IcoMainPanelView"></object>
+                      <object class="GtkScrolledWindow">
+                        <property name="hexpand">1</property>
+                        <child>
+                          <object class="IcoMainPanelView"></object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IcoDetailsPanel"></object>
                     </child>
                   </object>
                 </property>
@@ -122,6 +126,10 @@
   </template>
   <menu id="primary_menu">
     <section>
+      <item>
+        <attribute name="label" translatable="yes">_Add icon set</attribute>
+        <attribute name="action">app.add-icon-set</attribute>
+      </item>
       <item>
         <attribute name="label" translatable="yes">_Preferences</attribute>
         <attribute name="action">app.preferences</attribute>

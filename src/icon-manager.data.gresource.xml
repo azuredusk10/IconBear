@@ -5,6 +5,7 @@
     <file preprocess="xml-stripblanks">ui/MainPanelView.ui</file>
     <file preprocess="xml-stripblanks">ui/SidebarView.ui</file>
     <file preprocess="xml-stripblanks">ui/Window.ui</file>
+    <file preprocess="xml-stripblanks">ui/DetailsPanel.ui</file>
     <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
   </gresource>
    <gresource prefix="/com/github/azuredusk10/IconManager/icons/scalable/actions">

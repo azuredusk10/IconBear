@@ -41,12 +41,20 @@ export const MainPanelView = GObject.registerClass({
           width_request: 100,
       }));
 
+      const newItemWrapper = new Gtk.FlowBoxChild({
+        child: newItem,
+      });
 
-
-      this._iconsFlowbox.append(newItem);
+      this._iconsFlowbox.append(newItemWrapper);
 
     });
 
+  }
+
+  onIconActivated(child) {
+    console.log('activated!')
+
+    // Open the details panel
   }
 
 });

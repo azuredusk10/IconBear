@@ -31,7 +31,7 @@ export const MainPanelView = GObject.registerClass({
 
       const setRow = new Gtk.ListBoxRow({
         child: setRowBox,
-        css_classes: ["sets-list__row"],
+        css_classes: [""],
       });
 
       this._iconSetsList.append(setRow)

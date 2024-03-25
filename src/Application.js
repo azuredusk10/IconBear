@@ -6,6 +6,7 @@ import Gio from 'gi://Gio';
 
 import './MainPanelView.js';
 import './SidebarView.js';
+import './DetailsPanel.js';
 import { Window } from './Window.js';
 
 export const Application = GObject.registerClass({

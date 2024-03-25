@@ -112,7 +112,21 @@
                       </object>
                     </child>
                     <child>
-                      <object class="IcoDetailsPanel"></object>
+                      <object class="AdwClamp" id="detailsPanel">
+                        <property name="maximum-size">300</property>
+                        <property name="vexpand">1</property>
+                        <style>
+                          <class name="card"/>
+                          <class name="card--details-panel"/>
+                        </style>
+                        <child>
+                          <object class="GtkScrolledWindow">
+                            <child>
+                              <object class="IcoDetailsPanel"></object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
                     </child>
                   </object>
                 </property>

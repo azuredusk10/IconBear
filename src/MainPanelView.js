@@ -30,8 +30,9 @@ export const MainPanelView = GObject.registerClass({
           hexpand: true,
           icon_name: icon,
           css_classes: ["emoji"],
-          width_request: 60,
-          height_request: 60,
+          pixel_size: 24,
+          margin_top: 16,
+          margin_bottom: 16,
       }));
 
       newItem.append(new Gtk.Label({

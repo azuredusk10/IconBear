@@ -7,117 +7,107 @@
 			</object>
 		</property>
     <child>
-      <object class="AdwClamp" id="detailsPanel">
-        <property name="maximum-size">300</property>
-        <property name="vexpand">1</property>
-        <style>
-          <class name="card"/>
-          <class name="card--details-panel"/>
-        </style>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="margin-start">16</property>
+        <property name="margin-end">16</property>
+        <property name="margin-top">16</property>
+        <property name="margin-bottom">16</property>
+
+        <!-- <child>
+          <object class="GtkLabel">
+            <property name="label">Icon name</property>
+            <property name="valign">1</property>
+            <property name="margin-top">8</property>
+            <property name="margin-bottom">24</property>
+            <style>
+              <class name="title-4"/>
+            </style>
+          </object>
+        </child> -->
+        <child>
+          <object class="GtkImage">
+            <property name="width-request">200</property>
+            <property name="height-request">200</property>
+            <property name="pixel-size">128</property>
+            <property name="icon-name">ico-grid-large-symbolic</property>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkListBox">
+            <property name="selection-mode">none</property>
+            <style>
+              <class name="boxed-list"/>
+            </style>
+            <child>
+              <object class="AdwActionRow">
+                <property name="title" translatable="yes">Name</property>
+                <property name="subtitle">Icon name</property>
+                <property name="subtitle-selectable">True</property>
+                <style>
+                  <class name="property"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwActionRow">
+                <property name="title" translatable="yes">Color</property>
+                <child>
+                  <object class="GtkColorDialogButton" id="color_dialog_button">
+                  </object>
+                </child>
+              </object>
+            </child>
+            <!-- <child>
+              <object class="AdwActionRow">
+                <property name="title" translatable="yes">Open containing folder</property>
+                <child type="suffix">
+                  <object class="GtkImage">
+                    <property name="icon-name">ico-grid-large-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child> -->
+          </object>
+        </child>
+
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
-            <property name="margin-start">16</property>
-            <property name="margin-end">16</property>
-            <property name="margin-top">16</property>
-            <property name="margin-bottom">16</property>
-
-            <!-- <child>
-              <object class="GtkLabel">
-                <property name="label">Icon name</property>
-                <property name="valign">1</property>
-                <property name="margin-top">8</property>
-                <property name="margin-bottom">24</property>
-                <style>
-                  <class name="title-4"/>
-                </style>
-              </object>
-            </child> -->
+            <property name="spacing">8</property>
+            <property name="margin-top">48</property>
             <child>
-              <object class="GtkImage">
-                <property name="width-request">200</property>
-                <property name="height-request">200</property>
-                <property name="pixel-size">128</property>
-                <property name="icon-name">ico-grid-large-symbolic</property>
-              </object>
-            </child>
-
-            <child>
-              <object class="GtkListBox">
-                <property name="selection-mode">none</property>
+              <object class="AdwSplitButton">
+                <property name="menu-model">icon_details_export_menu</property>
                 <style>
-                  <class name="boxed-list"/>
+                  <class name="flat"/>
                 </style>
                 <child>
-                  <object class="AdwActionRow">
-                    <property name="title" translatable="yes">Name</property>
-                    <property name="subtitle">Icon name</property>
-                    <property name="subtitle-selectable">True</property>
-                    <style>
-                      <class name="property"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwActionRow">
-                    <property name="title" translatable="yes">Color</property>
-                    <child>
-                      <object class="GtkColorDialogButton" id="color_dialog_button">
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwActionRow">
-                    <property name="title" translatable="yes">Open containing folder</property>
-                    <child type="suffix">
-                      <object class="GtkImage">
-                        <property name="icon-name">ico-grid-large-symbolic</property>
-                      </object>
-                    </child>
+                  <object class="AdwButtonContent">
+                    <property name="label" translatable="true">Export as SVG</property>
+                    <property name="icon-name">document-save-symbolic</property>
                   </object>
                 </child>
               </object>
             </child>
-
             <child>
-              <object class="GtkBox">
-                <property name="orientation">vertical</property>
-                <property name="spacing">8</property>
-                <property name="margin-top">48</property>
+              <object class="AdwSplitButton">
+                <property name="menu-model">icon_details_copy_menu</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
                 <child>
-                  <object class="AdwSplitButton">
-                    <property name="menu-model">icon_details_export_menu</property>
-                    <style>
-                      <class name="flat"/>
-                    </style>
-                    <child>
-                      <object class="AdwButtonContent">
-                        <property name="label" translatable="true">Export as SVG</property>
-                        <property name="icon-name">ico-grid-large-symbolic</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwSplitButton">
-                    <property name="menu-model">icon_details_copy_menu</property>
-                    <style>
-                      <class name="suggested-action"/>
-                    </style>
-                    <child>
-                      <object class="AdwButtonContent">
-                        <property name="label" translatable="true">Copy as SVG</property>
-                        <property name="icon-name">ico-grid-large-symbolic</property>
-                      </object>
-                    </child>
+                  <object class="AdwButtonContent">
+                    <property name="label" translatable="true">Copy as SVG</property>
+                    <property name="icon-name">edit-copy-symbolic</property>
                   </object>
                 </child>
               </object>
             </child>
-
           </object>
         </child>
+
       </object>
     </child>
 

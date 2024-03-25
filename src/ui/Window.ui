@@ -39,10 +39,11 @@
                 </object>
               </child>
               <property name="content">
-                <object class="AdwStatusPage">
+                <object class="GtkBox">
                   <child>
                     <object class="GtkBox">
                       <property name="orientation">vertical</property>
+                      <property name="hexpand">1</property>
                       <child>
                         <object class="GtkButton" id="button">
                           <property name="visible">false</property>
@@ -85,6 +86,16 @@
                         <property name="tooltip-text" translatable="true">Search icons</property>
                       </object>
                     </child>
+                    <child type="end">
+                      <object class="GtkToggleButton">
+                        <property name="active">true</property>
+                        <property name="icon-name">sidebar-show-right-symbolic</property>
+                        <property name="tooltip-text" translatable="true">Toggle Icon Detail Sidebar</property>
+
+                      </object>
+                    </child>
+
+
                     <!-- TODO: Put a search bar in the centre of the panel. Ensure it doesn't overlap the "Close" button when window decorations are on the right. -->
 
                     <!-- <child type="end">
@@ -113,7 +124,7 @@
                     </child>
                     <child>
                       <object class="AdwClamp" id="detailsPanel">
-                        <property name="maximum-size">300</property>
+                        <property name="maximum-size">260</property>
                         <property name="vexpand">1</property>
                         <style>
                           <class name="card"/>

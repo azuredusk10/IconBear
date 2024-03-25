@@ -47,7 +47,7 @@
             <property name="row-spacing">6</property>
             <property name="column-spacing">6</property>
             <property name="homogeneous">false</property>
-            <property name="max-children-per-line">6</property>
+            <property name="max-children-per-line">-1</property>
             <property name="min-children-per-line">1</property>
             <property name="selection-mode">single</property>
             <property name="vexpand">0</property>

@@ -31,15 +31,15 @@ export const MainPanelView = GObject.registerClass({
           icon_name: icon,
           css_classes: ["emoji"],
           pixel_size: 24,
-          margin_top: 16,
-          margin_bottom: 16,
+          margin_top: 8,
+          margin_bottom: 8,
       }));
 
-      newItem.append(new Gtk.Label({
-          vexpand: true,
+     newItem.append(new Gtk.Label({
+          hexpand: true,
           label: 'icon label',
           css_classes: ["icon-label"],
-          width_request: 100,
+          width_request: 60,
       }));
 
       const newItemWrapper = new Gtk.FlowBoxChild({

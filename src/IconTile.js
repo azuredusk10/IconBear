@@ -1,5 +1,6 @@
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
+import Gdk from 'gi://Gdk';
 
 export const IconTile = GObject.registerClass({
   GTypeName: 'IcoIconTile',
@@ -20,4 +21,15 @@ export const IconTile = GObject.registerClass({
       ''
     )
   },
-}, class extends Gtk.Widget{} );
+  InternalChildren: ['icon_tile_popover_menu']
+}, class extends Gtk.Widget{
+  constructor(params){
+    super(params);
+  }
+
+  onRightClick(_self, _n_press, x, y) {
+    const position = new Gdk.Rectangle({ x: x, y: y });
+    this._icon_tile_popover_menu.pointing_to = position;
+    this._icon_tile_popover_menu.popup();
+  }
+} );

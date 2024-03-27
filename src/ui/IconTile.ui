@@ -44,8 +44,29 @@
             </style>
           </object>
         </child>
+        <child>
+          <object class="GtkGestureClick">
+            <signal name="pressed" handler="onRightClick" />
+            <property name="button">3</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkPopoverMenu" id="icon_tile_popover_menu">
+            <property name="menu-model">icon_tile_menu</property>
+            <property name="has-arrow">false</property>
+            <property name="halign">1</property>
+          </object>
+        </child>
       </object>
     </child>
+    <menu id="icon_tile_menu">
+      <item>
+        <attribute name="label" translatable="true">Copy as SVG</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="true">Copy as PNG</attribute>
+      </item>
+    </menu>
   </template>
 </interface>
         

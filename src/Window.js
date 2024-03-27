@@ -12,7 +12,7 @@ export const Window = GObject.registerClass({
   constructor(params={}){
     super(params);
     this.#bindSizeToSettings();
-    this.#setupActions();
+
   }
 
 	vfunc_close_request() {
@@ -31,21 +31,5 @@ export const Window = GObject.registerClass({
 	  this._details_panel.label = label;
 	}
 
-	#setupActions(){
-	  const updateIconDetailsPanelAction = new Gio.SimpleAction({
-	    name: 'update-icon-details-panel',
-	    parameterType: GLib.VariantType.new('a{ss}'),
-	  })
-
-	  updateIconDetailsPanelAction.connect('activate', (_action, params) => {
-	    const paramsObject = params.recursiveUnpack();
-	    console.log(paramsObject);
-	    console.log(this._details_panel.label);
-      this._details_panel.filepath = paramsObject.filepath;
-      this._details_panel.label = paramsObject.label;
-	  })
-
-	  	this.add_action(updateIconDetailsPanelAction);
-	}
 });
 

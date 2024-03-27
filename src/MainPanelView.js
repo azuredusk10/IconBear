@@ -89,17 +89,7 @@ export const MainPanelView = GObject.registerClass({
 
 
   onIconActivated(_flowbox, _child) {
-    console.log(_child.label);
     this.emit('icon-activated', _child.filepath, _child.label);
-
-    //console.log(child.label, child.filepath);
-    // Open the details panel
-    /* const application = new Gtk.Application();
-    application.activate_action('win.update-icon-details-panel',
-    {
-      "filepath": "filepath",
-      "label": "label"
-    }); */
   }
 
 });

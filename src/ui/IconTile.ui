@@ -45,13 +45,6 @@
           </object>
         </child>
         <child>
-          <object class="GtkButton">
-            <property name="label">Activate</property>
-            <property name="action-name">win.update-icon-details-panel</property>
-            	<property name="action-target">{"filepath": "filepath", "label": "label"}</property>
-          </object>
-        </child>
-        <child>
           <object class="GtkGestureClick">
             <signal name="pressed" handler="onRightClick" />
             <property name="button">3</property>

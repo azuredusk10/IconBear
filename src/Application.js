@@ -7,6 +7,7 @@ import Gio from 'gi://Gio';
 import './MainPanelView.js';
 import './SidebarView.js';
 import './DetailsPanel.js';
+import './IconTile.js';
 import { Window } from './Window.js';
 
 

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<interface>
+  <template class="IcoIconTile">
+    <property name="layout-manager">
+			<object class="GtkBoxLayout">
+				<property name="orientation">vertical</property>
+			</object>
+		</property>
+    <child>
+      <object class="GtkBox">
+        <property name="spacing">4</property>
+        <property name="orientation">vertical</property>
+        <style>
+          <class name="card"/>
+          <class name="card--icon"/>
+        </style>
+        <child>
+          <object class="GtkImage">
+            <property name="margin-top">8</property>
+            <property name="margin-bottom">8</property>
+            <property name="pixel-size">24</property>
+            <property name="file" bind-source="IcoIconTile" bind-property="filepath" bind-flags="sync-create" />
+            <property name="vexpand">true</property>
+            <property name="hexpand">true</property>
+            <style>
+              <class name="icon-grid__image"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" bind-source="IcoIconTile" bind-property="label" bind-flags="sync-create" />
+            <property name="max-width-chars">10</property>
+            <property name="width-chars">10</property>
+            <property name="ellipsize">3</property>
+            <property name="width-request">60</property>
+            <property name="hexpand">false</property>
+            <property name="margin-start">4</property>
+            <property name="margin-end">4</property>
+            <style>
+              <class name="caption" />
+              <class name="opacity-7" />
+              <class name="icon-grid__label" />
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
+        

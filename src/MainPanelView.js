@@ -2,6 +2,8 @@ import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
+
+import { IconTile } from './IconTile.js';
 import { Icon } from './Icon.js';
 
 export const MainPanelView = GObject.registerClass({
@@ -64,54 +66,17 @@ export const MainPanelView = GObject.registerClass({
     */
 
 
-
-    const icons2 = ['ico-grid-large-symbolic', 'ico-grid-large-symbolic', 'ico-grid-large-symbolic','ico-grid-large-symbolic','ico-grid-large-symbolic','ico-grid-large-symbolic','ico-grid-large-symbolic','ico-grid-large-symbolic','ico-grid-large-symbolic','ico-grid-large-symbolic','ico-grid-large-symbolic','ico-grid-large-symbolic'];
-
-
   }
 
-  //icons2.forEach(icon => {
-    _addItem(filepath, label){
-      // FlowBoxChild -> GtkBox -> GtkLabel, GtkLabel
-      const newItem = new Gtk.Box({
-        css_classes: ["card", "card--icon"],
-        spacing: 4,
-        orientation: 1,
-      });
+  _addItem(filepath, label){
 
-      // TODO: Fix blurriness when pixel size is greater than the dimensions of the SVG
-      newItem.append(new Gtk.Image({
-          vexpand: true,
-          hexpand: true,
-          // icon_name: icon,
-          // resource: '/com/github/azuredusk10/IconManager/icon-sets/carbon/character--sentence-case.svg',
-          file: filepath,
-          css_classes: ["icon-grid__image"],
-          pixel_size: 24,
-          margin_top: 8,
-          margin_bottom: 8,
-      }));
+    const newItemWrapper = new IconTile({
+      filepath: filepath,
+      label: label.substring(0, 20),
+    });
 
-     newItem.append(new Gtk.Label({
-          hexpand: false,
-          label: label.substring(0, 20),
-          //label,
-          max_width_chars: 10,
-          width_chars: 10,
-          ellipsize: 3,
-          css_classes: ["caption", "opacity-7", "icon-grid__label"],
-          width_request: 60,
-          margin_start: 4,
-          margin_end: 4,
-      }));
-
-      const newItemWrapper = new Gtk.FlowBoxChild({
-        child: newItem,
-      });
-
-      this._iconsFlowbox.append(newItemWrapper);
-    }
-   //  });
+    this._iconsFlowbox.append(newItemWrapper);
+  }
 
   onIconActivated(child) {
     console.log('activated!')

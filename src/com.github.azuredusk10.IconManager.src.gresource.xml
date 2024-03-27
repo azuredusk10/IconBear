@@ -8,5 +8,6 @@
     <file>DetailsPanel.js</file>
     <file>Window.js</file>
     <file>Icon.js</file>
+    <file>IconTile.js</file>
   </gresource>
 </gresources>

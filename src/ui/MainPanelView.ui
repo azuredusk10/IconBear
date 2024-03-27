@@ -54,9 +54,6 @@
             <signal name="child-activated" handler="onIconActivated"/>
           </object>
         </child>
-        <child>
-          <object class="GtkBox"></object>
-        </child>
       </object>
     </child>
   </template>

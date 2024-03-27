@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <interface>
-  <template class="IcoIconTile">
+  <template class="IcoIconTile" parent="GtkFlowBoxChild">
     <property name="layout-manager">
 			<object class="GtkBoxLayout">
 				<property name="orientation">vertical</property>
@@ -42,6 +42,13 @@
               <class name="opacity-7" />
               <class name="icon-grid__label" />
             </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton">
+            <property name="label">Activate</property>
+            <property name="action-name">win.update-icon-details-panel</property>
+            	<property name="action-target">{"filepath": "filepath", "label": "label"}</property>
           </object>
         </child>
         <child>

@@ -128,7 +128,9 @@
                     <property name="content">
                       <object class="GtkScrolledWindow">
                         <child>
-                          <object class="IcoMainPanelView"></object>
+                          <object class="IcoMainPanelView">
+                            <signal name="icon-activated" handler="onIconActivated" />
+                          </object>
                         </child>
                       </object>
                     </property>
@@ -137,7 +139,7 @@
                         <property name="min-content-width">250</property>
                         <property name="max-content-width">300</property>
                         <child>
-                          <object class="IcoDetailsPanel">
+                          <object class="IcoDetailsPanel" id="details_panel">
                             <property name="filepath"></property>
                             <property name="label">Test label coming in</property>
                           </object>

@@ -22,7 +22,7 @@ export const IconTile = GObject.registerClass({
     )
   },
   InternalChildren: ['icon_tile_popover_menu']
-}, class extends Gtk.Widget{
+}, class extends Gtk.FlowBoxChild{
   constructor(params){
     super(params);
   }
@@ -32,4 +32,9 @@ export const IconTile = GObject.registerClass({
     this._icon_tile_popover_menu.pointing_to = position;
     this._icon_tile_popover_menu.popup();
   }
+
+  /* get label(){
+    return this._label || '';
+  } */
+
 } );

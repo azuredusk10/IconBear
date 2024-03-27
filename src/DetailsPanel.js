@@ -5,14 +5,14 @@ export const DetailsPanel = GObject.registerClass({
   GTypeName: 'IcoDetailsPanel',
   Template: 'resource:///com/github/azuredusk10/IconManager/ui/DetailsPanel.ui',
   Properties: {
-    Filepath: GObject.ParamSpec.string(
+    'filepath': GObject.ParamSpec.string(
       'filepath',
       'Filepath',
       'The filepath to the icon image to be displayed',
       GObject.ParamFlags.READWRITE,
       ''
     ),
-    Label: GObject.ParamSpec.string(
+    'label': GObject.ParamSpec.string(
       'label',
       'Label',
       'The icon label',
@@ -25,6 +25,5 @@ export const DetailsPanel = GObject.registerClass({
     super(params);
 
   }
-
 
 });

@@ -19,6 +19,11 @@ export const MainPanelView = GObject.registerClass({
       Gio.ListStore
     ),
   },
+  Signals: {
+    'icon-activated': {
+      param_types: [GObject.TYPE_STRING, GObject.TYPE_STRING]
+    },
+  }
 }, class extends Gtk.Widget {
   constructor(params){
     super(params);
@@ -70,18 +75,31 @@ export const MainPanelView = GObject.registerClass({
 
   _addItem(filepath, label){
 
-    const newItemWrapper = new IconTile({
+    const newItem = new IconTile({
       filepath: filepath,
       label: label.substring(0, 20),
     });
 
-    this._iconsFlowbox.append(newItemWrapper);
+    /* const newItemWrapper = new Gtk.FlowBoxChild({
+      child: newItem,
+    }); */
+
+    this._iconsFlowbox.append(newItem);
   }
 
-  onIconActivated(child) {
-    console.log('activated!')
 
+  onIconActivated(_flowbox, _child) {
+    console.log(_child.label);
+    this.emit('icon-activated', _child.filepath, _child.label);
+
+    //console.log(child.label, child.filepath);
     // Open the details panel
+    /* const application = new Gtk.Application();
+    application.activate_action('win.update-icon-details-panel',
+    {
+      "filepath": "filepath",
+      "label": "label"
+    }); */
   }
 
 });

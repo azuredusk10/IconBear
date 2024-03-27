@@ -15,7 +15,7 @@
         <property name="margin-bottom">16</property>
         <child>
           <object class="GtkLabel">
-            <property name="label">Set 1</property>
+            <property name="label">Carbon</property>
             <property name="halign">1</property>
             <style>
 		          <class name="title-1"/>
@@ -24,7 +24,7 @@
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="label">52 icons</property>
+            <property name="label">2,225 icons</property>
             <property name="halign">1</property>
             <style>
               <class name="opacity-7"/>

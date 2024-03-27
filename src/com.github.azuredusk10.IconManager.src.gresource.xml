@@ -7,5 +7,6 @@
     <file>SidebarView.js</file>
     <file>DetailsPanel.js</file>
     <file>Window.js</file>
+    <file>Icon.js</file>
   </gresource>
 </gresources>

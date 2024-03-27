@@ -9,8 +9,7 @@
   /* Reverse this for rtl languages */
   background-color: #1d1d1d;
 }
-.icon-label {
-  font-size: 0.875rem;
+.icon-grid__label {
   opacity: 0.6;
 }
 .mb-8 {

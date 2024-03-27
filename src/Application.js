@@ -9,6 +9,7 @@ import './SidebarView.js';
 import './DetailsPanel.js';
 import { Window } from './Window.js';
 
+
 export const Application = GObject.registerClass({
 	GTypeName: 'IcoApplication'
 }, class extends Adw.Application {

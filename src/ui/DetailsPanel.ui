@@ -55,6 +55,7 @@
                 <property name="title" translatable="yes">Color</property>
                 <child>
                   <object class="GtkColorDialogButton" id="color_dialog_button">
+                    <property name="valign">3</property>
                   </object>
                 </child>
               </object>

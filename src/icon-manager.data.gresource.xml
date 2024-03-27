@@ -2,11 +2,13 @@
 <gresources>
   <gresource prefix="/com/github/azuredusk10/IconManager">
     <file>css/style.css</file>
+    <file alias="style-dark.css">css/style-dark.css</file>
     <file preprocess="xml-stripblanks">ui/MainPanelView.ui</file>
     <file preprocess="xml-stripblanks">ui/SidebarView.ui</file>
     <file preprocess="xml-stripblanks">ui/Window.ui</file>
     <file preprocess="xml-stripblanks">ui/DetailsPanel.ui</file>
     <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
+    <file>icon-sets/carbon/character--sentence-case.svg</file>
   </gresource>
    <gresource prefix="/com/github/azuredusk10/IconManager/icons/scalable/actions">
     <file alias="ico-grid-large-symbolic.svg">icons/grid-large-symbolic.svg</file>

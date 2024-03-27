@@ -29,13 +29,13 @@
                 <object class="AdwHeaderBar">
                   <property name="show-title">true</property>
                   <child type="end">
-                      <object class="GtkMenuButton">
-                        <property name="icon-name">open-menu-symbolic</property>
-                        <property name="tooltip-text" translatable="true">Main Menu</property>
-                        <property name="primary">true</property>
-                        <property name="menu-model">primary_menu</property>
-                      </object>
-                    </child>
+                    <object class="GtkMenuButton">
+                      <property name="icon-name">open-menu-symbolic</property>
+                      <property name="tooltip-text" translatable="true">Main Menu</property>
+                      <property name="primary">true</property>
+                      <property name="menu-model">primary_menu</property>
+                    </object>
+                  </child>
                 </object>
               </child>
               <property name="content">
@@ -79,18 +79,28 @@
                     <property name="show-title">false</property>
 
 
-                    <child>
+                    <child type="start">
                       <object class="GtkButton">
                         <property name="hexpand">0</property>
                         <property name="icon-name">edit-find-symbolic</property>
                         <property name="tooltip-text" translatable="true">Search icons</property>
                       </object>
                     </child>
+                    <child type="start">
+                      <object class="GtkMenuButton">
+                        <property name="label">24px</property>
+                        <property name="always-show-arrow">true</property>
+                        <property name="tooltip-text" translatable="true">Icon Size</property>
+                        <property name="menu-model">icon_size_menu</property>
+                      </object>
+                    </child>
+
                     <child type="end">
-                      <object class="GtkToggleButton">
-                        <property name="active">true</property>
+                      <object class="GtkToggleButton" id="show_details_sidebar_button">
+                        <property name="active" bind-source="details_view" bind-property="show-sidebar" bind-flags="sync-create" />
                         <property name="icon-name">sidebar-show-right-symbolic</property>
                         <property name="tooltip-text" translatable="true">Toggle Icon Detail Sidebar</property>
+
 
                       </object>
                     </child>
@@ -112,33 +122,25 @@
                 </child>
 
                 <property name="content">
-                  <object class="GtkBox">
-                    <property name="orientation">horizontal</property>
-                    <child>
+                  <object class="AdwOverlaySplitView" id="details_view">
+                    <property name="show-sidebar" bind-source="show_details_sidebar_button" bind-property="active" bind-flags="sync-create" />
+                    <property name="sidebar-position">1</property>
+                    <property name="content">
                       <object class="GtkScrolledWindow">
-                        <property name="hexpand">1</property>
                         <child>
                           <object class="IcoMainPanelView"></object>
                         </child>
                       </object>
-                    </child>
-                    <child>
-                      <object class="AdwClamp" id="detailsPanel">
-                        <property name="maximum-size">260</property>
-                        <property name="vexpand">1</property>
-                        <style>
-                          <class name="card"/>
-                          <class name="card--details-panel"/>
-                        </style>
+                    </property>
+                    <property name="sidebar">
+                      <object class="GtkScrolledWindow">
+                        <property name="min-content-width">250</property>
+                        <property name="max-content-width">300</property>
                         <child>
-                          <object class="GtkScrolledWindow">
-                            <child>
-                              <object class="IcoDetailsPanel"></object>
-                            </child>
-                          </object>
+                          <object class="IcoDetailsPanel"></object>
                         </child>
                       </object>
-                    </child>
+                    </property>
                   </object>
                 </property>
               </object>
@@ -166,6 +168,29 @@
       <item>
         <attribute name="label" translatable="yes">_About Icon-manager</attribute>
         <attribute name="action">app.about</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="icon_size_menu">
+    <section>
+      <attribute name="label" translatable="true">Icon size</attribute>
+      <item>
+        <attribute name="label" translatable="yes">16px</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">24px</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">32px</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">48px</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">64px</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">96px</attribute>
       </item>
     </section>
   </menu>

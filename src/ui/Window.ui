@@ -137,7 +137,10 @@
                         <property name="min-content-width">250</property>
                         <property name="max-content-width">300</property>
                         <child>
-                          <object class="IcoDetailsPanel"></object>
+                          <object class="IcoDetailsPanel">
+                            <property name="filepath"></property>
+                            <property name="label">Test label coming in</property>
+                          </object>
                         </child>
                       </object>
                     </property>

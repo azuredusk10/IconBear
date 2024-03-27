@@ -30,7 +30,7 @@
             <property name="width-request">200</property>
             <property name="height-request">200</property>
             <property name="pixel-size">128</property>
-            <property name="icon-name">ico-grid-large-symbolic</property>
+            <property name="file" bind-source="IcoDetailsPanel" bind-property="filepath" bind-flags="sync-create" />
           </object>
         </child>
 
@@ -43,7 +43,7 @@
             <child>
               <object class="AdwActionRow">
                 <property name="title" translatable="yes">Name</property>
-                <property name="subtitle">Icon name</property>
+                <property name="subtitle" bind-source="IcoDetailsPanel" bind-property="label" bind-flags="sync-create"/>
                 <property name="subtitle-selectable">True</property>
                 <style>
                   <class name="property"/>

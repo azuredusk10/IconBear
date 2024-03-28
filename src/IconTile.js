@@ -2,6 +2,9 @@ import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 import Gdk from 'gi://Gdk';
 
+import { IconPaintable } from './IconPaintable.js';
+
+
 export const IconTile = GObject.registerClass({
   GTypeName: 'IcoIconTile',
   Template: 'resource:///com/github/azuredusk10/IconManager/ui/IconTile.ui',
@@ -21,10 +24,11 @@ export const IconTile = GObject.registerClass({
       ''
     )
   },
-  InternalChildren: ['icon_tile_popover_menu']
+  InternalChildren: ['icon_tile_popover_menu', 'icon_box']
 }, class extends Gtk.FlowBoxChild{
   constructor(params){
     super(params);
+    this.#renderIcon();
   }
 
   onRightClick(_self, _n_press, x, y) {
@@ -33,8 +37,11 @@ export const IconTile = GObject.registerClass({
     this._icon_tile_popover_menu.popup();
   }
 
-  /* get label(){
-    return this._label || '';
-  } */
+  #renderIcon(){
+    const svgWidget = new IconPaintable({
+      filepath: this.filepath
+    });
+    this._icon_box.append(svgWidget);
+  }
 
 } );

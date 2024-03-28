@@ -7,7 +7,7 @@
 			</object>
 		</property>
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="icon_box">
         <property name="spacing">4</property>
         <property name="orientation">vertical</property>
         <style>

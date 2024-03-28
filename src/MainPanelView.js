@@ -34,11 +34,6 @@ export const MainPanelView = GObject.registerClass({
 
     this.icons = Gio.ListStore.new(Icon);
 
-
-
-    const filepath = GLib.build_filenamev([GLib.get_home_dir(), 'character--sentence-case.svg']);
-    const file = Gio.File.new_for_path(filepath);
-
     const iconSetsDir = GLib.build_pathv('/', [GLib.get_home_dir(), '/icon-sets']);
     console.log(iconSetsDir);
 
@@ -48,29 +43,15 @@ export const MainPanelView = GObject.registerClass({
   		// Get an enumerator of all children
     	const children = Gio.File.new_for_path(carbonSetDir).enumerate_children('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
 
-    	// Iterate over the enumerator and add each child to the list store
+    	// Add an IconTile to the FlowBox for the first 50 icon files in the directory
 		let fileInfo;
+		let i=0;
 		while (fileInfo = children.next_file(null)) {
-		  //console.log(fileInfo.get_name());
-		  this._addItem(carbonSetDir + '/' + fileInfo.get_name(), fileInfo.get_display_name().replace(/\.[^/.]+$/, ""));
+		  if(i < 50){
+		    this._addItem(carbonSetDir + '/' + fileInfo.get_name(), fileInfo.get_display_name().replace(/\.[^/.]+$/, ""));
+		    i++;
+	    }
 		}
-
-    console.log(JSON.stringify(this.icons, null, 4));
-
-    /*
-    const file = Gio.File.new_for_uri('/com/github/azuredusk10/IconManager/icon-sets/carbon/character--sentence-case.svg');
-
-    const [contents, etag] = await file.load_contents_async(null);
-
-    // Do I need to do this? Or can I just pop this source into the GtkImage widget?
-    // Maybe, so I can modify the colours in the SVG?
-    // Or maybe I just need light and dark variants of each icon? Idk.
-
-    const decoder = new TextDecoder('utf-8');
-    const contentsString = decoder.decode(contents);
-    */
-
-
   }
 
   _addItem(filepath, label){
@@ -79,10 +60,6 @@ export const MainPanelView = GObject.registerClass({
       filepath: filepath,
       label: label.substring(0, 20),
     });
-
-    /* const newItemWrapper = new Gtk.FlowBoxChild({
-      child: newItem,
-    }); */
 
     this._iconsFlowbox.append(newItem);
   }

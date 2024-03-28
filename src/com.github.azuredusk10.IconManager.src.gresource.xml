@@ -9,5 +9,6 @@
     <file>Window.js</file>
     <file>Icon.js</file>
     <file>IconTile.js</file>
+    <file>IconPaintable.js</file>
   </gresource>
 </gresources>

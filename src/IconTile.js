@@ -38,9 +38,12 @@ export const IconTile = GObject.registerClass({
   }
 
   #renderIcon(){
-    const svgWidget = new IconPaintable({
+    const svgPaintable = new IconPaintable({
       filepath: this.filepath
     });
+    const svgWidget = new Gtk.Image({
+      paintable: svgPaintable
+    })
     this._icon_box.append(svgWidget);
   }
 

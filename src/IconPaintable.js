@@ -7,7 +7,7 @@ import Rsvg from 'gi://Rsvg';
 
 export const IconPaintable = GObject.registerClass({
   GTypeName: 'IcoIconPaintable',
-  Extends: [Gtk.Paintable],
+  Implements: [Gdk.Paintable],
   Properties: {
     Filepath: GObject.ParamSpec.string(
       'filepath',
@@ -17,7 +17,7 @@ export const IconPaintable = GObject.registerClass({
       ''
     ),
   },
-}, class extends Gtk.Widget {
+}, class extends GObject.Object {
 
   constructor(params){
     super(params);
@@ -26,6 +26,7 @@ export const IconPaintable = GObject.registerClass({
 
 
   vfunc_snapshot(snapshot, width, height) {
+    // TODO: The render_document method is breaking the app.
     // Create a Cairo context
     const cairoContext = snapshot.cairoContext;
 
@@ -34,6 +35,7 @@ export const IconPaintable = GObject.registerClass({
 
     // Create an Rsvg handle
     const rsvgHandle = Rsvg.Handle.new_from_gfile_sync(svgFile, 0, null);
+    // const rsvgHandle = Rsvg.Handle.new_from_file(this.filepath);
 
     // Set the viewport width and height
     const viewport = new Rsvg.Rectangle({
@@ -43,21 +45,24 @@ export const IconPaintable = GObject.registerClass({
       height: 24
     });
 
-    // Render the SVG to the Cairo context
-    rsvgHandle.render_document(cairoContext, viewport);
+    //rsvgHandle.render_document(cairoContext, viewport);
 
-    // Clean up
-    rsvgHandle.close();
   }
 
-  get_intrinsic_width() {
+  vfunc_get_intrinsic_width() {
     // SVG output width
     return 24;
   }
 
-  get_intrinsic_height() {
+  vfunc_get_intrinsic_height() {
     // SVG output height
     return 24;
+  }
+
+  vfunc_get_flags(){
+
+    // This flag states that the content will not change, for optimisation.
+    return Gdk.PaintableFlags.CONTENTS;
   }
 
 });

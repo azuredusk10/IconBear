@@ -37,6 +37,16 @@ export const IconTile = GObject.registerClass({
     this._icon_tile_popover_menu.popup();
   }
 
+  onLeftClick(_self, _n_press, x, y){
+    if(_n_press == 2){
+      console.log('tile double-clicked');
+
+      // Open a toast to say that the icon SVG has been copied to the clipboard
+
+      // Copy the icon SVG to the clipboard
+    }
+  }
+
   #renderIcon(){
     const svgPaintable = new IconPaintable({
       filepath: this.filepath

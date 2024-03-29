@@ -51,6 +51,12 @@
           </object>
         </child>
         <child>
+          <object class="GtkGestureClick">
+            <property name="button">1</property>
+            <signal name="pressed" handler="onLeftClick"/>
+          </object>
+        </child>
+        <child>
           <object class="GtkPopoverMenu" id="icon_tile_popover_menu">
             <property name="menu-model">icon_tile_menu</property>
             <property name="has-arrow">false</property>

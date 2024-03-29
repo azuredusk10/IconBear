@@ -57,12 +57,22 @@ export const MainPanelView = GObject.registerClass({
 		let i=0;
 		while (fileInfo = children.next_file(null)) {
 		  if(i < 50){
-		    const icon = new Icon({
-		      label: fileInfo.get_display_name().replace(/\.[^/.]+$/, ""),
-		      filepath: carbonSetDir + '/' + fileInfo.get_name(),
-		    });
-		    this.icons.append(icon);
-		    i++;
+		    const label = fileInfo.get_display_name().replace(/\.[^/.]+$/, "");
+
+        // if label contains text from filter bar, add it to the list store
+        const re = new RegExp(this.searchEntryText, "i");
+        const match = re.test(label);
+        if (match) {
+
+
+		      const icon = new Icon({
+		        label,
+		        filepath: carbonSetDir + '/' + fileInfo.get_name(),
+		      });
+		      this.icons.append(icon);
+
+		      i++;
+		    }
 	    }
 		}
   }
@@ -84,11 +94,8 @@ export const MainPanelView = GObject.registerClass({
     this.emit('icon-activated', _child.filepath, _child.label);
   }
 
-  _filter(item) {
-    const re = new RegExp(searchEntryText, "i");
-    const match = re.test(item.label);
-    // if (match) results_count++;
-    return match;
-  }
+
+  // TODO: Update the icons list model when the SearchEntry text changes.
+  // I may need to hold the icon list store in the Window instead, and then pass it to this MainPanelView as a property.
 
 });

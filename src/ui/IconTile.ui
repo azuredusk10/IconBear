@@ -68,6 +68,8 @@
     <menu id="icon_tile_menu">
       <item>
         <attribute name="label" translatable="true">Copy as SVG</attribute>
+        <attribute name="action">win.copy-icon</attribute>
+        <attribute name="target">{'mimeType':'image/svg+xml','data':'image-data-goes-here'}</attribute>
       </item>
       <item>
         <attribute name="label" translatable="true">Copy as PNG</attribute>

@@ -69,23 +69,27 @@
         </object>
         </property>
         <property name="content">
-          <object class="AdwNavigationPage">
+          <object class="AdwNavigationPage" id="container">
             <property name="title" translatable="true">Icon thumbnails</property>
             <property name="tag">content</property>
             <property name="child">
               <object class="AdwToolbarView">
                 <child type="top">
                   <object class="AdwHeaderBar">
-                    <property name="show-title">false</property>
-
-
-                    <child type="start">
-                      <object class="GtkButton">
-                        <property name="hexpand">0</property>
-                        <property name="icon-name">edit-find-symbolic</property>
-                        <property name="tooltip-text" translatable="true">Search icons</property>
+                    <property name="title-widget">
+                      <object class="AdwClamp">
+                        <property name="hexpand">true</property>
+                        <property name="maximum-size">400</property>
+                        <property name="tightening-threshold">200</property>
+                        <child>
+                          <object class="GtkSearchEntry" id="searchentry">
+                            <property name="search-delay">100</property>
+                            <property name="placeholder-text" translatable="true">Search icons in this set</property>
+                          </object>
+                        </child>
                       </object>
-                    </child>
+                    </property>
+
                     <child type="start">
                       <object class="GtkMenuButton">
                         <property name="label">24px</property>
@@ -126,10 +130,14 @@
                     <property name="show-sidebar" bind-source="show_details_sidebar_button" bind-property="active" bind-flags="sync-create" />
                     <property name="sidebar-position">1</property>
                     <property name="content">
-                      <object class="GtkScrolledWindow">
+                      <object class="AdwToastOverlay" id="toast_overlay">
                         <child>
-                          <object class="IcoMainPanelView">
-                            <signal name="icon-activated" handler="onIconActivated" />
+                          <object class="GtkScrolledWindow">
+                            <child>
+                              <object class="IcoMainPanelView">
+                                <signal name="icon-activated" handler="onIconActivated" />
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>

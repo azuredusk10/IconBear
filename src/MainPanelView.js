@@ -35,7 +35,7 @@ export const MainPanelView = GObject.registerClass({
   constructor(params){
     super(params);
     this.#initializeIcons()
-    //this._iconsFlowbox.bind_model(this.icons, this._addItem);
+    this._iconsFlowbox.bind_model(this.icons, this._addItem);
 
   }
 
@@ -57,7 +57,11 @@ export const MainPanelView = GObject.registerClass({
 		let i=0;
 		while (fileInfo = children.next_file(null)) {
 		  if(i < 50){
-		    this._addItem(carbonSetDir + '/' + fileInfo.get_name(), fileInfo.get_display_name().replace(/\.[^/.]+$/, ""));
+		    const icon = new Icon({
+		      label: fileInfo.get_display_name().replace(/\.[^/.]+$/, ""),
+		      filepath: carbonSetDir + '/' + fileInfo.get_name(),
+		    });
+		    this.icons.append(icon);
 		    i++;
 	    }
 		}
@@ -65,14 +69,14 @@ export const MainPanelView = GObject.registerClass({
 
   // Create a new child of the Flowbox
   // TODO: correctly populate the list model. Then, the arguments to just "item" that represents a single item of the model (See Gtk.FlowBoxCreateWidgetFunc docs)
-  _addItem(filepath, label){
+  _addItem(icon){
 
     const newItem = new IconTile({
-      filepath: filepath,
-      label: label.substring(0, 20),
+      filepath: icon.filepath,
+      label: icon.label.substring(0, 20),
     });
 
-    this._iconsFlowbox.append(newItem);
+    return newItem;
   }
 
 

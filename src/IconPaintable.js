@@ -21,31 +21,32 @@ export const IconPaintable = GObject.registerClass({
 
   constructor(params){
     super(params);
-
+    console.log(this.filepath, 'hello');
   }
 
 
   vfunc_snapshot(snapshot, width, height) {
-    // TODO: The render_document method is breaking the app.
     // Create a Cairo context
     const cairoContext = snapshot.cairoContext;
 
     // Load an svg file using the "Filename" property
-    const svgFile = Gio.File.new_for_path(this.filepath);
+    const svgFile = Gio.File.new_for_path('/home/chriswood/icon-sets/carbon/ai-status-complete.svg');
 
     // Create an Rsvg handle
     const rsvgHandle = Rsvg.Handle.new_from_gfile_sync(svgFile, 0, null);
-    // const rsvgHandle = Rsvg.Handle.new_from_file(this.filepath);
+    // const rsvgHandle = Rsvg.Handle.new_from_file('/home/chriswood/icon-sets/carbon/ai-status-complete.svg');
 
     // Set the viewport width and height
     const viewport = new Rsvg.Rectangle({
       x: 0,
       y: 0,
-      width: 24,
-      height: 24
+      width,
+      height,
     });
 
-    //rsvgHandle.render_document(cairoContext, viewport);
+    console.log(rsvgHandle);
+
+    rsvgHandle.render_document(cairoContext, viewport);
 
   }
 

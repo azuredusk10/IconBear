@@ -28,7 +28,7 @@ export const IconTile = GObject.registerClass({
 }, class extends Gtk.FlowBoxChild{
   constructor(params){
     super(params);
-    this.#renderIcon();
+    // this.#renderIcon();
   }
 
   onRightClick(_self, _n_press, x, y) {

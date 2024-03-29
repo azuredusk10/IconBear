@@ -18,6 +18,13 @@ export const MainPanelView = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       Gio.ListStore
     ),
+    searchEntryText: GObject.ParamSpec.string(
+      'searchEntryText',
+      'Search Entry Text',
+      'The user-inputted value of the search entry',
+      GObject.ParamFlags.READWRITE,
+      ''
+    )
   },
   Signals: {
     'icon-activated': {
@@ -28,6 +35,8 @@ export const MainPanelView = GObject.registerClass({
   constructor(params){
     super(params);
     this.#initializeIcons()
+    //this._iconsFlowbox.bind_model(this.icons, this._addItem);
+
   }
 
   #initializeIcons() {
@@ -54,6 +63,8 @@ export const MainPanelView = GObject.registerClass({
 		}
   }
 
+  // Create a new child of the Flowbox
+  // TODO: correctly populate the list model. Then, the arguments to just "item" that represents a single item of the model (See Gtk.FlowBoxCreateWidgetFunc docs)
   _addItem(filepath, label){
 
     const newItem = new IconTile({
@@ -67,6 +78,13 @@ export const MainPanelView = GObject.registerClass({
 
   onIconActivated(_flowbox, _child) {
     this.emit('icon-activated', _child.filepath, _child.label);
+  }
+
+  _filter(item) {
+    const re = new RegExp(searchEntryText, "i");
+    const match = re.test(item.label);
+    // if (match) results_count++;
+    return match;
   }
 
 });

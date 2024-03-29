@@ -82,7 +82,7 @@
                         <property name="maximum-size">400</property>
                         <property name="tightening-threshold">200</property>
                         <child>
-                          <object class="GtkSearchEntry" id="searchentry">
+                          <object class="GtkSearchEntry" id="search_entry">
                             <property name="search-delay">100</property>
                             <property name="placeholder-text" translatable="true">Search icons in this set</property>
                           </object>
@@ -108,20 +108,6 @@
 
                       </object>
                     </child>
-
-
-                    <!-- TODO: Put a search bar in the centre of the panel. Ensure it doesn't overlap the "Close" button when window decorations are on the right. -->
-
-                    <!-- <child type="end">
-                      <object class="GtkMenuButton">
-                        <property name="icon-name">view-reveal-symbolic</property>
-                        <property name="always-show-arrow">true</property>
-                        <property name="tooltip-text" translatable="true">Icon appearance</property>
-                        <property name="popover">icon_appearance_popover</property>
-                      </object>
-                    </child> -->
-
-
                   </object>
                 </child>
 
@@ -136,6 +122,7 @@
                             <child>
                               <object class="IcoMainPanelView">
                                 <signal name="icon-activated" handler="onIconActivated" />
+                                <property name="searchEntryText" bind-source="search_entry" bind-property="text" bind-flags="sync-create" />
                               </object>
                             </child>
                           </object>

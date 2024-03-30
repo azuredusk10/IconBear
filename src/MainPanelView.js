@@ -43,13 +43,13 @@ export const MainPanelView = GObject.registerClass({
     super(params);
 
     this.connect('notify::icons', () => {
-      console.log('icons list store changed')
       // Filter the icons whenever the parent list store changes and when it's been fully populated.
 
       if(this.icons){
         // The number of items in the list store property returns 0 until it's been fully populated.
         // Once populated, filter it and bind the model.
         if(this.icons.get_n_items() > 0){
+          console.log('icons list store loaded')
           this.#filterIcons();
         }
       }
@@ -76,7 +76,7 @@ export const MainPanelView = GObject.registerClass({
 
     while(i < totalIcons) {
       const singleIcon = this.icons.get_item(i);
-      console.log(singleIcon.label);
+
       if(re.test(singleIcon.label)){
         this.filteredIcons.append(singleIcon);
       }

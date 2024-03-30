@@ -8,7 +8,6 @@ import './MainPanelView.js';
 import './SidebarView.js';
 import './DetailsPanel.js';
 import './IconTile.js';
-import './IconPaintable.js';
 import { Window } from './Window.js';
 
 

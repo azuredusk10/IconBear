@@ -1,7 +1,7 @@
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 
-import { IconPaintable } from './IconPaintable.js';
+import { drawSvg } from './drawSvg.js';
 
 export const DetailsPanel = GObject.registerClass({
   GTypeName: 'IcoDetailsPanel',
@@ -20,27 +20,23 @@ export const DetailsPanel = GObject.registerClass({
       'The icon label',
       GObject.ParamFlags.READWRITE,
       ''
-    )
+    ),
   },
   InternalChildren: ['preview_image'],
 }, class extends Gtk.Widget {
   constructor(params){
     super(params);
     this.#renderPreview();
-    this.svgPaintable;
+    this.connect('notify::filepath', () => this.#renderPreview());
   }
 
   #renderPreview(){
-    // Create the paintable
-     this.svgPaintable = new IconPaintable({
-      // filepath: this.filepath
-    });
 
-    console.log(this.svgPaintable);
+    if(this.filepath){
+      console.log(this.filepath);
+      this._preview_image.set_draw_func((widget, cr, width, height) => drawSvg(widget, cr, width, height, this.filepath));
+    }
 
-    // Set the paintable property of the GtkImage
-    // TODO: setting the image's paintable property breaks the app.
-    //this._preview_image.paintable = this.svgPaintable;
   }
 
 });

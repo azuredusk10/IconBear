@@ -101,8 +101,11 @@ export const Window = GObject.registerClass({
 		        filepath: carbonSetDir + '/' + fileInfo.get_name(),
 		      });
 
-		      // Using the list store's splice method to add all icons at once would be more efficient.
+		      // TODO: Using the list store's splice method to add all icons at once would be more efficient.
+		      // Although, the part that's causing a bottleneck in the application opening is actually opening the file. Work out how to do this asynchronously.
 		      this.currentSetIcons.append(icon);
+
+		      console.log('adding "' + label + '" to list store');
 
 		      i++;
 	    }

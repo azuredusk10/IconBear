@@ -40,7 +40,7 @@ export const IconTile = GObject.registerClass({
       24
     ),
   },
-  InternalChildren: ['icon_tile_popover_menu', 'icon_box']
+  InternalChildren: ['icon_tile_popover_menu', 'icon_box', 'icon_label']
 }, class extends Gtk.FlowBoxChild{
   constructor(params){
     super(params);
@@ -67,12 +67,14 @@ export const IconTile = GObject.registerClass({
     const svgWidget = new Gtk.DrawingArea({
       widthRequest: this.width,
       heightRequest: this.height,
+      marginTop: 8,
+      marginBottom: 8,
       cssClasses: ['icon-grid__image'],
     })
 
     svgWidget.set_draw_func((widget, cr, width, height) => drawSvg(widget, cr, width, height, this.filepath));
 
-    this._icon_box.append(svgWidget);
+    svgWidget.insert_before(this._icon_box, this._icon_label);
   }
 
 

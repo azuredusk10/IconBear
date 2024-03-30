@@ -96,7 +96,7 @@
                         <property name="label">24px</property>
                         <property name="always-show-arrow">true</property>
                         <property name="tooltip-text" translatable="true">Icon Size</property>
-                        <property name="menu-model">icon_size_menu</property>
+                        <property name="popover">icon_size_popover</property>
                       </object>
                     </child>
 
@@ -195,49 +195,58 @@
       </item>
     </section>
   </menu>
-  <object class="GtkPopover" id="icon_appearance_popover">
+  <object class="GtkPopover" id="icon_size_popover">
     <property name="has-arrow">true</property>
-    <property name="name">icon_appearance_popover</property>
+    <property name="name">icon_size_popover</property>
     <property name="child">
-      <object class="GtkBox" id="icon-appearance-popover-box">
-        <property name="name">plain-popover-box</property>
-        <property name="orientation">vertical</property>
+      <object class="AdwClamp">
+        <property name="hexpand">true</property>
+        <property name="maximum-size">300</property>
         <child>
-          <object class="GtkLabel">
-            <property name="label" translatable="true">Size</property>
-            <style>
-              <class name="mb-2"/>
-            </style>
-          </object>
-        </child>
-        <child>
-          <object class="GtkScale" id="icon_size">
-            <property name="orientation">0</property>
-            <property name="margin-bottom">18</property>
-            <property name="width-request">200</property>
-            <property name="hexpand">true</property>
-            <property name="draw-value">true</property>
-            <property name="digits">0</property>
-            <property name="adjustment">
-              <object class="GtkAdjustment">
-                <property name="lower">16</property>
-                <property name="upper">188</property>
-                <property name="value">48</property>
-
+          <object class="GtkBox" id="">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="true">Size</property>
+                <style>
+                  <class name="mb-2"/>
+                </style>
               </object>
-            </property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="label" translatable="true">Color</property>
-            <style>
-              <class name="mb-2"/>
-            </style>
-          </object>
-        </child>
-        <child>
-          <object class="GtkColorDialogButton" id="color_dialog_button">
+            </child>
+            <child>
+              <object class="GtkScale" id="icon_size_scale">
+                <property name="orientation">0</property>
+                <property name="margin-bottom">18</property>
+                <property name="hexpand">true</property>
+                <property name="draw-value">true</property>
+                <property name="digits">0</property>
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">16</property>
+                    <property name="upper">96</property>
+
+                  </object>
+                </property>
+                <property name="draw-value">true</property>
+                <marks>
+                  <mark value="16" position="top"></mark>
+                  <mark value="24" position="top"></mark>
+                  <mark value="32" position="top"></mark>
+                  <mark value="48" position="top"></mark>
+                  <mark value="64" position="top"></mark>
+                  <mark value="96" position="top"></mark>
+                </marks>
+                <signal name="value-changed" handler="onIconSizeChanged"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="true">Color</property>
+                <style>
+                  <class name="mb-2"/>
+                </style>
+              </object>
+            </child>
           </object>
         </child>
       </object>

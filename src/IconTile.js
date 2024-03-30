@@ -45,6 +45,9 @@ export const IconTile = GObject.registerClass({
   constructor(params){
     super(params);
     this.#renderIcon();
+    this.connect('notify::width', () => {
+      console.log('width of IconTile changed');
+    })
   }
 
   onRightClick(_self, _n_press, x, y) {

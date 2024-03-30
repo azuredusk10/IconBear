@@ -24,7 +24,15 @@ export const MainPanelView = GObject.registerClass({
       'The user-inputted value of the search entry',
       GObject.ParamFlags.READWRITE,
       ''
-    )
+    ),
+    iconSize: GObject.ParamSpec.double(
+      'iconSize',
+      'Icon Size',
+      'The size to render icons in the Flowbox at',
+      GObject.ParamFlags.READWRITE,
+      Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER,
+      24
+    ),
   },
   Signals: {
     'icon-activated': {
@@ -43,11 +51,13 @@ export const MainPanelView = GObject.registerClass({
         // Once populated, filter it and bind the model.
         if(this.icons.get_n_items() > 0){
           console.log('icons list store loaded')
-          this._iconsFlowbox.bind_model(this.icons, this._addItem);
+          this._iconsFlowbox.bind_model(this.icons, (icon) => this._addItem(icon, this.iconSize));
           this.#filterIcons();
         }
       }
     });
+
+
 
     this.connect('notify::searchEntryText', () => {
       if(this.icons){
@@ -81,11 +91,13 @@ export const MainPanelView = GObject.registerClass({
   }
 
   // Create a new child of the Flowbox
-  _addItem(icon){
+  _addItem(icon, size){
 
     const newItem = new IconTile({
       filepath: icon.filepath,
       label: icon.label.substring(0, 20),
+      width: size,
+      height: size,
     });
 
     return newItem;

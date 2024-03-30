@@ -25,6 +25,14 @@ export const Window = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       ''
     ),
+    iconSize: GObject.ParamSpec.double(
+      'iconSize',
+      'Icon Size',
+      'The size to render icons in the grid at',
+      GObject.ParamFlags.READWRITE,
+      Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER,
+      24
+    ),
 	}
 }, class extends Adw.ApplicationWindow {
   constructor(params={}){
@@ -93,7 +101,7 @@ export const Window = GObject.registerClass({
 		let fileInfo;
 		let i=0;
 		while (fileInfo = children.next_file(null)) {
-		  if(i < 5000){
+		  if(i < 50){
 		    const label = fileInfo.get_display_name().replace(/\.[^/.]+$/, "");
 
 		      const icon = new Icon({
@@ -102,7 +110,7 @@ export const Window = GObject.registerClass({
 		      });
 
 		      // TODO: Using the list store's splice method to add all icons at once would be more efficient.
-		      // Although, the part that's causing a bottleneck in the application opening is actually opening the file. Work out how to do this asynchronously.
+		      // Although, the part that's causing a bottleneck in the application opening is actually opening the file / rendering the IconTiles. Work out how to do this asynchronously.
 		      this.currentSetIcons.append(icon);
 
 		      console.log('adding "' + label + '" to list store');
@@ -114,8 +122,6 @@ export const Window = GObject.registerClass({
 		// This will tell the Main Panel that the icons have been fully processed
 		this.notify('currentSetIcons');
 
-    // How to run a method on MainPanelView from here? This doesn't work
-    // this._main_panel.#filterItems();
   }
 
 	onIconActivated(emitter, filepath, label){
@@ -126,6 +132,14 @@ export const Window = GObject.registerClass({
 	onSearchEntrySearchChanged() {
 	  const searchEntryText = this._search_entry.text;
     this._main_panel.searchEntryText = this._search_entry.text;
+	}
+
+	onIconSizeChanged(_scale){
+
+	  this.iconSize = _scale.get_value();
+
+	  console.log(this.iconSize);
+	  // this.notify('iconSize');
 	}
 
 });

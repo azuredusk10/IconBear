@@ -14,7 +14,14 @@ export const MainPanelView = GObject.registerClass({
     icons: GObject.ParamSpec.object(
       'icons',
       'Icons',
-      'The list model containing the icons',
+      'The list model containing the icons from the current icon set',
+      GObject.ParamFlags.READWRITE,
+      Gio.ListStore
+    ),
+    filteredIcons: GObject.ParamSpec.object(
+      'filteredIcons',
+      'Filtered Icons',
+      'The list model containing the icons from the current set, filtered by the search entry text',
       GObject.ParamFlags.READWRITE,
       Gio.ListStore
     ),
@@ -34,51 +41,60 @@ export const MainPanelView = GObject.registerClass({
 }, class extends Gtk.Widget {
   constructor(params){
     super(params);
-    this.#initializeIcons()
-    this._iconsFlowbox.bind_model(this.icons, this._addItem);
 
+    this.connect('notify::icons', () => {
+      console.log('icons list store changed')
+      // Filter the icons whenever the parent list store changes and when it's been fully populated.
+
+      if(this.icons){
+        // The number of items in the list store property returns 0 until it's been fully populated.
+        // Once populated, filter it and bind the model.
+        if(this.icons.get_n_items() > 0){
+          this.#filterIcons();
+        }
+      }
+    });
+
+    this.connect('notify::searchEntryText', () => {
+      if(this.icons){
+         if(this.icons.get_n_items() > 0){
+          this.#filterIcons();
+         }
+      }
+    });
   }
 
-  #initializeIcons() {
+  #filterIcons(){
 
-    this.icons = Gio.ListStore.new(Icon);
+    // Reset the filtered icons list store
+    this.filteredIcons = new Gio.ListStore(Icon);
 
-    const iconSetsDir = GLib.build_pathv('/', [GLib.get_home_dir(), '/icon-sets']);
-    console.log(iconSetsDir);
+    // loop over each item in the listStore - use value of get_n_items to decide how many times to iterate over the "get" list store method.
+    let i=0;
+    let totalIcons = this.icons.get_n_items();
+    const re = new RegExp(this.searchEntryText, "i");
 
-    const carbonSetDir = GLib.build_pathv('/', [iconSetsDir, '/carbon']);
-    console.log(carbonSetDir);
+    while(i < totalIcons) {
+      const singleIcon = this.icons.get_item(i);
+      console.log(singleIcon.label);
+      if(re.test(singleIcon.label)){
+        this.filteredIcons.append(singleIcon);
+      }
 
-  		// Get an enumerator of all children
-    	const children = Gio.File.new_for_path(carbonSetDir).enumerate_children('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
-
-    	// Add an IconTile to the FlowBox for the first 50 icon files in the directory
-		let fileInfo;
-		let i=0;
-		while (fileInfo = children.next_file(null)) {
-		  if(i < 50){
-		    const label = fileInfo.get_display_name().replace(/\.[^/.]+$/, "");
-
-        // if label contains text from filter bar, add it to the list store
-        const re = new RegExp(this.searchEntryText, "i");
-        const match = re.test(label);
-        if (match) {
+      i++;
+    }
 
 
-		      const icon = new Icon({
-		        label,
-		        filepath: carbonSetDir + '/' + fileInfo.get_name(),
-		      });
-		      this.icons.append(icon);
+    // if it matches the regex expression, append it to filteredItems
+    console.log(this.filteredIcons.get_n_items(), 'filtered icons');
 
-		      i++;
-		    }
-	    }
-		}
+    this._iconsFlowbox.bind_model(this.filteredIcons, this._addItem);
+
+    // Tell the app that the filteredIcons list store has changed
+    this.notify('filteredIcons');
   }
 
   // Create a new child of the Flowbox
-  // TODO: correctly populate the list model. Then, the arguments to just "item" that represents a single item of the model (See Gtk.FlowBoxCreateWidgetFunc docs)
   _addItem(icon){
 
     const newItem = new IconTile({
@@ -93,9 +109,5 @@ export const MainPanelView = GObject.registerClass({
   onIconActivated(_flowbox, _child) {
     this.emit('icon-activated', _child.filepath, _child.label);
   }
-
-
-  // TODO: Update the icons list model when the SearchEntry text changes.
-  // I may need to hold the icon list store in the Window instead, and then pass it to this MainPanelView as a property.
 
 });

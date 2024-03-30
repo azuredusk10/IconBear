@@ -120,9 +120,10 @@
                         <child>
                           <object class="GtkScrolledWindow">
                             <child>
-                              <object class="IcoMainPanelView">
+                              <object class="IcoMainPanelView" id="main_panel">
                                 <signal name="icon-activated" handler="onIconActivated" />
                                 <property name="searchEntryText" bind-source="search_entry" bind-property="text" bind-flags="sync-create" />
+                                <property name="icons" bind-source="IcoWindow" bind-property="currentSetIcons" bind-flags="sync-create" />
                               </object>
                             </child>
                           </object>

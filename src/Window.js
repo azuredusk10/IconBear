@@ -9,7 +9,7 @@ import { Icon } from './Icon.js';
 export const Window = GObject.registerClass({
 	GTypeName: 'IcoWindow',
 	Template: 'resource:///com/github/azuredusk10/IconManager/ui/Window.ui',
-	InternalChildren: ['details_panel', 'main_panel', 'toast_overlay'],
+	InternalChildren: ['details_panel', 'main_panel', 'toast_overlay', 'search_entry'],
 	Properties: {
 	  currentSetIcons: GObject.ParamSpec.object(
       'currentSetIcons',
@@ -93,7 +93,7 @@ export const Window = GObject.registerClass({
 		let fileInfo;
 		let i=0;
 		while (fileInfo = children.next_file(null)) {
-		  if(i < 50){
+		  if(i < 5000){
 		    const label = fileInfo.get_display_name().replace(/\.[^/.]+$/, "");
 
 		      const icon = new Icon({
@@ -121,6 +121,11 @@ export const Window = GObject.registerClass({
 	onIconActivated(emitter, filepath, label){
 	  this._details_panel.filepath = filepath;
 	  this._details_panel.label = label;
+	}
+
+	onSearchEntrySearchChanged() {
+	  const searchEntryText = this._search_entry.text;
+    this._main_panel.searchEntryText = this._search_entry.text;
 	}
 
 });

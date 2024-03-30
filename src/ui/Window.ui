@@ -85,6 +85,7 @@
                           <object class="GtkSearchEntry" id="search_entry">
                             <property name="search-delay">100</property>
                             <property name="placeholder-text" translatable="true">Search icons in this set</property>
+                            <signal name="search-changed" handler="onSearchEntrySearchChanged" />
                           </object>
                         </child>
                       </object>
@@ -122,7 +123,6 @@
                             <child>
                               <object class="IcoMainPanelView" id="main_panel">
                                 <signal name="icon-activated" handler="onIconActivated" />
-                                <property name="searchEntryText" bind-source="search_entry" bind-property="text" bind-flags="sync-create" />
                                 <property name="icons" bind-source="IcoWindow" bind-property="currentSetIcons" bind-flags="sync-create" />
                               </object>
                             </child>

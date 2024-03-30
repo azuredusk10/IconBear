@@ -18,13 +18,6 @@ export const MainPanelView = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       Gio.ListStore
     ),
-    filteredIcons: GObject.ParamSpec.object(
-      'filteredIcons',
-      'Filtered Icons',
-      'The list model containing the icons from the current set, filtered by the search entry text',
-      GObject.ParamFlags.READWRITE,
-      Gio.ListStore
-    ),
     searchEntryText: GObject.ParamSpec.string(
       'searchEntryText',
       'Search Entry Text',
@@ -50,6 +43,7 @@ export const MainPanelView = GObject.registerClass({
         // Once populated, filter it and bind the model.
         if(this.icons.get_n_items() > 0){
           console.log('icons list store loaded')
+          this._iconsFlowbox.bind_model(this.icons, this._addItem);
           this.#filterIcons();
         }
       }
@@ -65,33 +59,25 @@ export const MainPanelView = GObject.registerClass({
   }
 
   #filterIcons(){
+    // Set the filter condition
+    const re = new RegExp(this.searchEntryText, "i");
 
-    // Reset the filtered icons list store
-    this.filteredIcons = new Gio.ListStore(Icon);
-
-    // loop over each item in the listStore - use value of get_n_items to decide how many times to iterate over the "get" list store method.
+    // Loop over each item in the list store
     let i=0;
     let totalIcons = this.icons.get_n_items();
-    const re = new RegExp(this.searchEntryText, "i");
 
     while(i < totalIcons) {
       const singleIcon = this.icons.get_item(i);
 
+      // If the current item's label matches the filter condition, show the item in the FlowBox. Otherwise, hide it.
       if(re.test(singleIcon.label)){
-        this.filteredIcons.append(singleIcon);
+        this._iconsFlowbox.get_child_at_index(i).show();
+      } else {
+        this._iconsFlowbox.get_child_at_index(i).hide();
       }
 
       i++;
     }
-
-
-    // if it matches the regex expression, append it to filteredItems
-    console.log(this.filteredIcons.get_n_items(), 'filtered icons');
-
-    this._iconsFlowbox.bind_model(this.filteredIcons, this._addItem);
-
-    // Tell the app that the filteredIcons list store has changed
-    this.notify('filteredIcons');
   }
 
   // Create a new child of the Flowbox

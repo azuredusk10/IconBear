@@ -36,11 +36,9 @@ export const MainPanelView = GObject.registerClass({
   },
   Signals: {
     'icon-activated': {
-      param_types: [GObject.TYPE_STRING, GObject.TYPE_STRING]
+      param_types: [GObject.TYPE_STRING, GObject.TYPE_STRING, GObject.TYPE_OBJECT]
     },
-    'icon-copied': {
-      param_types: [GObject.TYPE_OBJECT]
-    },
+    'icon-copied': {},
   }
 }, class extends Gtk.Widget {
   constructor(params){
@@ -111,11 +109,11 @@ export const MainPanelView = GObject.registerClass({
 
 
   onIconActivated(_flowbox, _child) {
-    this.emit('icon-activated', _child.filepath, _child.label);
+    this.emit('icon-activated', _child.icon.label, _child.icon.filepath, _child.icon);
   }
 
-  onIconCopied(emitter, gfile) {
-    this.emit('icon-copied', gfile);
+  onIconCopied(emitter) {
+    this.emit('icon-copied');
   }
 
 });

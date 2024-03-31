@@ -21,8 +21,18 @@ export const DetailsPanel = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       ''
     ),
+    icon: GObject.ParamSpec.object(
+      'icon',
+      'Icon',
+      'The Icon in GObject format',
+      GObject.ParamFlags.READWRITE,
+      GObject.Object
+    ),
   },
   InternalChildren: ['preview_image'],
+  Signals: {
+    'icon-copied': {},
+  }
 }, class extends Gtk.Widget {
   constructor(params){
     super(params);
@@ -34,9 +44,14 @@ export const DetailsPanel = GObject.registerClass({
 
     if(this.filepath){
       console.log(this.filepath);
+
       this._preview_image.set_draw_func((widget, cr, width, height) => drawSvg(widget, cr, width, height, this.filepath));
     }
 
+  }
+
+  onCopyButtonClicked(emitter){
+    this.emit('icon-copied');
   }
 
 });

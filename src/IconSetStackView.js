@@ -36,16 +36,30 @@ export const IconSetStackView = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       true,
     ),
+    activeIcon: GObject.ParamSpec.object(
+      'activeIcon',
+      'Active Icon',
+      'The Icon in GObject format that is currently selected',
+      GObject.ParamFlags.READWRITE,
+      GObject.Object
+    ),
   },
   InternalChildren: ['main_panel', 'toast_overlay', 'details_panel'],
 }, class extends Gtk.Widget {
   constructor(params){
     super(params);
+
+    // Connect the icon-copied signals and pass this widget's activeIcon property gfile through
+    this._main_panel.connect('icon-copied', (emitter) => this.onIconCopied(emitter, this.activeIcon.gfile));
+    this._details_panel.connect('icon-copied', (emitter) => this.onIconCopied(emitter, this.activeIcon.gfile));
   }
 
-  onIconActivated(emitter, filepath, label){
-	  this._details_panel.filepath = filepath;
+  onIconActivated(emitter, label, filepath, icon){
+    this.activeIcon = icon;
+
 	  this._details_panel.label = label;
+	  this._details_panel.filepath = filepath;
+	  this._details_panel.icon = icon;
 	}
 
 	onIconCopied(emitter, gfile){

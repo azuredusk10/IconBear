@@ -63,18 +63,6 @@ export const IconTile = GObject.registerClass({
     })
   }
 
-  onRightClick(_self, _n_press, x, y) {
-    const position = new Gdk.Rectangle({ x: x, y: y });
-    this._icon_tile_popover_menu.pointing_to = position;
-    this._icon_tile_popover_menu.popup();
-  }
-
-  onLeftClick(_self, _n_press, x, y){
-    if(_n_press == 2){
-      this.emit('icon-copied', this.icon.gfile);
-    }
-  }
-
   #renderIcon(){
     const svgWidget = new Gtk.DrawingArea({
       widthRequest: this.width,
@@ -89,5 +77,24 @@ export const IconTile = GObject.registerClass({
     svgWidget.insert_before(this._icon_box, this._icon_label);
   }
 
+  onRightClick(_self, _n_press, x, y) {
+
+    // Copying the icon as a placeholder
+    this.emit('icon-copied', this.icon.gfile);
+
+
+    // TODO: get the right-click menu items working
+    /*
+    const position = new Gdk.Rectangle({ x: x, y: y });
+    this._icon_tile_popover_menu.pointing_to = position;
+    this._icon_tile_popover_menu.popup();
+    */
+  }
+
+  onLeftClick(_self, _n_press, x, y){
+    if(_n_press == 2){
+      this.emit('icon-copied', this.icon.gfile);
+    }
+  }
 
 } );

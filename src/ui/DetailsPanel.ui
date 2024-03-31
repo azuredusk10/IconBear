@@ -97,6 +97,7 @@
             <child>
               <object class="AdwSplitButton">
                 <property name="menu-model">icon_details_copy_menu</property>
+                <signal name="clicked" handler="onCopyButtonClicked" />
                 <style>
                   <class name="suggested-action"/>
                 </style>

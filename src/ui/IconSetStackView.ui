@@ -8,9 +8,7 @@
 		</property>
     <child>
       <object class="AdwOverlaySplitView">
-        <!-- TODO: Pass sidebar visibility to this composite widget and then bing here
-        <property name="show-sidebar" bind-source="show_details_sidebar_button" bind-property="active" bind-flags="sync-create" /> -->
-        <property name="show-sidebar">true</property>
+        <property name="show-sidebar" bind-source="IcoIconSetStackView" bind-property="sidebarVisible" bind-flags="sync-create" />
         <property name="sidebar-position">1</property>
         <property name="vexpand">true</property>
         <property name="content">

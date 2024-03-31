@@ -105,7 +105,7 @@
 
                     <child type="end">
                       <object class="GtkToggleButton" id="show_details_sidebar_button">
-                        <property name="active" bind-source="IcoWindow" bind-property="sidebarVisible" bind-flags="sync-create" />
+                        <property name="active" bind-source="IcoWindow" bind-property="sidebarVisible" bind-flags="bidirectional" />
                         <property name="icon-name">sidebar-show-right-symbolic</property>
                         <property name="tooltip-text" translatable="true">Toggle Icon Detail Sidebar</property>
 

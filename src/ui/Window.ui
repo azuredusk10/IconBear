@@ -105,8 +105,7 @@
 
                     <child type="end">
                       <object class="GtkToggleButton" id="show_details_sidebar_button">
-                        <!-- TODO: fix this button
-                        <property name="active" bind-source="details_view" bind-property="show-sidebar" bind-flags="sync-create" /> -->
+                        <property name="active" bind-source="IcoWindow" bind-property="sidebarVisible" bind-flags="sync-create" />
                         <property name="icon-name">sidebar-show-right-symbolic</property>
                         <property name="tooltip-text" translatable="true">Toggle Icon Detail Sidebar</property>
 
@@ -125,7 +124,10 @@
                         <property name="title">All sets</property>
                         <property name="name">all_sets</property>
                         <property name="child">
-                          <object class="IcoAllSetsStackView" id="all_sets_view"></object>
+                          <object class="IcoAllSetsStackView" id="all_sets_view">
+                            <!-- Pass all icon sets into this composite widget -->
+                            <property name="searchEntryText" bind-source="search_entry" bind-property="text" bind-flags="sync-create"></property>
+                          </object>
                         </property>
                       </object>
                     </child>
@@ -134,7 +136,13 @@
                         <property name="title">Example set</property>
                         <property name="name">example_set</property>
                         <property name="child">
-                          <object class="IcoIconSetStackView" id="set_view"></object>
+                          <object class="IcoIconSetStackView" id="set_view">
+                            <!-- TODO: Pass in icon set, search entry, and sidebar visibility -->
+                            <property name="icons" bind-source="IcoWindow" bind-property="currentSetIcons" bind-flags="sync-create"></property>
+                            <property name="setName" bind-source="IcoWindow" bind-property="currentSetName" bind-flags="sync-create"></property>
+                            <property name="searchEntryText" bind-source="search_entry" bind-property="text" bind-flags="sync-create"></property>
+                            <property name="sidebarVisible" bind-source="IcoWindow" bind-property="sidebarVisible" bind-flags="sync-create" />
+                          </object>
                         </property>
                       </object>
                     </child>

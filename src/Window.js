@@ -25,6 +25,13 @@ export const Window = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       ''
     ),
+    sidebarVisible: GObject.ParamSpec.boolean(
+      'sidebarVisible',
+      'Sidebar Visible',
+      'Whether the details sidebar is visible or not',
+      GObject.ParamFlags.READWRITE,
+      true,
+    ),
     iconSize: GObject.ParamSpec.double(
       'iconSize',
       'Icon Size',

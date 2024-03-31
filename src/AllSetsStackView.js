@@ -11,7 +11,13 @@ export const AllSetsStackView = GObject.registerClass({
   Template: 'resource:///com/github/azuredusk10/IconManager/ui/AllSetsStackView.ui',
   InternalChildren: ['sets_flowbox'],
   Properties: {
-
+    searchEntryText: GObject.ParamSpec.string(
+      'searchEntryText',
+      'Search Entry Text',
+      'The user-inputted value of the search entry',
+      GObject.ParamFlags.READWRITE,
+      ''
+    ),
   },
   Signals: {
     'set-activated': {},

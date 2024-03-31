@@ -8,6 +8,7 @@
     <file preprocess="xml-stripblanks">ui/Window.ui</file>
     <file preprocess="xml-stripblanks">ui/DetailsPanel.ui</file>
     <file preprocess="xml-stripblanks">ui/IconTile.ui</file>
+    <file preprocess="xml-stripblanks">ui/AllSetsStackView.ui</file>
     <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
     <file>icon-sets/carbon/character--sentence-case.svg</file>
   </gresource>

@@ -111,7 +111,6 @@ export const Window = GObject.registerClass({
 		      });
 
 		      // TODO: Using the list store's splice method to add all icons at once would be more efficient.
-		      // Although, the part that's causing a bottleneck in the application opening is actually opening the file / rendering the IconTiles. Work out how to do this asynchronously.
 		      this.currentSetIcons.append(icon);
 
 		      console.log('adding "' + label + '" to list store');

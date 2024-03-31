@@ -9,6 +9,7 @@
     <file>Window.js</file>
     <file>Icon.js</file>
     <file>IconTile.js</file>
+    <file>AllSetsStackView.js</file>
     <file>drawSvg.js</file>
   </gresource>
 </gresources>

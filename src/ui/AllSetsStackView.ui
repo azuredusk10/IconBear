@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<interface>
+  <template class="IcoAllSetsStackView">
+    <property name="layout-manager">
+			<object class="GtkBoxLayout">
+				<property name="orientation">vertical</property>
+			</object>
+		</property>
+    <child>
+      <object class="GtkBox" id="all_sets_container">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="label">All sets</property>
+            <property name="valign">1</property>
+            <style>
+              <class name="title-1"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkFlowBox" id="sets_flowbox">
+            <property name="orientation">0</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">6</property>
+            <property name="homogeneous">false</property>
+            <property name="max-children-per-line">-1</property>
+            <property name="min-children-per-line">1</property>
+            <property name="selection-mode">single</property>
+            <property name="vexpand">0</property>
+            <signal name="child-activated" handler="onSetActivated"/>
+            <child>
+              <object class="GtkFlowBoxChild">
+                <style>
+                  <class name="card"/>
+                </style>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkFlowBox">
+                        <child>
+                          <object class="GtkFlowBoxChild">
+                            <property name="child">
+                              <object class="GtkLabel">
+                                <property name="label">Icon preview * 6</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label">Carbon</property>
+                        <style>
+                          <class name="title-2"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">All sets</property>
+                <property name="valign">1</property>
+                <style>
+                  <class name="title-1"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">All sets</property>
+                <property name="valign">1</property>
+                <style>
+                  <class name="title-1"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

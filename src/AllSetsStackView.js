@@ -8,7 +8,7 @@ import { Icon } from './Icon.js';
 export const AllSetsStackView = GObject.registerClass({
   GTypeName: 'IcoAllSetsStackView',
   Template: 'resource:///com/github/azuredusk10/IconManager/ui/AllSetsStackView.ui',
-  InternalChildren: ['sets_flowbox', 'main_stack'],
+  InternalChildren: ['sets_flowbox'],
   Properties: {
 
   },
@@ -18,6 +18,11 @@ export const AllSetsStackView = GObject.registerClass({
 }, class extends Gtk.Widget {
   constructor(params){
     super(params);
+  }
+
+  onSetActivated(_flowbox, _child){
+    this.emit('set-activated');
+    console.log('set activated');
   }
 
 });

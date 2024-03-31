@@ -109,9 +109,8 @@
                         <property name="active" bind-source="IcoWindow" bind-property="sidebarVisible" bind-flags="sync-create" />
                         <property name="icon-name">sidebar-show-right-symbolic</property>
                         <property name="tooltip-text" translatable="true">Toggle Icon Detail Sidebar</property>
+                        <property name="visible" bind-source="IcoWindow" bind-property="sidebarButtonVisible" bind-flags="sync-create" />
                         <signal name="toggled" handler="onDetailsSidebarToggled"/>
-
-
                       </object>
                     </child>
                   </object>
@@ -120,6 +119,7 @@
 
                 <property name="content">
                   <object class="GtkStack" id="main_stack">
+                    <signal name="notify::visible-child-name" handler="onStackPageChange"/>
                     <child>
                       <object class="GtkStackPage">
                         <property name="title">All sets</property>

@@ -9,7 +9,7 @@ import { Icon } from './Icon.js';
 export const Window = GObject.registerClass({
 	GTypeName: 'IcoWindow',
 	Template: 'resource:///com/github/azuredusk10/IconManager/ui/Window.ui',
-	InternalChildren: ['search_entry', 'set_view', 'main_stack', 'sidebar_panel'],
+	InternalChildren: ['search_entry', 'set_view', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button'],
 	Properties: {
 	  currentSetIcons: GObject.ParamSpec.object(
       'currentSetIcons',
@@ -39,6 +39,13 @@ export const Window = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER,
       24
+    ),
+    sidebarButtonVisible: GObject.ParamSpec.boolean(
+      'sidebarButtonVisible',
+      'Sidebar Button Visible',
+      'Whether the details sidebar toggle button is visible or not',
+      GObject.ParamFlags.READWRITE,
+      false,
     ),
 	}
 }, class extends Adw.ApplicationWindow {
@@ -153,6 +160,15 @@ export const Window = GObject.registerClass({
 	onDetailsSidebarToggled(){
 	  this.sidebarVisible = !this.sidebarVisible;
 	  this.notify('sidebarVisible');
+	}
+
+	onStackPageChange(e){
+	  const visiblePageName = e.visibleChildName;
+	  if(visiblePageName === 'all_sets'){
+      this.sidebarButtonVisible = false;
+	  } else {
+	    this.sidebarButtonVisible = true;
+	  }
 	}
 
 });

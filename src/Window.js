@@ -59,11 +59,10 @@ export const Window = GObject.registerClass({
   constructor(params={}){
     super(params);
     this.#bindSizeToSettings();
+    this.#importBundledIcons();
     this.#setupActions();
     this.#initializeIcons();
     this.#initializeMainStack();
-
-
   }
 
 	vfunc_close_request() {
@@ -112,7 +111,7 @@ export const Window = GObject.registerClass({
 		      // TODO: Using the list store's splice method to add all icons at once would be more efficient.
 		      this.currentSetIcons.append(icon);
 
-		      console.log('adding "' + label + '" to list store');
+		      // console.log('adding "' + label + '" to list store');
 
 		      i++;
 	    }
@@ -127,6 +126,107 @@ export const Window = GObject.registerClass({
     this._sidebar_panel._main_stack_sidebar.stack = this._main_stack;
   }
 
+  #importBundledIcons() {
+    // If the user is opening the app for the first time, import the bundled icons to their app data directory
+    const dataDir = GLib.get_user_data_dir();
+    console.log(dataDir);
+
+    const bundledIconsDir = '/com/github/azuredusk10/IconManager/icon-sets/';
+
+    // Detect whether the user data directory has all the bundled icons
+
+    // Create an array of bundle names
+    const bundleNamesArray = Gio.resources_enumerate_children(bundledIconsDir, 0);
+    console.log(bundleNamesArray);
+
+
+    bundleNamesArray.forEach(bundleName => {
+      // Check if a folder exists with that bundle name
+      const bundleDataPath = dataDir + '/' + bundleName;
+      console.log(bundleName);
+
+      const bundleDataDir = Gio.File.new_for_path(bundleDataPath);
+
+      const dirExists = bundleDataDir.query_file_type(0, null);
+      switch(dirExists){
+        case 0:
+          console.log('Dir does not exist');
+          break;
+        case 2:
+          console.log('Dir exists');
+          return;
+        default:
+          console.log('A file with this name exists')
+          return;
+      }
+
+      // If the data directory doesn't already exist, make it
+      console.log(bundleDataDir.make_directory(null));
+
+      // Try just copying all files from the relevant resource directory to the data directory?
+      // Or do I even need to bother with this if I'm going to keep the built-in icons as resources anyway? Arg probably not.
+
+      // Create a File object representing the bundle directory
+      const bundlePath = 'resource://com/github/azuredusk10/IconManager/icon-sets/' + bundleName
+      const bundleDirFile = Gio.File.new_for_uri(bundlePath);
+
+
+      // Iterate through the bundle directory and copy each file to the data directory
+      const iconFilenamesArray = Gio.resources_enumerate_children(bundledIconsDir + 'carbon', 0);
+      console.log(iconFilenamesArray);
+      iconFilenamesArray.forEach(iconFilename => {
+        const sourceFile = Gio.File.new_for_uri(bundlePath + '/' + iconFilename);
+        const targetFile = Gio.File.new_for_path(bundleDataPath + iconFilename);
+
+        sourceFile.copy(targetFile, 1, null, null);
+      });
+
+
+
+
+
+      // If not, extract the icon archive into the data directory
+      /* This just didn't work. Couldn't make heads or tails of it. */
+      // Looks like this would just decompress a .tar.gz to a .tar at the end of it. Good luck managing that.
+      /*
+      const archivePath = bundledIconsDir + bundleFilename;
+      const decompressor = Gio.ZlibDecompressor.new(Gio.ZlibDecompressor.GZIP);
+
+      const archive = Gio.resources_open_stream(archivePath, 0);
+      const fileBytes = Gio.resources_lookup_data(archivePath, 0);
+      //const archiveStream = Gio.MemoryInputStream.new_from_bytes(fileBytes);
+
+      console.log(fileBytes.get_size());
+
+
+
+      // const archiveContents = archiveStream.read(fileBytes.get_size(), null);
+      let output = GLib.ByteArray.new();
+
+      const outputDir = dataDir + '/' + bundleName;
+      let outputFile = Gio.File.new_for_path(outputDir + '.txt');
+
+      //let outputStream = outputFile.create(0, null);
+
+      const [outputContents, outputEtag] = outputFile.load_contents(null);
+
+      console.log(decompressor.convert(
+          fileBytes.get_data(),
+          outputContents,
+          GLib.PRIORITY_DEFAULT,
+      ));
+
+      console.log(archiveContents);
+
+      decompressor.convert(archiveContents, output, 0);
+      */
+
+    });
+
+
+
+
+  }
 
 	onSearchEntrySearchChanged() {
 	  const searchEntryText = this._search_entry.text;

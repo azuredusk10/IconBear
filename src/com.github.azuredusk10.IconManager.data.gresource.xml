@@ -11,9 +11,8 @@
     <file preprocess="xml-stripblanks">ui/AllSetsStackView.ui</file>
     <file preprocess="xml-stripblanks">ui/IconSetStackView.ui</file>
     <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
-    <file>icon-sets/carbon/character--sentence-case.svg</file>
-  </gresource>
-   <gresource prefix="/com/github/azuredusk10/IconManager/icons/scalable/actions">
-	  <file alias="ico-grid-large-symbolic.svg">icons/grid-large-symbolic.svg</file>
+    <file>icon-sets/carbon/3d-cursor.svg</file>
+    <file>icon-sets/carbon/3d-cursor-alt.svg</file>
+    <file>icon-sets/carbon/3d-curve-auto-colon.svg</file>
   </gresource>
 </gresources>

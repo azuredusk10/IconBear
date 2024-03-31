@@ -105,6 +105,8 @@ export const Window = GObject.registerClass({
 		      const icon = new Icon({
 		        label,
 		        filepath: carbonSetDir + '/' + fileInfo.get_name(),
+		        type: fileInfo.get_file_type(),
+		        gfile: children.get_child(fileInfo),
 		      });
 
 		      // TODO: Using the list store's splice method to add all icons at once would be more efficient.

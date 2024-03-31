@@ -48,27 +48,35 @@ export const IconSetStackView = GObject.registerClass({
 	  this._details_panel.label = label;
 	}
 
-	onIconCopied(emitter, mimeType, data){
+	onIconCopied(emitter, gfile){
+
+	  let toastTitle;
+
+    // Copy the icon to clipboard
+    // Create a new GValue
+    const value = new GObject.Value();
+    value.init(Gio.File);
+
+    // Set and get the value contents
+    value.set_object(gfile);
+    const contentProvider = Gdk.ContentProvider.new_for_value(value);
+
+    // Copy the icon to the clipboard
+    const clipboard = this.get_clipboard();
+    if(clipboard.set_content(contentProvider)){
+      toastTitle = "SVG copied to clipboard";
+    } else {
+      toastTitle = "Couldn't copy the SVG to clipboard";
+    }
+
     // Show toast
     const toast = new Adw.Toast({
-      title: "SVG copied to clipboard",
+      title: toastTitle,
       timeout: 3,
     });
 
     this._toast_overlay.add_toast(toast);
-    console.log(mimeType, data);
-
-    // Copy the icon to clipboard
-    // Create a new GValue
-    const stringValue = new GObject.Value();
-    stringValue.init(GObject.TYPE_STRING);
-
-    // Set and get the value contents
-    stringValue.set_string(data);
-    console.log(stringValue.get_string());
-
-    const clipboard = this.get_clipboard();
-    clipboard.set(stringValue);
 	}
 
 });
+

@@ -40,11 +40,18 @@ export const IconTile = GObject.registerClass({
       Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER,
       24
     ),
+    icon: GObject.ParamSpec.object(
+      'icon',
+      'Icon',
+      'The Icon in GObject format',
+      GObject.ParamFlags.READWRITE,
+      GObject.Object
+    ),
   },
   InternalChildren: ['icon_tile_popover_menu', 'icon_box', 'icon_label'],
   Signals: {
     'icon-copied': {
-      param_types: [GObject.TYPE_STRING, GObject.TYPE_STRING]
+      param_types: [GObject.TYPE_OBJECT]
     },
   }
 }, class extends Gtk.FlowBoxChild{
@@ -64,9 +71,7 @@ export const IconTile = GObject.registerClass({
 
   onLeftClick(_self, _n_press, x, y){
     if(_n_press == 2){
-      console.log('tile double-clicked');
-
-      this.emit('icon-copied', 'image/svg+xml', 'data goes here');
+      this.emit('icon-copied', this.icon.gfile);
     }
   }
 

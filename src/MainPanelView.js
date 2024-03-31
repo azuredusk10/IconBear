@@ -39,7 +39,7 @@ export const MainPanelView = GObject.registerClass({
       param_types: [GObject.TYPE_STRING, GObject.TYPE_STRING]
     },
     'icon-copied': {
-      param_types: [GObject.TYPE_STRING, GObject.TYPE_STRING]
+      param_types: [GObject.TYPE_OBJECT]
     },
   }
 }, class extends Gtk.Widget {
@@ -97,6 +97,7 @@ export const MainPanelView = GObject.registerClass({
   _addItem(icon, size){
 
     const newItem = new IconTile({
+      icon,
       filepath: icon.filepath,
       label: icon.label.substring(0, 20),
       width: size,
@@ -113,8 +114,8 @@ export const MainPanelView = GObject.registerClass({
     this.emit('icon-activated', _child.filepath, _child.label);
   }
 
-  onIconCopied(emitter, mimeType, data) {
-    this.emit('icon-copied', mimeType, data);
+  onIconCopied(emitter, gfile) {
+    this.emit('icon-copied', gfile);
   }
 
 });

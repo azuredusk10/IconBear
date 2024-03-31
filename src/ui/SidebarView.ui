@@ -15,15 +15,13 @@
             <property name="valign">0</property>
           </object>
         </child>
-        <child>
+        <!-- <child>
           <object class="GtkListBox" id="iconSetsList">
             <style>
               <class name="navigation-sidebar"/>
             </style>
             <child>
-              <object class="GtkListBoxRow">
-                <style>
-                </style>
+              <object class="GtkListBoxRow" id="all_icons_list_box">
                 <child>
                   <object class="GtkBox">
                     <child>
@@ -43,7 +41,7 @@
               </object>
             </child>
           </object>
-        </child>
+        </child> -->
       </object>
     </child>
   </template>

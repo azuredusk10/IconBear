@@ -9,7 +9,7 @@ import { Icon } from './Icon.js';
 export const Window = GObject.registerClass({
 	GTypeName: 'IcoWindow',
 	Template: 'resource:///com/github/azuredusk10/IconManager/ui/Window.ui',
-	InternalChildren: ['search_entry', 'set_view'],
+	InternalChildren: ['search_entry', 'set_view', 'main_stack', 'sidebar_panel'],
 	Properties: {
 	  currentSetIcons: GObject.ParamSpec.object(
       'currentSetIcons',
@@ -132,7 +132,7 @@ export const Window = GObject.registerClass({
   }
 
   #initializeMainStack(){
-    // this._sidebar_panel._main_stack_sidebar.stack = this._main_panel._main_stack;
+    this._sidebar_panel._main_stack_sidebar.stack = this._main_stack;
   }
 
 

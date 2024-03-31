@@ -19,6 +19,7 @@
     </child>
     <property name="content">
       <object class="AdwNavigationSplitView" id="split_view">
+        <property name="max-sidebar-width">240</property>
         <property name="sidebar">
           <object class="AdwNavigationPage">
           <property name="title" translatable="true">Sets</property>
@@ -118,7 +119,6 @@
 
 
                 <property name="content">
-                  <!-- Put the main stack here -->
                   <object class="GtkStack" id="main_stack">
                     <child>
                       <object class="GtkStackPage">
@@ -126,7 +126,7 @@
                         <property name="name">all_sets</property>
                         <property name="child">
                           <object class="IcoAllSetsStackView" id="all_sets_view">
-                            <!-- Pass all icon sets into this composite widget -->
+                            <!-- TODO: Pass all icon sets into this composite widget -->
                             <property name="searchEntryText" bind-source="search_entry" bind-property="text" bind-flags="sync-create"></property>
                           </object>
                         </property>
@@ -138,7 +138,6 @@
                         <property name="name">example_set</property>
                         <property name="child">
                           <object class="IcoIconSetStackView" id="set_view">
-                            <!-- TODO: Pass in icon set, search entry, and sidebar visibility -->
                             <property name="icons" bind-source="IcoWindow" bind-property="currentSetIcons" bind-flags="sync-create"></property>
                             <property name="setName" bind-source="IcoWindow" bind-property="currentSetName" bind-flags="sync-create"></property>
                             <property name="searchEntryText" bind-source="search_entry" bind-property="text" bind-flags="sync-create"></property>

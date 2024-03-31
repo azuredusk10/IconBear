@@ -2,6 +2,7 @@ import GObject from 'gi://GObject';
 import Gio from 'gi://Gio';
 import Gtk from 'gi://Gtk';
 import Adw from 'gi://Adw';
+import Gdk from 'gi://Gdk';
 
 export const IconSetStackView = GObject.registerClass({
   GTypeName: 'IcoIconSetStackView',
@@ -58,6 +59,16 @@ export const IconSetStackView = GObject.registerClass({
     console.log(mimeType, data);
 
     // Copy the icon to clipboard
+    // Create a new GValue
+    const stringValue = new GObject.Value();
+    stringValue.init(GObject.TYPE_STRING);
+
+    // Set and get the value contents
+    stringValue.set_string(data);
+    console.log(stringValue.get_string());
+
+    const clipboard = this.get_clipboard();
+    clipboard.set(stringValue);
 	}
 
 });

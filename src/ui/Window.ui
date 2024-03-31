@@ -114,7 +114,13 @@
                   </object>
                 </child>
 
+
                 <property name="content">
+                  <!-- Put the main stack here -->
+
+                    <!-- Put the All Sets stack page here-->
+
+                    <!-- Make this below object a composite widget that acts as a template for single icon set stack pages -->
                   <object class="AdwOverlaySplitView" id="details_view">
                     <property name="show-sidebar" bind-source="show_details_sidebar_button" bind-property="active" bind-flags="sync-create" />
                     <property name="sidebar-position">1</property>

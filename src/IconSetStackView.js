@@ -9,7 +9,7 @@ export const IconSetStackView = GObject.registerClass({
     icons: GObject.ParamSpec.object(
       'icons',
       'Icons',
-      'The list model containing the icons from the current icon set',
+      'The list model containing thactivatablee icons from the current icon set',
       GObject.ParamFlags.READWRITE,
       Gio.ListStore
     ),

@@ -13,6 +13,7 @@
         <style>
           <class name="card"/>
           <class name="card--icon"/>
+          <class name="activatable"/>
         </style>
         <child>
           <object class="GtkLabel" id="icon_label">

@@ -150,5 +150,10 @@ export const Window = GObject.registerClass({
 	  // this.notify('iconSize');
 	}
 
+	onDetailsSidebarToggled(){
+	  this.sidebarVisible = !this.sidebarVisible;
+	  this.notify('sidebarVisible');
+	}
+
 });
 

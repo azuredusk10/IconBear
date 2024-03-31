@@ -19,9 +19,7 @@
                 <child>
                   <object class="IcoMainPanelView" id="main_panel">
                     <signal name="icon-activated" handler="onIconActivated" />
-                    <!--
-                    TODO: pass icon set to the child
-                    <property name="icons" bind-source="IcoIconSetStackView" bind-property="iconSet" bind-flags="sync-create" /> -->
+                    <property name="icons" bind-source="IcoIconSetStackView" bind-property="icons" bind-flags="sync-create" />
                   </object>
                 </child>
               </object>

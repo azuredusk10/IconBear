@@ -47,6 +47,13 @@ export const Window = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       false,
     ),
+    searchPlaceholderText: GObject.ParamSpec.string(
+      'searchPlaceholderText',
+      'Search Placeholder Text',
+      'The placeholder text to display in the search entry',
+      GObject.ParamFlags.READWRITE,
+      'Search sets'
+    ),
 	}
 }, class extends Adw.ApplicationWindow {
   constructor(params={}){
@@ -166,8 +173,11 @@ export const Window = GObject.registerClass({
 	  const visiblePageName = e.visibleChildName;
 	  if(visiblePageName === 'all_sets'){
       this.sidebarButtonVisible = false;
+      // TODO: Make this translateable
+      this.searchPlaceholderText = 'Search sets';
 	  } else {
 	    this.sidebarButtonVisible = true;
+	    this.searchPlaceholderText = 'Search icons in this set';
 	  }
 	}
 

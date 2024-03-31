@@ -10,6 +10,7 @@
     <file>Icon.js</file>
     <file>IconTile.js</file>
     <file>AllSetsStackView.js</file>
+    <file>IconSetStackView.js</file>
     <file>drawSvg.js</file>
   </gresource>
 </gresources>

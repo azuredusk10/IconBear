@@ -9,6 +9,7 @@ import './SidebarView.js';
 import './DetailsPanel.js';
 import './IconTile.js';
 import './AllSetsStackView.js';
+import './IconSetStackView.js';
 import { Window } from './Window.js';
 
 

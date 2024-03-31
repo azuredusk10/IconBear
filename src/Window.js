@@ -9,7 +9,7 @@ import { Icon } from './Icon.js';
 export const Window = GObject.registerClass({
 	GTypeName: 'IcoWindow',
 	Template: 'resource:///com/github/azuredusk10/IconManager/ui/Window.ui',
-	InternalChildren: ['details_panel', 'main_panel', 'sidebar_panel', 'toast_overlay', 'search_entry'],
+	InternalChildren: ['search_entry', 'set_view'],
 	Properties: {
 	  currentSetIcons: GObject.ParamSpec.object(
       'currentSetIcons',
@@ -77,7 +77,7 @@ export const Window = GObject.registerClass({
         timeout: 3,
       });
 
-      this._toast_overlay.add_toast(toast);
+      //this._toast_overlay.add_toast(toast);
     });
 
     // Add action to window
@@ -125,19 +125,14 @@ export const Window = GObject.registerClass({
   }
 
   #initializeMainStack(){
-    this._sidebar_panel._main_stack_sidebar.stack = this._main_panel._main_stack;
-
-    // The list isn't updating. I probably won't use it anyway to change the view, so may as well scrap it. Nice to know I can map IDs in child composite widgets anyway.
+    // this._sidebar_panel._main_stack_sidebar.stack = this._main_panel._main_stack;
   }
 
-	onIconActivated(emitter, filepath, label){
-	  this._details_panel.filepath = filepath;
-	  this._details_panel.label = label;
-	}
 
 	onSearchEntrySearchChanged() {
 	  const searchEntryText = this._search_entry.text;
-    this._main_panel.searchEntryText = this._search_entry.text;
+    // TODO: Set searchEntryText property of the active stack page
+    // this._main_panel.searchEntryText = this._search_entry.text;
 	}
 
 	onIconSizeChanged(_scale){

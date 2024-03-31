@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<interface>
+  <template class="IcoIconSetStackView">
+    <property name="layout-manager">
+			<object class="GtkBoxLayout">
+				<property name="orientation">vertical</property>
+			</object>
+		</property>
+    <child>
+      <object class="AdwOverlaySplitView">
+        <!-- TODO: Pass sidebar visibility to this composite widget and then bing here
+        <property name="show-sidebar" bind-source="show_details_sidebar_button" bind-property="active" bind-flags="sync-create" /> -->
+        <property name="show-sidebar">true</property>
+        <property name="sidebar-position">1</property>
+        <property name="vexpand">true</property>
+        <property name="content">
+          <object class="AdwToastOverlay" id="toast_overlay">
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="vexpand">true</property>
+                <child>
+                  <object class="IcoMainPanelView" id="main_panel">
+                    <signal name="icon-activated" handler="onIconActivated" />
+                    <!--
+                    TODO: pass icon set to the child
+                    <property name="icons" bind-source="IcoIconSetStackView" bind-property="iconSet" bind-flags="sync-create" /> -->
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </property>
+        <property name="sidebar">
+          <object class="GtkScrolledWindow">
+            <property name="min-content-width">250</property>
+            <property name="max-content-width">300</property>
+            <child>
+              <object class="IcoDetailsPanel" id="details_panel"></object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -9,7 +9,7 @@ import { Icon } from './Icon.js';
 export const MainPanelView = GObject.registerClass({
   GTypeName: 'IcoMainPanelView',
   Template: 'resource:///com/github/azuredusk10/IconManager/ui/MainPanelView.ui',
-  InternalChildren: ['iconsFlowbox', 'main_stack'],
+  InternalChildren: ['iconsFlowbox'],
   Properties: {
     icons: GObject.ParamSpec.object(
       'icons',
@@ -107,11 +107,6 @@ export const MainPanelView = GObject.registerClass({
 
   onIconActivated(_flowbox, _child) {
     this.emit('icon-activated', _child.filepath, _child.label);
-  }
-
-  onSetActivated(_flowbox, _child){
-    this.emit('set-activated');
-    console.log('set activated');
   }
 
 });

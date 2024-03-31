@@ -7,39 +7,44 @@
 			</object>
 		</property>
     <child>
-      <object class="GtkStackSidebar" id="main_stack_sidebar">
+      <object class="GtkScrolledWindow">
         <property name="vexpand">true</property>
-        <property name="valign">0</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkListBox" id="iconSetsList">
-        <style>
-          <class name="navigation-sidebar"/>
-        </style>
         <child>
-          <object class="GtkListBoxRow">
+          <object class="GtkStackSidebar" id="main_stack_sidebar">
+            <property name="vexpand">true</property>
+            <property name="valign">0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkListBox" id="iconSetsList">
             <style>
+              <class name="navigation-sidebar"/>
             </style>
             <child>
-              <object class="GtkBox">
+              <object class="GtkListBoxRow">
+                <style>
+                </style>
                 <child>
-                  <object class="GtkLabel">
-                    <property name="label">All icons</property>
-                    <property name="hexpand">1</property>
-                    <property name="halign">1</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkImage">
-                    <property name="icon-name">ico-grid-large-symbolic</property>
+                  <object class="GtkBox">
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label">All icons</property>
+                        <property name="hexpand">1</property>
+                        <property name="halign">1</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">ico-grid-large-symbolic</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
             </child>
           </object>
         </child>
-      </object> -->
+      </object>
     </child>
   </template>
 </interface>

@@ -63,6 +63,7 @@ export const Window = GObject.registerClass({
     this.#initializeIcons();
     this.#initializeMainStack();
 
+
   }
 
 	vfunc_close_request() {
@@ -179,6 +180,10 @@ export const Window = GObject.registerClass({
 	    this.sidebarButtonVisible = true;
 	    this.searchPlaceholderText = 'Search icons in this set';
 	  }
+	}
+
+	onSetActivated(_flowbox, setName){
+	  this._main_stack.set_visible_child_name(setName);
 	}
 
 });

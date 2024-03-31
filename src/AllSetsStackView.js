@@ -20,7 +20,9 @@ export const AllSetsStackView = GObject.registerClass({
     ),
   },
   Signals: {
-    'set-activated': {},
+    'set-activated': {
+      param_types: [GObject.TYPE_STRING]
+    },
   }
 }, class extends Gtk.Widget {
   constructor(params){
@@ -145,6 +147,7 @@ export const AllSetsStackView = GObject.registerClass({
 
       const setFlowBoxChild = new Gtk.FlowBoxChild({
         child: setTile,
+        name: set.label,
         cssClasses: ['card'],
       });
 
@@ -154,8 +157,8 @@ export const AllSetsStackView = GObject.registerClass({
   }
 
   onSetActivated(_flowbox, _child){
-    this.emit('set-activated');
-    console.log('set activated');
+    this.emit('set-activated', _child.name);
+    _flowbox.unselect_all();
   }
 
 });

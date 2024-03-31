@@ -127,6 +127,8 @@ export const Window = GObject.registerClass({
 
   #initializeMainStack(){
     this._sidebar_panel._main_stack_sidebar.stack = this._main_panel._main_stack;
+
+    // The list isn't updating. I probably won't use it anyway to change the view, so may as well scrap it. Nice to know I can map IDs in child composite widgets anyway.
   }
 
 	onIconActivated(emitter, filepath, label){

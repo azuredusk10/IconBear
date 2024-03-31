@@ -58,7 +58,9 @@
                         </object>
                       </child>
                       <child>
-                        <object class="IcoSidebarView" id="sidebar_panel"></object>
+                        <object class="IcoSidebarView" id="sidebar_panel">
+                          <property name="vexpand">true</property>
+                        </object>
                       </child>
                     </object>
                   </child>
@@ -119,13 +121,9 @@
                     <property name="content">
                       <object class="AdwToastOverlay" id="toast_overlay">
                         <child>
-                          <object class="GtkScrolledWindow">
-                            <child>
-                              <object class="IcoMainPanelView" id="main_panel">
-                                <signal name="icon-activated" handler="onIconActivated" />
-                                <property name="icons" bind-source="IcoWindow" bind-property="currentSetIcons" bind-flags="sync-create" />
-                              </object>
-                            </child>
+                          <object class="IcoMainPanelView" id="main_panel">
+                            <signal name="icon-activated" handler="onIconActivated" />
+                            <property name="icons" bind-source="IcoWindow" bind-property="currentSetIcons" bind-flags="sync-create" />
                           </object>
                         </child>
                       </object>

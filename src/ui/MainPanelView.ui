@@ -8,33 +8,17 @@
 		</property>
     <child>
       <object class="GtkStack" id="main_stack">
+        <property name="interpolate-size">true</property>
+        <property name="vexpand">true</property>
         <child>
           <object class="GtkStackPage" id="page_all_sets">
             <property name="name">all_sets</property>
             <property name="title" translatable="true">All sets</property>
             <property name="child">
-              <object class="GtkBox" id="all_sets_container">
-                <property name="orientation">vertical</property>
+              <object class="GtkScrolledWindow">
                 <child>
-                  <object class="GtkLabel">
-                    <property name="label">All sets</property>
-                    <property name="valign">1</property>
-                    <style>
-                      <class name="title-1"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkFlowBox" id="all_icons_flowbox">
-                    <property name="orientation">0</property>
-                    <property name="row-spacing">6</property>
-                    <property name="column-spacing">6</property>
-                    <property name="homogeneous">false</property>
-                    <property name="max-children-per-line">-1</property>
-                    <property name="min-children-per-line">1</property>
-                    <property name="selection-mode">single</property>
-                    <property name="vexpand">0</property>
-                    <signal name="child-activated" handler="onSetActivated"/>
+                  <object class="GtkBox" id="all_sets_container">
+                    <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkLabel">
                         <property name="label">All sets</property>
@@ -45,21 +29,43 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkLabel">
-                        <property name="label">All sets</property>
-                        <property name="valign">1</property>
-                        <style>
-                          <class name="title-1"/>
-                        </style>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="label">All sets</property>
-                        <property name="valign">1</property>
-                        <style>
-                          <class name="title-1"/>
-                        </style>
+                      <object class="GtkFlowBox" id="all_icons_flowbox">
+                        <property name="orientation">0</property>
+                        <property name="row-spacing">6</property>
+                        <property name="column-spacing">6</property>
+                        <property name="homogeneous">false</property>
+                        <property name="max-children-per-line">-1</property>
+                        <property name="min-children-per-line">1</property>
+                        <property name="selection-mode">single</property>
+                        <property name="vexpand">0</property>
+                        <signal name="child-activated" handler="onSetActivated"/>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">All sets</property>
+                            <property name="valign">1</property>
+                            <style>
+                              <class name="title-1"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">All sets</property>
+                            <property name="valign">1</property>
+                            <style>
+                              <class name="title-1"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">All sets</property>
+                            <property name="valign">1</property>
+                            <style>
+                              <class name="title-1"/>
+                            </style>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -72,52 +78,57 @@
           <object class="GtkStackPage" id="page_set_1">
             <!-- Dynamically generate a new stack page for each icon set -->
             <property name="name">set_1</property>
+            <property name="title" translatable="true">Set 1</property>
             <property name="child">
-              <object class="GtkBox" id="container">
-                <property name="orientation">vertical</property>
-                <property name="margin-start">16</property>
-                <property name="margin-end">16</property>
-                <property name="margin-top">16</property>
-                <property name="margin-bottom">16</property>
+              <object class="GtkScrolledWindow">
                 <child>
-                  <object class="GtkLabel">
-                    <property name="label">Carbon</property>
-                    <property name="halign">1</property>
-                    <style>
-		                  <class name="title-1"/>
-	                  </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label">2,225 icons</property>
-                    <property name="halign">1</property>
-                    <style>
-                      <class name="opacity-7"/>
-	                  </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label">MIT licence</property>
-                    <property name="halign">1</property>
-                    <style>
-                      <class name="opacity-7"/>
-          		          <class name="mb-8"/>
-	                  </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkFlowBox" id="iconsFlowbox">
-                    <property name="orientation">0</property>
-                    <property name="row-spacing">6</property>
-                    <property name="column-spacing">6</property>
-                    <property name="homogeneous">false</property>
-                    <property name="max-children-per-line">-1</property>
-                    <property name="min-children-per-line">1</property>
-                    <property name="selection-mode">single</property>
-                    <property name="vexpand">0</property>
-                    <signal name="child-activated" handler="onIconActivated"/>
+                  <object class="GtkBox" id="container">
+                    <property name="orientation">vertical</property>
+                    <property name="margin-start">16</property>
+                    <property name="margin-end">16</property>
+                    <property name="margin-top">16</property>
+                    <property name="margin-bottom">16</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label">Carbon</property>
+                        <property name="halign">1</property>
+                        <style>
+                          <class name="title-1"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label">2,225 icons</property>
+                        <property name="halign">1</property>
+                        <style>
+                          <class name="opacity-7"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label">MIT licence</property>
+                        <property name="halign">1</property>
+                        <style>
+                          <class name="opacity-7"/>
+              		          <class name="mb-8"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkFlowBox" id="iconsFlowbox">
+                        <property name="orientation">0</property>
+                        <property name="row-spacing">6</property>
+                        <property name="column-spacing">6</property>
+                        <property name="homogeneous">false</property>
+                        <property name="max-children-per-line">-1</property>
+                        <property name="min-children-per-line">1</property>
+                        <property name="selection-mode">single</property>
+                        <property name="vexpand">0</property>
+                        <signal name="child-activated" handler="onIconActivated"/>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>

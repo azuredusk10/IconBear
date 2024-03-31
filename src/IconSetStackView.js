@@ -1,6 +1,7 @@
 import GObject from 'gi://GObject';
 import Gio from 'gi://Gio';
 import Gtk from 'gi://Gtk';
+import Adw from 'gi://Adw';
 
 export const IconSetStackView = GObject.registerClass({
   GTypeName: 'IcoIconSetStackView',
@@ -9,7 +10,7 @@ export const IconSetStackView = GObject.registerClass({
     icons: GObject.ParamSpec.object(
       'icons',
       'Icons',
-      'The list model containing thactivatablee icons from the current icon set',
+      'The list model containing the activable icons from the current icon set',
       GObject.ParamFlags.READWRITE,
       Gio.ListStore
     ),
@@ -44,6 +45,19 @@ export const IconSetStackView = GObject.registerClass({
   onIconActivated(emitter, filepath, label){
 	  this._details_panel.filepath = filepath;
 	  this._details_panel.label = label;
+	}
+
+	onIconCopied(emitter, mimeType, data){
+    // Show toast
+    const toast = new Adw.Toast({
+      title: "SVG copied to clipboard",
+      timeout: 3,
+    });
+
+    this._toast_overlay.add_toast(toast);
+    console.log(mimeType, data);
+
+    // Copy the icon to clipboard
 	}
 
 });

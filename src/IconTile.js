@@ -1,6 +1,7 @@
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 import Gdk from 'gi://Gdk';
+import GLib from 'gi://GLib';
 
 import { drawSvg } from './drawSvg.js';
 
@@ -40,7 +41,12 @@ export const IconTile = GObject.registerClass({
       24
     ),
   },
-  InternalChildren: ['icon_tile_popover_menu', 'icon_box', 'icon_label']
+  InternalChildren: ['icon_tile_popover_menu', 'icon_box', 'icon_label'],
+  Signals: {
+    'icon-copied': {
+      param_types: [GObject.TYPE_STRING, GObject.TYPE_STRING]
+    },
+  }
 }, class extends Gtk.FlowBoxChild{
   constructor(params){
     super(params);
@@ -60,9 +66,7 @@ export const IconTile = GObject.registerClass({
     if(_n_press == 2){
       console.log('tile double-clicked');
 
-      // Open a toast to say that the icon SVG has been copied to the clipboard
-
-      // Copy the icon SVG to the clipboard
+      this.emit('icon-copied', 'image/svg+xml', 'data goes here');
     }
   }
 

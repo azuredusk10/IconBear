@@ -36,7 +36,6 @@
                 <property name="max-children-per-line">-1</property>
                 <property name="min-children-per-line">1</property>
                 <property name="selection-mode">single</property>
-                <!-- <property name="activate-on-single-click">false</property> -->
                 <property name="vexpand">0</property>
                 <signal name="child-activated" handler="onSetActivated"/>
               </object>

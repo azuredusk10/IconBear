@@ -9,7 +9,7 @@ import { Icon } from './Icon.js';
 export const Window = GObject.registerClass({
 	GTypeName: 'IcoWindow',
 	Template: 'resource:///com/github/azuredusk10/IconManager/ui/Window.ui',
-	InternalChildren: ['details_panel', 'main_panel', 'toast_overlay', 'search_entry'],
+	InternalChildren: ['details_panel', 'main_panel', 'sidebar_panel', 'toast_overlay', 'search_entry'],
 	Properties: {
 	  currentSetIcons: GObject.ParamSpec.object(
       'currentSetIcons',
@@ -40,6 +40,7 @@ export const Window = GObject.registerClass({
     this.#bindSizeToSettings();
     this.#setupActions();
     this.#initializeIcons();
+    this.#initializeMainStack();
 
   }
 
@@ -122,6 +123,10 @@ export const Window = GObject.registerClass({
 		// This will tell the Main Panel that the icons have been fully processed
 		this.notify('currentSetIcons');
 
+  }
+
+  #initializeMainStack(){
+    this._sidebar_panel._main_stack_sidebar.stack = this._main_panel._main_stack;
   }
 
 	onIconActivated(emitter, filepath, label){

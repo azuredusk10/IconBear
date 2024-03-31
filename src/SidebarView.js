@@ -6,7 +6,7 @@ import GLib from 'gi://GLib';
 export const MainPanelView = GObject.registerClass({
   GTypeName: 'IcoSidebarView',
   Template: 'resource:///com/github/azuredusk10/IconManager/ui/SidebarView.ui',
-  InternalChildren: ['iconSetsList'],
+  InternalChildren: ['iconSetsList', 'main_stack_sidebar'],
 }, class extends Gtk.Widget {
   constructor(params){
     super(params);

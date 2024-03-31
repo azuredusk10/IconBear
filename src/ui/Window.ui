@@ -58,7 +58,7 @@
                         </object>
                       </child>
                       <child>
-                        <object class="IcoSidebarView"></object>
+                        <object class="IcoSidebarView" id="sidebar_panel"></object>
                       </child>
                     </object>
                   </child>

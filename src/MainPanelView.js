@@ -9,7 +9,7 @@ import { Icon } from './Icon.js';
 export const MainPanelView = GObject.registerClass({
   GTypeName: 'IcoMainPanelView',
   Template: 'resource:///com/github/azuredusk10/IconManager/ui/MainPanelView.ui',
-  InternalChildren: ['iconsFlowbox'],
+  InternalChildren: ['iconsFlowbox', 'main_stack'],
   Properties: {
     icons: GObject.ParamSpec.object(
       'icons',
@@ -38,6 +38,7 @@ export const MainPanelView = GObject.registerClass({
     'icon-activated': {
       param_types: [GObject.TYPE_STRING, GObject.TYPE_STRING]
     },
+    'set-activated': {},
   }
 }, class extends Gtk.Widget {
   constructor(params){
@@ -106,6 +107,11 @@ export const MainPanelView = GObject.registerClass({
 
   onIconActivated(_flowbox, _child) {
     this.emit('icon-activated', _child.filepath, _child.label);
+  }
+
+  onSetActivated(_flowbox, _child){
+    this.emit('set-activated');
+    console.log('set activated');
   }
 
 });

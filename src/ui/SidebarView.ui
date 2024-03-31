@@ -7,6 +7,11 @@
 			</object>
 		</property>
     <child>
+      <object class="GtkStackSidebar" id="main_stack_sidebar">
+
+      </object>
+    </child>
+    <child>
       <object class="GtkListBox" id="iconSetsList">
         <style>
           <class name="navigation-sidebar"/>
@@ -33,7 +38,7 @@
             </child>
           </object>
         </child>
-      </object>
+      </object> -->
     </child>
   </template>
 </interface>

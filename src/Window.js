@@ -115,7 +115,7 @@ export const Window = GObject.registerClass({
 
 
 
-      //const iconFiles = Gio.File.new_for_uri(iconsDir).enumerate_children('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
+      const iconFiles = Gio.File.new_for_uri('resource://' + iconsDir).enumerate_children('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
 
       // let fileInfo;
 	    // let i=0;
@@ -124,8 +124,8 @@ export const Window = GObject.registerClass({
       iconFilenames.forEach(iconFilename => {
 
 
-        const iconFile = Gio.File.new_for_uri(iconsDir + iconFilename);
-        console.log(iconsDir + iconFilename);
+        const iconFile = Gio.File.new_for_uri('resource://' + iconsDir + iconFilename);
+        //console.log(iconsDir + iconFilename);
         const fileInfo = iconFile.query_info('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
 
         const label = fileInfo.get_display_name().replace(/\.[^/.]+$/, "");
@@ -139,7 +139,7 @@ export const Window = GObject.registerClass({
 
 
 	      // TODO: Using the list store's splice method to add all icons at once would be more efficient.
-        this.set.icons.append(icon);
+        set.icons.append(icon);
 
       /*
       label: GObject.ParamSpec.string('label', 'Label', 'Name of the icon', GObject.ParamFlags.READWRITE, ''),
@@ -158,7 +158,6 @@ export const Window = GObject.registerClass({
       this.sets.push(set);
     });
 
-    console.log(this.sets);
     this.notify('sets');
 
 

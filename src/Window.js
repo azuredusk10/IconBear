@@ -11,6 +11,12 @@ export const Window = GObject.registerClass({
 	Template: 'resource:///com/github/azuredusk10/IconManager/ui/Window.ui',
 	InternalChildren: ['search_entry', 'set_view', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button'],
 	Properties: {
+	  sets: GObject.ParamSpec.jsobject(
+      'sets',
+      'Sets',
+      'All icon sets',
+      GObject.ParamFlags.READWRITE
+	  ),
 	  currentSetIcons: GObject.ParamSpec.object(
       'currentSetIcons',
       'Current Set Icons',
@@ -59,7 +65,7 @@ export const Window = GObject.registerClass({
   constructor(params={}){
     super(params);
     this.#bindSizeToSettings();
-    //this.#importBundledIcons();
+    // this.#importBundledIcons();
     this.#setupActions();
     this.#initializeIcons();
     this.#initializeMainStack();
@@ -82,6 +88,87 @@ export const Window = GObject.registerClass({
 
 
 	#initializeIcons() {
+
+	  this.sets = [];
+
+    // loop through icon-sets resource directory
+    // Icons: icon-sets/[bundle-name]/icons/*.svg
+    // Info: icon-sets/[bundle-name]/info.json
+    const bundledIconsDir = '/com/github/azuredusk10/IconManager/icon-sets/';
+
+    const bundleDirNames = Gio.resources_enumerate_children(bundledIconsDir, 0);
+
+    bundleDirNames.forEach(bundleDirName => {
+      const bundleId = bundleDirName.slice(0, -1);
+
+      let set = {
+        id: bundleId,
+        name: '', // To get from info.json
+        licence: '', // To get from info.json
+        icons: Gio.ListStore.new(Icon),
+      };
+
+      const iconsDir = bundledIconsDir + bundleDirName + 'icons/';
+      const iconFilenames = Gio.resources_enumerate_children(iconsDir, 0);
+
+      console.log(iconsDir);
+
+
+
+      //const iconFiles = Gio.File.new_for_uri(iconsDir).enumerate_children('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
+
+      // let fileInfo;
+	    // let i=0;
+	    // while (fileInfo = iconFiles.next_file(null)) {
+	      //if(i < 50){
+      iconFilenames.forEach(iconFilename => {
+
+
+        const iconFile = Gio.File.new_for_uri(iconsDir + iconFilename);
+        console.log(iconsDir + iconFilename);
+        const fileInfo = iconFile.query_info('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
+
+        const label = fileInfo.get_display_name().replace(/\.[^/.]+$/, "");
+
+        const icon = new Icon({
+          label,
+          filepath: iconsDir + iconFilename,
+          type: fileInfo.get_file_type(),
+          gfile: iconFile,
+        });
+
+
+	      // TODO: Using the list store's splice method to add all icons at once would be more efficient.
+        this.set.icons.append(icon);
+
+      /*
+      label: GObject.ParamSpec.string('label', 'Label', 'Name of the icon', GObject.ParamFlags.READWRITE, ''),
+  filepath: GObject.ParamSpec.string('filepath', 'Filepath', 'Path to the icon file', GObject.ParamFlags.READWRITE, ''),
+  // icon: GObject.ParamSpec.object('icon', 'Icon', 'Icon for the file', GObject.ParamFlags.READWRITE, Gio.Icon),
+  type: GObject.ParamSpec.enum('type', 'Type', 'File type', GObject.ParamFlags.READWRITE, Gio.FileType, Gio.FileType.UNKNOWN),
+  gFile: GObject.ParamSpec.object('gfile', 'GFile', 'GFile of the icon', GObject.ParamFlags.READWRITE, Gio.File)
+      */
+
+        // }
+      // }
+
+      });
+
+
+      this.sets.push(set);
+    });
+
+    console.log(this.sets);
+    this.notify('sets');
+
+
+
+    // add a new item in the ‘sets’ array with the name of the set and the first 16 icons
+
+    // create a new Stack Page for each set. Pass the set into it.
+
+    // When switching to a new Stack Page, check how many items are in that page’s set. If it’s equal to or less than 16, ask Window.js to load the full set.
+
 
     this.currentSetIcons = Gio.ListStore.new(Icon);
 
@@ -186,11 +273,11 @@ export const Window = GObject.registerClass({
 
 
 
-      */
+
 
     });
 
-
+    */
 
 
   }

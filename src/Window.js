@@ -59,7 +59,7 @@ export const Window = GObject.registerClass({
   constructor(params={}){
     super(params);
     this.#bindSizeToSettings();
-    this.#importBundledIcons();
+    //this.#importBundledIcons();
     this.#setupActions();
     this.#initializeIcons();
     this.#initializeMainStack();
@@ -127,6 +127,7 @@ export const Window = GObject.registerClass({
   }
 
   #importBundledIcons() {
+    /*
     // If the user is opening the app for the first time, import the bundled icons to their app data directory
     const dataDir = GLib.get_user_data_dir();
     console.log(dataDir);
@@ -167,7 +168,7 @@ export const Window = GObject.registerClass({
       // Or do I even need to bother with this if I'm going to keep the built-in icons as resources anyway? Arg probably not.
 
       // Create a File object representing the bundle directory
-      const bundlePath = 'resource://com/github/azuredusk10/IconManager/icon-sets/' + bundleName
+      const bundlePath = 'resource://com/github/azuredusk10/IconManager/icon-sets/' + bundleName +'/icons'
       const bundleDirFile = Gio.File.new_for_uri(bundlePath);
 
 
@@ -185,40 +186,6 @@ export const Window = GObject.registerClass({
 
 
 
-      // If not, extract the icon archive into the data directory
-      /* This just didn't work. Couldn't make heads or tails of it. */
-      // Looks like this would just decompress a .tar.gz to a .tar at the end of it. Good luck managing that.
-      /*
-      const archivePath = bundledIconsDir + bundleFilename;
-      const decompressor = Gio.ZlibDecompressor.new(Gio.ZlibDecompressor.GZIP);
-
-      const archive = Gio.resources_open_stream(archivePath, 0);
-      const fileBytes = Gio.resources_lookup_data(archivePath, 0);
-      //const archiveStream = Gio.MemoryInputStream.new_from_bytes(fileBytes);
-
-      console.log(fileBytes.get_size());
-
-
-
-      // const archiveContents = archiveStream.read(fileBytes.get_size(), null);
-      let output = GLib.ByteArray.new();
-
-      const outputDir = dataDir + '/' + bundleName;
-      let outputFile = Gio.File.new_for_path(outputDir + '.txt');
-
-      //let outputStream = outputFile.create(0, null);
-
-      const [outputContents, outputEtag] = outputFile.load_contents(null);
-
-      console.log(decompressor.convert(
-          fileBytes.get_data(),
-          outputContents,
-          GLib.PRIORITY_DEFAULT,
-      ));
-
-      console.log(archiveContents);
-
-      decompressor.convert(archiveContents, output, 0);
       */
 
     });

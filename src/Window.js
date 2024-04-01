@@ -60,6 +60,14 @@ export const Window = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       'Search sets'
     ),
+    maxPreviewIcons: GObject.ParamSpec.int(
+      'maxPreviewIcons',
+      'Max Preview Icons',
+      'The maximum number of items to show when previewing a set',
+      GObject.ParamFlags.READWRITE,
+      0, 100,
+      16
+    )
 	}
 }, class extends Adw.ApplicationWindow {
   constructor(params={}){
@@ -116,48 +124,41 @@ export const Window = GObject.registerClass({
 
 
       const iconFiles = Gio.File.new_for_uri('resource://' + iconsDir).enumerate_children('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
+      let i = 0;
 
-      // let fileInfo;
-	    // let i=0;
-	    // while (fileInfo = iconFiles.next_file(null)) {
-	      //if(i < 50){
       iconFilenames.forEach(iconFilename => {
 
+        if(i < this.maxPreviewIcons){
+          const iconFile = Gio.File.new_for_uri('resource://' + iconsDir + iconFilename);
+          console.log(iconsDir + iconFilename);
+          const fileInfo = iconFile.query_info('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
 
-        const iconFile = Gio.File.new_for_uri('resource://' + iconsDir + iconFilename);
-        //console.log(iconsDir + iconFilename);
-        const fileInfo = iconFile.query_info('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
+          const label = iconFilename.replace(/\.[^/.]+$/, "");
 
-        const label = fileInfo.get_display_name().replace(/\.[^/.]+$/, "");
-
-        const icon = new Icon({
-          label,
-          filepath: iconsDir + iconFilename,
-          type: fileInfo.get_file_type(),
-          gfile: iconFile,
-        });
+          const icon = new Icon({
+            label,
+            filepath: iconsDir + iconFilename,
+            type: fileInfo.get_file_type(),
+            gfile: iconFile,
+          });
 
 
-	      // TODO: Using the list store's splice method to add all icons at once would be more efficient.
-        set.icons.append(icon);
+	        // TODO: Using the list store's splice method to add all icons at once would be more efficient.
+          set.icons.append(icon);
+        }
 
-      /*
-      label: GObject.ParamSpec.string('label', 'Label', 'Name of the icon', GObject.ParamFlags.READWRITE, ''),
-  filepath: GObject.ParamSpec.string('filepath', 'Filepath', 'Path to the icon file', GObject.ParamFlags.READWRITE, ''),
-  // icon: GObject.ParamSpec.object('icon', 'Icon', 'Icon for the file', GObject.ParamFlags.READWRITE, Gio.Icon),
-  type: GObject.ParamSpec.enum('type', 'Type', 'File type', GObject.ParamFlags.READWRITE, Gio.FileType, Gio.FileType.UNKNOWN),
-  gFile: GObject.ParamSpec.object('gfile', 'GFile', 'GFile of the icon', GObject.ParamFlags.READWRITE, Gio.File)
-      */
-
-        // }
-      // }
+        i++;
 
       });
 
 
       this.sets.push(set);
+
     });
 
+    console.log(this.sets[0].icons.n_items);
+    console.log(this.sets[1].icons.n_items);
+    console.log(this.sets[2].icons.n_items);
     this.notify('sets');
 
 
@@ -168,6 +169,7 @@ export const Window = GObject.registerClass({
 
     // When switching to a new Stack Page, check how many items are in that page’s set. If it’s equal to or less than 16, ask Window.js to load the full set.
 
+    // TODO: move away from using the "currentSet" List Store and to using the sets property instead
 
     this.currentSetIcons = Gio.ListStore.new(Icon);
 
@@ -182,9 +184,9 @@ export const Window = GObject.registerClass({
 
 
 		let fileInfo;
-		let i=0;
+		let ii=0;
 		while (fileInfo = children.next_file(null)) {
-		  if(i < 50){
+		  if(ii < 50){
 		    const label = fileInfo.get_display_name().replace(/\.[^/.]+$/, "");
 
 		      const icon = new Icon({
@@ -199,7 +201,7 @@ export const Window = GObject.registerClass({
 
 		      // console.log('adding "' + label + '" to list store');
 
-		      i++;
+		      ii++;
 	    }
 		}
 

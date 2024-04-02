@@ -139,6 +139,7 @@ export const Window = GObject.registerClass({
       iconFilenames.sort();
 
       let i = 0;
+      const iconsArray = [];
 
       iconFilenames.forEach(iconFilename => {
 
@@ -161,12 +162,15 @@ export const Window = GObject.registerClass({
           });
 
 	        // TODO: Using the list store's splice method to add all icons at once would be more efficient.
-          set.icons.append(icon);
+          iconsArray.push(icon);
         }
 
         i++;
 
       });
+
+      // Add the loaded icons into the list store
+      set.icons.splice(0, 0, iconsArray);
 
 
       this.sets.push(set);

@@ -116,13 +116,10 @@ export const MainPanelView = GObject.registerClass({
     // Set up the permanent parts of the ListItem (e.g. constructing widgets and adding them to the ListItem)
     factory.connect('setup', (factory, listItem) => {
 
-      // How to make the list items shorter?
-
       // Box -> (DrawingArea, Label, GestureClick, GestureClick)
       const topLevelBox = new Gtk.Box({
         spacing: 4,
         orientation: 1,
-        vexpand: false,
         cssClasses: ['card', 'card--icon', 'activatable'],
       });
 
@@ -141,7 +138,6 @@ export const MainPanelView = GObject.registerClass({
         widthChars: 10,
         ellipsize: 3,
         widthRequest: 60,
-        hexpand: false,
         marginStart: 4,
         marginEnd: 4,
         opacity: 0.7,
@@ -179,6 +175,7 @@ export const MainPanelView = GObject.registerClass({
   }
 
   // Create a new child of the Flowbox
+  /*
   _addItem(icon, size){
 
     // return new Gtk.FlowBoxChild({});
@@ -194,10 +191,13 @@ export const MainPanelView = GObject.registerClass({
 
     return newItem;
   }
+  */
 
 
-  onIconActivated(_flowbox, _child) {
-    this.emit('icon-activated', _child.icon.label, _child.icon);
+  onIconActivated(position) {
+    const icon = this.icons.get_item(position);
+    console.log(position, icon);
+    this.emit('icon-activated', icon.label, icon);
   }
 
   onIconCopied(emitter) {

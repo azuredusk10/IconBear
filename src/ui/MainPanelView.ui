@@ -41,26 +41,26 @@
             </style>
           </object>
         </child>
-        <child>
-          <object class="GtkGridView" id="icons_grid_view">
-            <property name="model">
-              <object class="GtkSingleSelection">
-                <property name="model" bind-source="IcoMainPanelView" bind-property="icons"/>
+        <!-- <child>
+          <object class="GtkScrolledWindow">
+            <property name="hscrollbar-policy">2</property>
+            <property name="propagate-natural-height">true</property>
+            <property name="has-frame">true</property>
+            <property name="valign">1</property> -->
+            <child>
+              <object class="GtkGridView" id="icons_grid_view">
+                <property name="orientation">1</property>
+                <property name="model">
+                  <object class="GtkSingleSelection">
+                    <property name="model" bind-source="IcoMainPanelView" bind-property="icons"/>
+                    <signal name="selection-changed" handler="onIconActivated"/>
+                  </object>
+                </property>
               </object>
-            </property>
-          </object>
-          <!-- <object class="GtkFlowBox" id="iconsFlowbox">
-            <property name="orientation">0</property>
-            <property name="row-spacing">6</property>
-            <property name="column-spacing">6</property>
-            <property name="homogeneous">false</property>
-            <property name="max-children-per-line">-1</property>
-            <property name="min-children-per-line">1</property>
-            <property name="selection-mode">single</property>
-            <property name="vexpand">0</property>
-            <signal name="child-activated" handler="onIconActivated"/>
+            <!-- </child>
           </object> -->
         </child>
+
       </object>
     </child>
   </template>

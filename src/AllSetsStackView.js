@@ -114,7 +114,7 @@ export const AllSetsStackView = GObject.registerClass({
       });
 
       const setIconCount = new Gtk.Label({
-        label: set.icons.n_items.toString(),
+        label: set.iconsCount.toString(),
         opacity: 0.7,
         halign: 2,
       });

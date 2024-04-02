@@ -115,35 +115,43 @@ export const Window = GObject.registerClass({
     const bundleDirNames = Gio.resources_enumerate_children(bundledIconsDir, 0);
 
     bundleDirNames.forEach(bundleDirName => {
+
+      // Remove the trailing slash from the directory
       const bundleId = bundleDirName.slice(0, -1);
 
+      // Establish the structure of the set object
       let set = {
         id: bundleId,
         name: bundleId, // TODO: get from info.json
         licence: '', // TODO: get from info.json
         icons: Gio.ListStore.new(Icon),
+        iconsCount: 0
       };
 
+      // Get an array of all the files in this bundle resource directory
       const iconsDir = bundledIconsDir + bundleDirName + 'icons/';
       const iconFilenames = Gio.resources_enumerate_children(iconsDir, 0);
 
-      // console.log(iconsDir);
+      set.iconsCount = iconFilenames.length;
 
+      // Sort the icons in alphabetical order
+      iconFilenames.sort();
 
-
-      const iconFiles = Gio.File.new_for_uri('resource://' + iconsDir).enumerate_children('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
       let i = 0;
 
       iconFilenames.forEach(iconFilename => {
 
+        // Only load the number of icons needed to populate the set preview tile for the "All sets" view
         if(i < this.maxPreviewIcons){
+
+          // Create the Gio.File for this icon resource and get its file info
           const iconFile = Gio.File.new_for_uri('resource://' + iconsDir + iconFilename);
           console.log(iconsDir + iconFilename);
           const fileInfo = iconFile.query_info('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
-          // console.log(fileInfo.get_file_type());
 
           const label = iconFilename.replace(/\.[^/.]+$/, "");
 
+          // Create a new Icon
           const icon = new Icon({
             label,
             filepath: iconsDir + iconFilename,
@@ -164,9 +172,6 @@ export const Window = GObject.registerClass({
 
     });
 
-    console.log(this.sets[0].icons.n_items);
-    console.log(this.sets[1].icons.n_items);
-    console.log(this.sets[2].icons.n_items);
     this.notify('sets');
 
 

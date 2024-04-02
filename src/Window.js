@@ -9,7 +9,7 @@ import { Icon } from './Icon.js';
 export const Window = GObject.registerClass({
 	GTypeName: 'IcoWindow',
 	Template: 'resource:///com/github/azuredusk10/IconManager/ui/Window.ui',
-	InternalChildren: ['search_entry', 'set_view', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button'],
+	InternalChildren: ['search_entry', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button'],
 	Properties: {
 	  sets: GObject.ParamSpec.jsobject(
       'sets',
@@ -224,7 +224,26 @@ export const Window = GObject.registerClass({
   }
 
   #initializeMainStack(){
+    // Link the StackPageSidebar in the sidear_panel to the main_stack StackPage
     this._sidebar_panel._main_stack_sidebar.stack = this._main_stack;
+
+    // Create a new StackPage for each set
+    this.sets.forEach(set => {
+
+      /*
+      const stackPageChild = new IcoIconSetStackView({
+        id: set.id + '_view'
+      });
+      */
+
+      const stackPageChild = new Gtk.Label({
+        label: set.name
+      });
+
+      this._main_stack.add_titled(stackPageChild, set.id, set.name);
+
+    });
+
   }
 
   #importBundledIcons() {

@@ -7,6 +7,14 @@ export const MainPanelView = GObject.registerClass({
   GTypeName: 'IcoSidebarView',
   Template: 'resource:///com/github/azuredusk10/IconManager/ui/SidebarView.ui',
   InternalChildren: ['main_stack_sidebar'],
+  Properties: {
+    sets: GObject.ParamSpec.jsobject(
+      'sets',
+      'Sets',
+      'All icon sets',
+      GObject.ParamFlags.READWRITE
+	  ),
+  }
 }, class extends Gtk.Widget {
   constructor(params){
     super(params);

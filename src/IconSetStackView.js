@@ -20,7 +20,7 @@ export const IconSetStackView = GObject.registerClass({
       'Set Name',
       'The name of the currently selected icon set',
       GObject.ParamFlags.READWRITE,
-      ''
+      'Carbon'
     ),
     searchEntryText: GObject.ParamSpec.string(
       'searchEntryText',
@@ -56,8 +56,8 @@ export const IconSetStackView = GObject.registerClass({
       'Icons Count',
       'The number of icons in this set',
       GObject.ParamFlags.READWRITE,
-      0, 1024,
-      0
+      0, 100000,
+      1234
     ),
   },
   InternalChildren: ['main_panel', 'toast_overlay', 'details_panel'],

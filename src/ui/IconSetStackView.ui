@@ -20,6 +20,8 @@
                   <object class="IcoMainPanelView" id="main_panel">
                     <signal name="icon-activated" handler="onIconActivated" />
                     <property name="icons" bind-source="IcoIconSetStackView" bind-property="icons" bind-flags="sync-create" />
+                    <property name="setName" bind-source="IcoIconSetStackView" bind-property="setName" bind-flags="sync-create" />
+                <property name="iconsCount" bind-source="IcoIconSetStackView" bind-property="iconsCount" bind-flags="sync-create" />
                   </object>
                 </child>
               </object>

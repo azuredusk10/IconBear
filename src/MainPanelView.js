@@ -25,6 +25,22 @@ export const MainPanelView = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       ''
     ),
+    setName: GObject.ParamSpec.string(
+      'setName',
+      'Set Name',
+      'The name of the currently selected icon set',
+      GObject.ParamFlags.READWRITE,
+      ''
+    ),
+    iconsCount: GObject.ParamSpec.int(
+      'iconsCount',
+      'Icons Count',
+      'The number of icons in this set',
+      GObject.ParamFlags.READWRITE,
+      0, 100000,
+      0
+    ),
+    // TODO: replace with iconPreviewSize property
     iconSize: GObject.ParamSpec.double(
       'iconSize',
       'Icon Size',

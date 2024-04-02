@@ -15,7 +15,7 @@
         <property name="margin-bottom">16</property>
         <child>
           <object class="GtkLabel">
-            <property name="label">Carbon</property>
+            <property name="label" bind-source="IcoMainPanelView" bind-property="setName" bind-flags="sync-create" />
             <property name="halign">1</property>
             <style>
               <class name="title-1"/>
@@ -24,7 +24,7 @@
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="label">2,225 icons</property>
+            <property name="label" bind-source="IcoMainPanelView" bind-property="iconsCount" bind-flags="sync-create" />
             <property name="halign">1</property>
             <style>
               <class name="opacity-7"/>

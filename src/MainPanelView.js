@@ -5,10 +5,12 @@ import GLib from 'gi://GLib';
 
 import { IconTile } from './IconTile.js';
 import { Icon } from './Icon.js';
+import { drawSvg } from './drawSvg.js';
 
 export const MainPanelView = GObject.registerClass({
   GTypeName: 'IcoMainPanelView',
   Template: 'resource:///com/github/azuredusk10/IconManager/ui/MainPanelView.ui',
+  InternalChildren: ['icons_grid_view'],
   Properties: {
     icons: GObject.ParamSpec.object(
       'icons',
@@ -59,6 +61,8 @@ export const MainPanelView = GObject.registerClass({
   constructor(params){
     super(params);
 
+    this.#createListViewFactory();
+
     this.connect('notify::icons', () => {
       // Filter the icons whenever the parent list store changes and when it's been fully populated.
 
@@ -104,6 +108,74 @@ export const MainPanelView = GObject.registerClass({
 
       i++;
     }
+  }
+
+  #createListViewFactory(){
+    const factory = new Gtk.SignalListItemFactory();
+
+    // Set up the permanent parts of the ListItem (e.g. constructing widgets and adding them to the ListItem)
+    factory.connect('setup', (factory, listItem) => {
+
+      // How to make the list items shorter?
+
+      // Box -> (DrawingArea, Label, GestureClick, GestureClick)
+      const topLevelBox = new Gtk.Box({
+        spacing: 4,
+        orientation: 1,
+        vexpand: false,
+        cssClasses: ['card', 'card--icon', 'activatable'],
+      });
+
+      const drawingArea = new Gtk.DrawingArea({
+        widthRequest: 24,
+        heightRequest: 24,
+        marginTop: 8,
+        marginBottom: 8,
+        cssClasses: ['icon-grid__image'],
+      })
+
+      drawingArea.set_draw_func((widget, cr, width, height) => drawSvg(widget, cr, width, height, listItem.item.gfile));
+
+      const label = new Gtk.Label({
+        maxWidthChars: 10,
+        widthChars: 10,
+        ellipsize: 3,
+        widthRequest: 60,
+        hexpand: false,
+        marginStart: 4,
+        marginEnd: 4,
+        opacity: 0.7,
+        cssClasses: ['caption', 'icon-grid__label']
+      });
+
+      topLevelBox.append(drawingArea);
+      topLevelBox.append(label);
+
+
+      listItem.set_child(topLevelBox);
+    });
+
+    // Bind properties to the widgets in the ListItem
+    factory.connect('bind', (factory, listItem) => {
+      const topLevelBox = listItem.get_child();
+      const drawingArea = topLevelBox.get_first_child();
+      const label = drawingArea.get_next_sibling();
+
+      label.label = listItem.item.label;
+    });
+
+    // Remove bindings for widgets in the ListItem
+    factory.connect('unbind', (factory, listItem) => {
+
+    });
+
+    factory.connect('teardown', (factory, listItem) => {
+      // Clean up any resources or references here
+      // For example, if you created a custom object for the listItem:
+      // listItem.customObject = null;
+    });
+
+    this._icons_grid_view.factory = factory;
   }
 
   // Create a new child of the Flowbox

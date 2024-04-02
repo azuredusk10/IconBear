@@ -42,16 +42,11 @@
           </object>
         </child>
         <child>
-          <object class="GtkGridView">
+          <object class="GtkGridView" id="icons_grid_view">
             <property name="model">
               <object class="GtkSingleSelection">
                 <property name="model" bind-source="IcoMainPanelView" bind-property="icons"/>
               </object>
-            </property>
-            <property name="factory">
-              <object class="GtkBuilderListItemFactory">
-			          <property name="resource">/com/github/azuredusk10/IconManager/ui/IconListItem.ui</property>
-		          </object>
             </property>
           </object>
           <!-- <object class="GtkFlowBox" id="iconsFlowbox">

@@ -110,7 +110,7 @@ export const MainPanelView = GObject.registerClass({
   // Create a new child of the Flowbox
   _addItem(icon, size){
 
-    return new Gtk.FlowBoxChild({});
+    // return new Gtk.FlowBoxChild({});
 
     const newItem = new IconTile({
       icon,

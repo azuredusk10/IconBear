@@ -43,13 +43,21 @@ export const IconSetStackView = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       GObject.Object
     ),
-    maxPreviewIcons: GObject.ParamSpec.int(
-      'maxPreviewIcons',
-      'Max Preview Icons',
-      'The maximum number of items to show when previewing a set',
+    iconPreviewSize: GObject.ParamSpec.int(
+      'iconPreviewSize',
+      'Icon Preview Size',
+      'The size to render icon previews at',
       GObject.ParamFlags.READWRITE,
-      0, 100,
-      16
+      0, 1024,
+      24
+    ),
+    iconsCount: GObject.ParamSpec.int(
+      'iconsCount',
+      'Icons Count',
+      'The number of icons in this set',
+      GObject.ParamFlags.READWRITE,
+      0, 1024,
+      0
     ),
   },
   InternalChildren: ['main_panel', 'toast_overlay', 'details_panel'],
@@ -66,7 +74,6 @@ export const IconSetStackView = GObject.registerClass({
     this.activeIcon = icon;
 
 	  this._details_panel.label = label;
-	  this._details_panel.filepath = filepath;
 	  this._details_panel.icon = icon;
 	}
 

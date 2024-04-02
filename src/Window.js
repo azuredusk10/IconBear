@@ -4,6 +4,7 @@ import Adw from 'gi://Adw';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
+import { IconSetStackView } from './IconSetStackView.js';
 import { Icon } from './Icon.js';
 
 export const Window = GObject.registerClass({
@@ -230,15 +231,19 @@ export const Window = GObject.registerClass({
     // Create a new StackPage for each set
     this.sets.forEach(set => {
 
-      /*
-      const stackPageChild = new IcoIconSetStackView({
-        id: set.id + '_view'
+      // Create the composite widget child of the StackPage
+      // Note that if the set ever changes, this method should be rerun, as its properties aren't bound
+      const stackPageChild = new IconSetStackView({
+        icons: set.icons,
+        //iconsCount: set.iconsCount,
+        //setName: set.name,
       });
-      */
 
-      const stackPageChild = new Gtk.Label({
-        label: set.name
-      });
+      // Bind properties to the composite widget
+      stackPageChild.bind_property('searchEntryText', this._search_entry, 'text', GObject.BindingFlags.SYNC_CREATE);
+      stackPageChild.bind_property('sidebarVisible', this, 'sidebarVisible', GObject.BindingFlags.SYNC_CREATE);
+      stackPageChild.bind_property('iconPreviewSize', this, 'iconPreviewSize', GObject.BindingFlags.SYNC_CREATE);
+
 
       this._main_stack.add_titled(stackPageChild, set.id, set.name);
 

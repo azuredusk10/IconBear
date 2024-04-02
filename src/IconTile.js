@@ -10,13 +10,6 @@ export const IconTile = GObject.registerClass({
   GTypeName: 'IcoIconTile',
   Template: 'resource:///com/github/azuredusk10/IconManager/ui/IconTile.ui',
   Properties: {
-    Filepath: GObject.ParamSpec.string(
-      'filepath',
-      'Filepath',
-      'The filepath to the icon image to be displayed',
-      GObject.ParamFlags.READWRITE,
-      ''
-    ),
     Label: GObject.ParamSpec.string(
       'label',
       'Label',
@@ -72,7 +65,7 @@ export const IconTile = GObject.registerClass({
       cssClasses: ['icon-grid__image'],
     })
 
-    svgWidget.set_draw_func((widget, cr, width, height) => drawSvg(widget, cr, width, height, this.filepath));
+    svgWidget.set_draw_func((widget, cr, width, height) => drawSvg(widget, cr, width, height, this.icon.gfile));
 
     svgWidget.insert_before(this._icon_box, this._icon_label);
   }

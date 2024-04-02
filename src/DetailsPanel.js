@@ -7,13 +7,6 @@ export const DetailsPanel = GObject.registerClass({
   GTypeName: 'IcoDetailsPanel',
   Template: 'resource:///com/github/azuredusk10/IconManager/ui/DetailsPanel.ui',
   Properties: {
-    Filepath: GObject.ParamSpec.string(
-      'filepath',
-      'Filepath',
-      'The filepath to the icon image to be displayed',
-      GObject.ParamFlags.READWRITE,
-      ''
-    ),
     Label: GObject.ParamSpec.string(
       'label',
       'Label',
@@ -37,15 +30,13 @@ export const DetailsPanel = GObject.registerClass({
   constructor(params){
     super(params);
     this.#renderPreview();
-    this.connect('notify::filepath', () => this.#renderPreview());
+    this.connect('notify::icon', () => this.#renderPreview());
   }
 
   #renderPreview(){
 
-    if(this.filepath){
-      console.log(this.filepath);
-
-      this._preview_image.set_draw_func((widget, cr, width, height) => drawSvg(widget, cr, width, height, this.filepath));
+    if(this.icon && this.icon.gfile){
+      this._preview_image.set_draw_func((widget, cr, width, height) => drawSvg(widget, cr, width, height, this.icon.gfile));
     }
 
   }

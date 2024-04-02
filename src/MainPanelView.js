@@ -96,7 +96,6 @@ export const MainPanelView = GObject.registerClass({
 
     const newItem = new IconTile({
       icon,
-      filepath: icon.filepath,
       label: icon.label.substring(0, 20),
       width: size,
       height: size,

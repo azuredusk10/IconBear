@@ -213,9 +213,9 @@ export const Window = GObject.registerClass({
       stackPageChild.maxPreviewIcons = this.maxPreviewIcons;
 
       // Bind properties to the composite widget
-      stackPageChild.bind_property('searchEntryText', this._search_entry, 'text', GObject.BindingFlags.SYNC_CREATE);
-      stackPageChild.bind_property('sidebarVisible', this, 'sidebarVisible', GObject.BindingFlags.SYNC_CREATE);
-      stackPageChild.bind_property('iconPreviewSize', this, 'iconPreviewSize', GObject.BindingFlags.SYNC_CREATE);
+      this._search_entry.bind_property('text', stackPageChild, 'searchEntryText', GObject.BindingFlags.SYNC_CREATE);
+      this.bind_property('sidebarVisible', stackPageChild, 'sidebarVisible', GObject.BindingFlags.SYNC_CREATE);
+      this.bind_property('iconPreviewSize', stackPageChild, 'iconPreviewSize', GObject.BindingFlags.SYNC_CREATE);
 
 
       this._main_stack.add_titled(stackPageChild, set.id, set.name);

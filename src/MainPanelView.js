@@ -36,7 +36,7 @@ export const MainPanelView = GObject.registerClass({
   },
   Signals: {
     'icon-activated': {
-      param_types: [GObject.TYPE_STRING, GObject.TYPE_STRING, GObject.TYPE_OBJECT]
+      param_types: [GObject.TYPE_STRING, GObject.TYPE_OBJECT]
     },
     'icon-copied': {},
   }
@@ -108,7 +108,7 @@ export const MainPanelView = GObject.registerClass({
 
 
   onIconActivated(_flowbox, _child) {
-    this.emit('icon-activated', _child.icon.label, _child.icon.filepath, _child.icon);
+    this.emit('icon-activated', _child.icon.label, _child.icon);
   }
 
   onIconCopied(emitter) {

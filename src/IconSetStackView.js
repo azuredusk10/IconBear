@@ -70,7 +70,7 @@ export const IconSetStackView = GObject.registerClass({
     this._details_panel.connect('icon-copied', (emitter) => this.onIconCopied(emitter, this.activeIcon.gfile));
   }
 
-  onIconActivated(emitter, label, filepath, icon){
+  onIconActivated(emitter, label, icon){
     this.activeIcon = icon;
 
 	  this._details_panel.label = label;
@@ -87,8 +87,25 @@ export const IconSetStackView = GObject.registerClass({
     value.init(Gio.File);
 
     // Set and get the value contents
-    value.set_object(gfile);
-    const contentProvider = Gdk.ContentProvider.new_for_value(value);
+    value.set_object(Gio.File.new_for_path('/home/chriswood/icon-sets/carbon/3d-cursor.svg'));
+
+
+    // This line only seems to work for files.
+    // const contentProvider = Gdk.ContentProvider.new_for_value(value);
+
+    // Open the resource for reading
+    const fileStream = gfile.read(null);
+
+    // Get the file size
+    const fileSize = fileStream.query_info('standard::*', null).get_size();
+
+    // Read the entire file content into bytes
+    const bytes = fileStream.read_bytes(fileSize, null).get_data();
+    console.log(bytes);
+
+    const contentProvider = Gdk.ContentProvider.new_for_bytes('image/svg+xml', bytes);
+
+    console.log(contentProvider.ref_formats().get_mime_types());
 
     // Copy the icon to the clipboard
     const clipboard = this.get_clipboard();

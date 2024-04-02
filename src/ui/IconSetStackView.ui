@@ -19,7 +19,6 @@
                 <child>
                   <object class="IcoMainPanelView" id="main_panel">
                     <signal name="icon-activated" handler="onIconActivated" />
-                    <!-- <signal name="icon-copied" handler="onIconCopied" /> -->
                     <property name="icons" bind-source="IcoIconSetStackView" bind-property="icons" bind-flags="sync-create" />
                   </object>
                 </child>

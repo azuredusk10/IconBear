@@ -5,6 +5,8 @@ import Adw from 'gi://Adw';
 import Gdk from 'gi://Gdk';
 import GLib from 'gi://GLib';
 
+import { Icon } from './Icon.js';
+
 export const IconSetStackView = GObject.registerClass({
   GTypeName: 'IcoIconSetStackView',
   Template: 'resource:///com/github/azuredusk10/IconManager/ui/IconSetStackView.ui',
@@ -21,7 +23,14 @@ export const IconSetStackView = GObject.registerClass({
       'Set Name',
       'The name of the currently selected icon set',
       GObject.ParamFlags.READWRITE,
-      'Carbon'
+      ''
+    ),
+    setId: GObject.ParamSpec.string(
+      'setId',
+      'Set ID',
+      'The id of the currently selected icon set',
+      GObject.ParamFlags.READWRITE,
+      ''
     ),
     searchEntryText: GObject.ParamSpec.string(
       'searchEntryText',
@@ -60,6 +69,14 @@ export const IconSetStackView = GObject.registerClass({
       0, 100000,
       1234
     ),
+    maxPreviewIcons: GObject.ParamSpec.int(
+      'maxPreviewIcons',
+      'Max Preview Icons',
+      'The maximum number of items to show when previewing a set',
+      GObject.ParamFlags.READWRITE,
+      0, 100,
+      12
+    ),
   },
   InternalChildren: ['main_panel', 'toast_overlay', 'details_panel'],
 }, class extends Gtk.Widget {
@@ -69,6 +86,56 @@ export const IconSetStackView = GObject.registerClass({
     // Connect the icon-copied signals and pass this widget's activeIcon property gfile through
     this._main_panel.connect('icon-copied', (emitter) => this.onIconCopied(emitter, this.activeIcon.gfile));
     this._details_panel.connect('icon-copied', (emitter) => this.onIconCopied(emitter, this.activeIcon.gfile));
+
+  }
+
+  loadAllIcons(){
+    // Open the icon bundle resource Dir
+    const bundledIconsDir = '/com/github/azuredusk10/IconManager/icon-sets/';
+    const resourceDir = bundledIconsDir + this.setId;
+    const iconsDir = resourceDir + '/icons/';
+    const iconFilenames = Gio.resources_enumerate_children(iconsDir, 0);
+
+    // Don't proceed if we have already loaded all icons
+    console.log(this.iconsCount, iconFilenames.length)
+    if(this.icons.n_items === iconFilenames.length) {
+      console.log('already loaded all icons');
+      return;
+    }
+
+    // Remove the icons from the array which have already been loaded during initial app load
+    iconFilenames.sort();
+    iconFilenames.splice(0, this.maxPreviewIcons);
+
+
+
+
+    // Load all icons into the icons list store property in alphabetical order
+    iconFilenames.forEach(iconFilename => {
+
+      // Create the Gio.File for this icon resource and get its file info
+      const iconFile = Gio.File.new_for_uri('resource://' + iconsDir + iconFilename);
+      const fileInfo = iconFile.query_info('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
+
+      const label = iconFilename.replace(/\.[^/.]+$/, "");
+
+      // Create a new Icon
+      const icon = new Icon({
+        label,
+        filepath: iconsDir + iconFilename,
+        type: fileInfo.get_file_type(),
+        gfile: iconFile,
+      });
+
+      console.log(label);
+
+      // TODO: Using the list store's splice method to add all icons at once would be more efficient.
+      this.icons.append(icon);
+
+    });
+
+    this.notify('icons');
+
   }
 
   onIconActivated(emitter, label, icon){

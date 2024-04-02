@@ -174,54 +174,6 @@ export const Window = GObject.registerClass({
     });
 
     this.notify('sets');
-
-
-
-    // add a new item in the ‘sets’ array with the name of the set and the first 16 icons
-
-    // create a new Stack Page for each set. Pass the set into it.
-
-    // When switching to a new Stack Page, check how many items are in that page’s set. If it’s equal to or less than 16, ask Window.js to load the full set.
-
-    // TODO: move away from using the "currentSet" List Store and to using the sets property instead
-
-    this.currentSetIcons = Gio.ListStore.new(Icon);
-
-    const iconSetsDir = GLib.build_pathv('/', [GLib.get_home_dir(), '/icon-sets']);
-    console.log(iconSetsDir);
-
-    const carbonSetDir = GLib.build_pathv('/', [iconSetsDir, '/carbon']);
-    console.log(carbonSetDir);
-
-  		// Get an enumerator of all children
-    	const children = Gio.File.new_for_path(carbonSetDir).enumerate_children('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
-
-
-		let fileInfo;
-		let ii=0;
-		while (fileInfo = children.next_file(null)) {
-		  if(ii < 50){
-		    const label = fileInfo.get_display_name().replace(/\.[^/.]+$/, "");
-
-		      const icon = new Icon({
-		        label,
-		        filepath: carbonSetDir + '/' + fileInfo.get_name(),
-		        type: fileInfo.get_file_type(),
-		        gfile: children.get_child(fileInfo),
-		      });
-
-		      // TODO: Using the list store's splice method to add all icons at once would be more efficient.
-		      this.currentSetIcons.append(icon);
-
-		      // console.log('adding "' + label + '" to list store');
-
-		      ii++;
-	    }
-		}
-
-		// This will tell the Main Panel that the icons have been fully processed
-		this.notify('currentSetIcons');
-
   }
 
   #initializeMainStack(){
@@ -235,9 +187,13 @@ export const Window = GObject.registerClass({
       // Note that if the set ever changes, this method should be rerun, as its properties aren't bound
       const stackPageChild = new IconSetStackView({
         icons: set.icons,
-        //iconsCount: set.iconsCount,
-        //setName: set.name,
       });
+
+      stackPageChild.setName = set.name;
+      stackPageChild.iconsCount = set.iconsCount;
+      stackPageChild.setId = set.id;
+      stackPageChild.notify('setId');
+      stackPageChild.maxPreviewIcons = this.maxPreviewIcons;
 
       // Bind properties to the composite widget
       stackPageChild.bind_property('searchEntryText', this._search_entry, 'text', GObject.BindingFlags.SYNC_CREATE);
@@ -348,6 +304,10 @@ export const Window = GObject.registerClass({
 	  } else {
 	    this.sidebarButtonVisible = true;
 	    this.searchPlaceholderText = 'Search icons in this set';
+
+	    const visiblePage = e.get_visible_child();
+	    visiblePage.loadAllIcons();
+
 	  }
 	}
 
@@ -356,4 +316,5 @@ export const Window = GObject.registerClass({
 	}
 
 });
+
 

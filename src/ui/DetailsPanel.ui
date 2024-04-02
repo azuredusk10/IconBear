@@ -52,6 +52,7 @@
                 </style>
               </object>
             </child>
+            <!--
             <child>
               <object class="AdwActionRow">
                 <property name="title" translatable="yes">Color</property>
@@ -62,6 +63,7 @@
                 </child>
               </object>
             </child>
+            -->
             <!-- <child>
               <object class="AdwActionRow">
                 <property name="title" translatable="yes">Open containing folder</property>

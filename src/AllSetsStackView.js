@@ -18,6 +18,28 @@ export const AllSetsStackView = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       ''
     ),
+	  sets: GObject.ParamSpec.jsobject(
+      'sets',
+      'Sets',
+      'All icon sets',
+      GObject.ParamFlags.READWRITE
+	  ),
+	  maxPreviewIcons: GObject.ParamSpec.int(
+      'maxPreviewIcons',
+      'Max Preview Icons',
+      'The maximum number of items to show when previewing a set',
+      GObject.ParamFlags.READWRITE,
+      0, 100,
+      0
+    ),
+    iconPreviewSize: GObject.ParamSpec.int(
+      'iconPreviewSize',
+      'Icon Preview Size',
+      'The size to render icon previews at',
+      GObject.ParamFlags.READWRITE,
+      0, 1024,
+      0
+    ),
   },
   Signals: {
     'set-activated': {
@@ -29,64 +51,43 @@ export const AllSetsStackView = GObject.registerClass({
     super(params);
 
     // May need to call this once the icon sets have been loaded in correctly via properties
-    this.#initializeFlowbox();
+    this.connect('notify::sets', () => {
+      // Filter the icons whenever the parent list store changes and when it's been fully populated.
+
+      if(this.sets && this.sets[0]){
+        // The number of items in the list store property returns 0 until it's been fully populated.
+        // Once populated, filter it and bind the model.
+        if(this.sets[0].icons && this.sets[0].icons.get_n_items() > 0){
+          console.log('preview icons list store loaded')
+          this.#initializeFlowbox();
+        }
+      }
+    });
+
+  }
+
+  // Create a new child of the set preview FlowBox
+  _addPreviewItem(icon, size){
+
+    const svgWidget = new Gtk.DrawingArea({
+      widthRequest: size,
+      heightRequest: size,
+      marginTop: 8,
+      marginBottom: 8,
+      cssClasses: ['icon-grid__image'],
+    })
+
+    svgWidget.set_draw_func((widget, cr, width, height) => drawSvg(widget, cr, width, height, icon.gfile));
+
+    return svgWidget;
+
   }
 
   #initializeFlowbox(){
-    const sets = [{
-      label: 'Carbon',
-      iconCount: 2552,
-      iconFilepaths: [
-        '/home/chriswood/icon-sets/carbon/3d-cursor.svg',
-        '/home/chriswood/icon-sets/carbon/3d-cursor-alt.svg',
-        '/home/chriswood/icon-sets/carbon/3d-curve-auto-colon.svg',
-        '/home/chriswood/icon-sets/carbon/3d-curve-auto-vessels.svg',
-        '/home/chriswood/icon-sets/carbon/3d-curve-manual.svg',
-        '/home/chriswood/icon-sets/carbon/3d-ica.svg',
-        '/home/chriswood/icon-sets/carbon/3d-cursor.svg',
-        '/home/chriswood/icon-sets/carbon/3d-cursor-alt.svg',
-        '/home/chriswood/icon-sets/carbon/3d-curve-auto-colon.svg',
-        '/home/chriswood/icon-sets/carbon/3d-curve-auto-vessels.svg',
-        '/home/chriswood/icon-sets/carbon/3d-curve-manual.svg',
-        '/home/chriswood/icon-sets/carbon/3d-ica.svg',
-      ]
-    }, {
-      label: 'Carbon 2',
-      iconCount: 2553,
-      iconFilepaths: [
-        '/home/chriswood/icon-sets/carbon/3d-cursor.svg',
-        '/home/chriswood/icon-sets/carbon/3d-cursor-alt.svg',
-        '/home/chriswood/icon-sets/carbon/3d-curve-auto-colon.svg',
-        '/home/chriswood/icon-sets/carbon/3d-curve-auto-vessels.svg',
-        '/home/chriswood/icon-sets/carbon/3d-curve-manual.svg',
-        '/home/chriswood/icon-sets/carbon/3d-ica.svg',
-        '/home/chriswood/icon-sets/carbon/3d-cursor.svg',
-        '/home/chriswood/icon-sets/carbon/3d-cursor-alt.svg',
-        '/home/chriswood/icon-sets/carbon/3d-curve-auto-colon.svg',
-        '/home/chriswood/icon-sets/carbon/3d-curve-auto-vessels.svg',
-        '/home/chriswood/icon-sets/carbon/3d-curve-manual.svg',
-        '/home/chriswood/icon-sets/carbon/3d-ica.svg',
-      ]
-    }, {
-      label: 'Carbon 3',
-      iconCount: 2554,
-      iconFilepaths: [
-        '/home/chriswood/icon-sets/carbon/3d-cursor.svg',
-        '/home/chriswood/icon-sets/carbon/3d-cursor-alt.svg',
-        '/home/chriswood/icon-sets/carbon/3d-curve-auto-colon.svg',
-        '/home/chriswood/icon-sets/carbon/3d-curve-auto-vessels.svg',
-        '/home/chriswood/icon-sets/carbon/3d-curve-manual.svg',
-        '/home/chriswood/icon-sets/carbon/3d-ica.svg',
-        '/home/chriswood/icon-sets/carbon/3d-cursor.svg',
-        '/home/chriswood/icon-sets/carbon/3d-cursor-alt.svg',
-        '/home/chriswood/icon-sets/carbon/3d-curve-auto-colon.svg',
-        '/home/chriswood/icon-sets/carbon/3d-curve-auto-vessels.svg',
-        '/home/chriswood/icon-sets/carbon/3d-curve-manual.svg',
-        '/home/chriswood/icon-sets/carbon/3d-ica.svg',
-      ]
-    }];
 
-    sets.forEach(set => {
+    this.sets.forEach(set => {
+
+      console.log(set);
 
       // FlowBoxChild -> Box -> (FlowBox -> FlowBoxChild -> DrawingArea * 6), (Box -> (Label, Label))
 
@@ -101,31 +102,19 @@ export const AllSetsStackView = GObject.registerClass({
         maxChildrenPerLine: 6,
       });
 
-      set.iconFilepaths.forEach(filepath => {
+      // TODO: ensure only the first maxPreviewIcons number of icons are rendered in the Flowbox grid.
+      setTilePreviewFlowBox.bind_model(set.icons, (icon) => this._addPreviewItem(icon, this.iconPreviewSize));
 
-        const svgWidget = new Gtk.DrawingArea({
-          widthRequest: 24,
-          heightRequest: 24,
-          marginTop: 8,
-          marginBottom: 8,
-          cssClasses: ['icon-grid__image'],
-        })
-
-        svgWidget.set_draw_func((widget, cr, width, height) => drawSvg(widget, cr, width, height, filepath));
-
-        setTilePreviewFlowBox.append(svgWidget);
-
-      });
 
       const setLabel = new Gtk.Label({
-        label: set.label,
+        label: set.name,
         cssClasses: ['title-3'],
         hexpand: true,
         halign: 1,
       });
 
       const setIconCount = new Gtk.Label({
-        label: set.iconCount.toString(),
+        label: set.icons.n_items.toString(),
         opacity: 0.7,
         halign: 2,
       });
@@ -147,7 +136,7 @@ export const AllSetsStackView = GObject.registerClass({
 
       const setFlowBoxChild = new Gtk.FlowBoxChild({
         child: setTile,
-        name: set.label,
+        name: set.name,
         cssClasses: ['card', 'activatable'],
       });
 

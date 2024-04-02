@@ -66,8 +66,16 @@ export const Window = GObject.registerClass({
       'The maximum number of items to show when previewing a set',
       GObject.ParamFlags.READWRITE,
       0, 100,
-      16
-    )
+      12
+    ),
+    iconPreviewSize: GObject.ParamSpec.int(
+      'iconPreviewSize',
+      'Icon Preview Size',
+      'The size to render icon previews at',
+      GObject.ParamFlags.READWRITE,
+      0, 1024,
+      24
+    ),
 	}
 }, class extends Adw.ApplicationWindow {
   constructor(params={}){
@@ -111,15 +119,15 @@ export const Window = GObject.registerClass({
 
       let set = {
         id: bundleId,
-        name: '', // To get from info.json
-        licence: '', // To get from info.json
+        name: bundleId, // TODO: get from info.json
+        licence: '', // TODO: get from info.json
         icons: Gio.ListStore.new(Icon),
       };
 
       const iconsDir = bundledIconsDir + bundleDirName + 'icons/';
       const iconFilenames = Gio.resources_enumerate_children(iconsDir, 0);
 
-      console.log(iconsDir);
+      // console.log(iconsDir);
 
 
 
@@ -132,6 +140,7 @@ export const Window = GObject.registerClass({
           const iconFile = Gio.File.new_for_uri('resource://' + iconsDir + iconFilename);
           console.log(iconsDir + iconFilename);
           const fileInfo = iconFile.query_info('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
+          // console.log(fileInfo.get_file_type());
 
           const label = iconFilename.replace(/\.[^/.]+$/, "");
 
@@ -141,7 +150,6 @@ export const Window = GObject.registerClass({
             type: fileInfo.get_file_type(),
             gfile: iconFile,
           });
-
 
 	        // TODO: Using the list store's splice method to add all icons at once would be more efficient.
           set.icons.append(icon);

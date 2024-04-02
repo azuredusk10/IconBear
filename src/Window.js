@@ -183,10 +183,23 @@ export const Window = GObject.registerClass({
     // Create a new StackPage for each set
     this.sets.forEach(set => {
 
+      // Create a copy of the preview icon set list store to pass into the IconSetStackView
+      const copiedIconsListStore = new Gio.ListStore();
+
+      const sourceIconsListStoreCount = set.icons.n_items;
+      console.log(sourceIconsListStoreCount);
+
+      let i=0;
+      while (i < sourceIconsListStoreCount) {
+        const icon = set.icons.get_item(i);
+        copiedIconsListStore.append(icon);
+
+        i++;
+      }
+
       // Create the composite widget child of the StackPage
-      // Note that if the set ever changes, this method should be rerun, as its properties aren't bound
       const stackPageChild = new IconSetStackView({
-        icons: set.icons,
+        icons: copiedIconsListStore,
       });
 
       stackPageChild.setName = set.name;

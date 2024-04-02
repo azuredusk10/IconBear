@@ -107,7 +107,7 @@ export const IconSetStackView = GObject.registerClass({
     iconFilenames.sort();
     iconFilenames.splice(0, this.maxPreviewIcons);
 
-
+    const iconsArray = [];
 
 
     // Load all icons into the icons list store property in alphabetical order
@@ -127,12 +127,12 @@ export const IconSetStackView = GObject.registerClass({
         gfile: iconFile,
       });
 
-      console.log(label);
-
-      // TODO: Using the list store's splice method to add all icons at once would be more efficient.
-      this.icons.append(icon);
+      iconsArray.push(icon);
 
     });
+
+    // Add the loaded icons into the list store
+    this.icons.splice(this.maxPreviewIcons, 0, iconsArray);
 
     this.notify('icons');
 

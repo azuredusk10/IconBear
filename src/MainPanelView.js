@@ -9,7 +9,6 @@ import { Icon } from './Icon.js';
 export const MainPanelView = GObject.registerClass({
   GTypeName: 'IcoMainPanelView',
   Template: 'resource:///com/github/azuredusk10/IconManager/ui/MainPanelView.ui',
-  InternalChildren: ['iconsFlowbox'],
   Properties: {
     icons: GObject.ParamSpec.object(
       'icons',
@@ -68,7 +67,7 @@ export const MainPanelView = GObject.registerClass({
         // Once populated, filter it and bind the model.
         if(this.icons.get_n_items() > 0){
           console.log('icons list store loaded')
-          this._iconsFlowbox.bind_model(this.icons, (icon) => this._addItem(icon, this.iconSize));
+          //this._iconsFlowbox.bind_model(this.icons, (icon) => this._addItem(icon, this.iconSize));
           this.#filterIcons();
         }
       }
@@ -98,9 +97,9 @@ export const MainPanelView = GObject.registerClass({
 
       // If the current item's label matches the filter condition, show the item in the FlowBox. Otherwise, hide it.
       if(re.test(singleIcon.label)){
-        this._iconsFlowbox.get_child_at_index(i).show();
+        // this._iconsFlowbox.get_child_at_index(i).show();
       } else {
-        this._iconsFlowbox.get_child_at_index(i).hide();
+        // this._iconsFlowbox.get_child_at_index(i).hide();
       }
 
       i++;

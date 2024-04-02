@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+	<template class="GtkListItem">
+		<property name="child">
+		  <object class="GtkBox">
+			  <property name="spacing">4</property>
+        <property name="orientation">vertical</property>
+        <style>
+          <class name="card"/>
+          <class name="card--icon"/>
+          <class name="activatable"/>
+        </style>
+		    <child>
+		      <object class="GtkImage">
+		        <property name="width-request">24</property>
+		        <property name="height-request">24</property>
+		        <property name="margin-top">8</property>
+		        <property name="margin-bottom">8</property>
+		        <style>
+		          <class name="icon-grid__image"></class>
+		        </style>
+		      </object>
+		    </child>
+			  <child>
+				  <object class="GtkLabel">
+				    <property name="label">Helloooooo!</property>
+				    <property name="max-width-chars">10</property>
+            <property name="width-chars">10</property>
+            <property name="ellipsize">3</property>
+            <property name="width-request">60</property>
+            <property name="hexpand">false</property>
+            <property name="margin-start">4</property>
+            <property name="margin-end">4</property>
+            <style>
+              <class name="caption" />
+              <class name="opacity-7" />
+              <class name="icon-grid__label" />
+            </style>
+				  </object>
+			  </child>
+			  <child>
+				  <object class="GtkLabel">
+					  <property name="xalign">0</property>
+				  </object>
+			  </child>
+		    <!--
+		    <child>
+          <object class="GtkGestureClick">
+            <signal name="pressed" handler="onRightClick" />
+            <property name="button">3</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkGestureClick">
+            <property name="button">1</property>
+            <signal name="pressed" handler="onLeftClick"/>
+          </object>
+        </child>
+		    -->
+		  </object>
+		</property>
+	</template>
+</interface>

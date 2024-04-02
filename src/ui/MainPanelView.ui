@@ -42,7 +42,19 @@
           </object>
         </child>
         <child>
-          <object class="GtkFlowBox" id="iconsFlowbox">
+          <object class="GtkGridView">
+            <property name="model">
+              <object class="GtkSingleSelection">
+                <property name="model" bind-source="IcoMainPanelView" bind-property="icons"/>
+              </object>
+            </property>
+            <property name="factory">
+              <object class="GtkBuilderListItemFactory">
+			          <property name="resource">/com/github/azuredusk10/IconManager/ui/IconListItem.ui</property>
+		          </object>
+            </property>
+          </object>
+          <!-- <object class="GtkFlowBox" id="iconsFlowbox">
             <property name="orientation">0</property>
             <property name="row-spacing">6</property>
             <property name="column-spacing">6</property>
@@ -52,7 +64,7 @@
             <property name="selection-mode">single</property>
             <property name="vexpand">0</property>
             <signal name="child-activated" handler="onIconActivated"/>
-          </object>
+          </object> -->
         </child>
       </object>
     </child>

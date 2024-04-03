@@ -191,6 +191,7 @@
                 <property name="margin-end">16</property>
                 <property name="margin-top">16</property>
                 <property name="margin-bottom">16</property>
+                <!--
                 <child>
                   <object class="AdwSplitButton">
                     <property name="menu-model">icon_details_export_menu</property>
@@ -205,6 +206,8 @@
                     </child>
                   </object>
                 </child>
+                -->
+                <!--
                 <child>
                   <object class="AdwSplitButton">
                     <property name="menu-model">icon_details_copy_menu</property>
@@ -218,6 +221,20 @@
                         <property name="icon-name">edit-copy-symbolic</property>
                       </object>
                     </child>
+                  </object>
+                </child>
+                -->
+                <child>
+                  <object class="GtkButton">
+                    <property name="child">
+                      <object class="AdwButtonContent">
+                        <property name="label" translatable="true">Copy as SVG</property>
+                        <property name="icon-name">edit-copy-symbolic</property>
+                      </object>
+                    </property>
+                    <style>
+                      <class name="suggested-action"/>
+                    </style>
                   </object>
                 </child>
               </object>

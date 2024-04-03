@@ -13,6 +13,9 @@
           <object class="GtkStackSidebar" id="main_stack_sidebar">
             <property name="vexpand">true</property>
             <property name="valign">0</property>
+            <style>
+              <class name="mainStackSidebar"/>
+            </style>
           </object>
         </child>
         <!-- <child>

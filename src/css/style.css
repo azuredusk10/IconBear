@@ -24,3 +24,6 @@
 .detailsPanelActionBox {
   border-top: 1px solid @borders;
 }
+.mainStackSidebar {
+  border: none;
+}

@@ -1,6 +1,6 @@
 desktop_file = i18n.merge_file(
-        input: 'com.github.azuredusk10.IconManager.desktop.in',
-       output: 'com.github.azuredusk10.IconManager.desktop',
+        input: 'design.chris_wood.IconBear.desktop.in',
+       output: 'design.chris_wood.IconBear.desktop',
          type: 'desktop',
        po_dir: '../po',
       install: true,
@@ -13,8 +13,8 @@ if desktop_utils.found()
 endif
 
 appstream_file = i18n.merge_file(
-        input: 'com.github.azuredusk10.IconManager.metainfo.xml.in',
-       output: 'com.github.azuredusk10.IconManager.metainfo.xml',
+        input: 'design.chris_wood.IconBear.metainfo.xml.in',
+       output: 'design.chris_wood.IconBear.metainfo.xml',
        po_dir: '../po',
       install: true,
   install_dir: get_option('datadir') / 'metainfo'
@@ -24,7 +24,7 @@ appstreamcli = find_program('appstreamcli', required: false, disabler: true)
 test('Validate appstream file', appstreamcli,
      args: ['validate', '--no-net', '--explain', appstream_file])
 
-install_data('com.github.azuredusk10.IconManager.gschema.xml',
+install_data('design.chris_wood.IconBear.gschema.xml',
   install_dir: get_option('datadir') / 'glib-2.0' / 'schemas'
 )
 

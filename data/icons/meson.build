@@ -1,4 +1,4 @@
-application_id = 'com.github.azuredusk10.IconManager'
+application_id = 'design.chris_wood.IconBear'
 
 scalable_dir = 'hicolor' / 'scalable' / 'apps'
 install_data(

@@ -176,7 +176,7 @@
         <attribute name="action">win.show-help-overlay</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">_About Icon-manager</attribute>
+        <attribute name="label" translatable="yes">_About icon-bear</attribute>
         <attribute name="action">app.about</attribute>
       </item>
     </section>

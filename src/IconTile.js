@@ -8,7 +8,7 @@ import { drawSvg } from './drawSvg.js';
 
 export const IconTile = GObject.registerClass({
   GTypeName: 'IcoIconTile',
-  Template: 'resource:///com/github/azuredusk10/IconManager/ui/IconTile.ui',
+  Template: 'resource:///design/chris_wood/IconBear/ui/IconTile.ui',
   Properties: {
     Label: GObject.ParamSpec.string(
       'label',

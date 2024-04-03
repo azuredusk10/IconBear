@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=icon-bear
+Exec=design.chris_wood.IconBear
+Icon=design.chris_wood.IconBear
+Terminal=false
+Type=Application
+Categories=GTK;
+StartupNotify=true

@@ -9,7 +9,7 @@ import { drawSvg } from './drawSvg.js';
 
 export const MainPanelView = GObject.registerClass({
   GTypeName: 'IcoMainPanelView',
-  Template: 'resource:///com/github/azuredusk10/IconManager/ui/MainPanelView.ui',
+  Template: 'resource:///design/chris_wood/IconBear/ui/MainPanelView.ui',
   InternalChildren: ['icons_grid_view'],
   Properties: {
     icons: GObject.ParamSpec.object(

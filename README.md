@@ -1,4 +1,4 @@
-# icon-manager
+# icon-bear
 
 A WIP desktop app for Linux to help designers choose icons for their projects.
 

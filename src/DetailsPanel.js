@@ -5,7 +5,7 @@ import { drawSvg } from './drawSvg.js';
 
 export const DetailsPanel = GObject.registerClass({
   GTypeName: 'IcoDetailsPanel',
-  Template: 'resource:///com/github/azuredusk10/IconManager/ui/DetailsPanel.ui',
+  Template: 'resource:///design/chris_wood/IconBear/ui/DetailsPanel.ui',
   Properties: {
     Label: GObject.ParamSpec.string(
       'label',

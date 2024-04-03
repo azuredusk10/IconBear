@@ -1,5 +1,5 @@
 {
-    "app-id" : "com.github.azuredusk10.IconManager",
+    "app-id" : "design.chris_wood.IconBear",
     "runtime" : "org.gnome.Platform",
     "runtime-version" : "45",
     "sdk" : "org.gnome.Sdk",
@@ -7,7 +7,7 @@
         "org.freedesktop.Sdk.Extension.node18",
         "org.freedesktop.Sdk.Extension.typescript"
     ],
-    "command" : "com.github.azuredusk10.IconManager",
+    "command" : "design.chris_wood.IconBear",
     "finish-args" : [
         "--share=network",
         "--share=ipc",
@@ -32,7 +32,7 @@
     ],
     "modules" : [
         {
-            "name" : "icon-manager",
+            "name" : "icon-bear",
             "builddir" : true,
             "buildsystem" : "meson",
             "sources" : [

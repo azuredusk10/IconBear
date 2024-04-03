@@ -9,7 +9,7 @@ import { Icon } from './Icon.js';
 
 export const Window = GObject.registerClass({
 	GTypeName: 'IcoWindow',
-	Template: 'resource:///com/github/azuredusk10/IconManager/ui/Window.ui',
+	Template: 'resource:///design/chris_wood/IconBear/ui/Window.ui',
 	InternalChildren: ['search_entry', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button'],
 	Properties: {
 	  sets: GObject.ParamSpec.jsobject(
@@ -111,7 +111,7 @@ export const Window = GObject.registerClass({
     // loop through icon-sets resource directory
     // Icons: icon-sets/[bundle-name]/icons/*.svg
     // Info: icon-sets/[bundle-name]/info.json
-    const bundledIconsDir = '/com/github/azuredusk10/IconManager/icon-sets/';
+    const bundledIconsDir = '/design/chris_wood/IconBear/icon-sets/';
 
     const bundleDirNames = Gio.resources_enumerate_children(bundledIconsDir, 0);
 
@@ -230,7 +230,7 @@ export const Window = GObject.registerClass({
     const dataDir = GLib.get_user_data_dir();
     console.log(dataDir);
 
-    const bundledIconsDir = '/com/github/azuredusk10/IconManager/icon-sets/';
+    const bundledIconsDir = '/design/chris_wood/IconBear/icon-sets/';
 
     // Detect whether the user data directory has all the bundled icons
 
@@ -266,7 +266,7 @@ export const Window = GObject.registerClass({
       // Or do I even need to bother with this if I'm going to keep the built-in icons as resources anyway? Arg probably not.
 
       // Create a File object representing the bundle directory
-      const bundlePath = 'resource://com/github/azuredusk10/IconManager/icon-sets/' + bundleName +'/icons'
+      const bundlePath = 'resource://design/chris_wood/IconBear/icon-sets/' + bundleName +'/icons'
       const bundleDirFile = Gio.File.new_for_uri(bundlePath);
 
 

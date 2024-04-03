@@ -9,7 +9,7 @@ import { Icon } from './Icon.js';
 
 export const IconSetStackView = GObject.registerClass({
   GTypeName: 'IcoIconSetStackView',
-  Template: 'resource:///com/github/azuredusk10/IconManager/ui/IconSetStackView.ui',
+  Template: 'resource:///design/chris_wood/IconBear/ui/IconSetStackView.ui',
   Properties: {
     icons: GObject.ParamSpec.object(
       'icons',
@@ -91,7 +91,7 @@ export const IconSetStackView = GObject.registerClass({
 
   loadAllIcons(){
     // Open the icon bundle resource Dir
-    const bundledIconsDir = '/com/github/azuredusk10/IconManager/icon-sets/';
+    const bundledIconsDir = '/design/chris_wood/IconBear/icon-sets/';
     const resourceDir = bundledIconsDir + this.setId;
     const iconsDir = resourceDir + '/icons/';
     const iconFilenames = Gio.resources_enumerate_children(iconsDir, 0);

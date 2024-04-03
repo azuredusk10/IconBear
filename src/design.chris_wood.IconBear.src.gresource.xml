@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/com/github/azuredusk10/IconManager/js">
+  <gresource prefix="/design/chris_wood/IconBear/js">
     <file>main.js</file>
     <file>Application.js</file>
     <file>MainPanelView.js</file>

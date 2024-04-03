@@ -1,1 +1,1 @@
-i18n.gettext('icon-manager', preset: 'glib')
+i18n.gettext('icon-bear', preset: 'glib')

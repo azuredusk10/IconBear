@@ -5,7 +5,7 @@ import GLib from 'gi://GLib';
 
 export const MainPanelView = GObject.registerClass({
   GTypeName: 'IcoSidebarView',
-  Template: 'resource:///com/github/azuredusk10/IconManager/ui/SidebarView.ui',
+  Template: 'resource:///design/chris_wood/IconBear/ui/SidebarView.ui',
   InternalChildren: ['main_stack_sidebar'],
   Properties: {
     sets: GObject.ParamSpec.jsobject(

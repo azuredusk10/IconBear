@@ -8,7 +8,7 @@ import { drawSvg } from './drawSvg.js';
 
 export const AllSetsStackView = GObject.registerClass({
   GTypeName: 'IcoAllSetsStackView',
-  Template: 'resource:///com/github/azuredusk10/IconManager/ui/AllSetsStackView.ui',
+  Template: 'resource:///design/chris_wood/IconBear/ui/AllSetsStackView.ui',
   InternalChildren: ['sets_flowbox'],
   Properties: {
     searchEntryText: GObject.ParamSpec.string(

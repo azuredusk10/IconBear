@@ -10,7 +10,7 @@ import { drawSvg } from './drawSvg.js';
 export const MainPanelView = GObject.registerClass({
   GTypeName: 'IcoMainPanelView',
   Template: 'resource:///design/chris_wood/IconBear/ui/MainPanelView.ui',
-  InternalChildren: ['icons_grid_view'],
+  InternalChildren: ['icons_grid_view', 'icons_selection', 'icons_filter_model'],
   Properties: {
     icons: GObject.ParamSpec.object(
       'icons',
@@ -62,52 +62,15 @@ export const MainPanelView = GObject.registerClass({
     super(params);
 
     this.#createListViewFactory();
+    this.#createFilterModel();
 
-    this.connect('notify::icons', () => {
-      // Filter the icons whenever the parent list store changes and when it's been fully populated.
-
-      if(this.icons){
-        // The number of items in the list store property returns 0 until it's been fully populated.
-        // Once populated, filter it and bind the model.
-        if(this.icons.get_n_items() > 0){
-          console.log('icons list store loaded')
-          //this._iconsFlowbox.bind_model(this.icons, (icon) => this._addItem(icon, this.iconSize));
-          this.#filterIcons();
-        }
-      }
-    });
-
-
-
-    this.connect('notify::searchEntryText', () => {
+    this.connect('notify::searchEntryText', (a, b) => {
       if(this.icons){
          if(this.icons.get_n_items() > 0){
-          this.#filterIcons();
+          this._icons_filter_model.filter.changed(0);
          }
       }
     });
-  }
-
-  #filterIcons(){
-    // Set the filter condition
-    const re = new RegExp(this.searchEntryText, "i");
-
-    // Loop over each item in the list store
-    let i=0;
-    let totalIcons = this.icons.get_n_items();
-
-    while(i < totalIcons) {
-      const singleIcon = this.icons.get_item(i);
-
-      // If the current item's label matches the filter condition, show the item in the FlowBox. Otherwise, hide it.
-      if(re.test(singleIcon.label)){
-        // this._iconsFlowbox.get_child_at_index(i).show();
-      } else {
-        // this._iconsFlowbox.get_child_at_index(i).hide();
-      }
-
-      i++;
-    }
   }
 
   #createListViewFactory(){
@@ -184,24 +147,15 @@ export const MainPanelView = GObject.registerClass({
     this._icons_grid_view.factory = factory;
   }
 
-  // Create a new child of the Flowbox
-  /*
-  _addItem(icon, size){
 
-    // return new Gtk.FlowBoxChild({});
+  #createFilterModel(){
+    this._icons_filter_model.filter = Gtk.CustomFilter.new(item => {
 
-    const newItem = new IconTile({
-      icon,
-      label: icon.label.substring(0, 20),
-      width: size,
-      height: size,
+      // Check if the icon name contains the search entry text
+      return RegExp(this.searchEntryText, "i").test(item.label)
+
     });
-
-    newItem.connect('icon-copied', (emitter, mimeType, data) => this.onIconCopied(emitter, mimeType, data));
-
-    return newItem;
   }
-  */
 
   onIconLeftClick(_self, _n_press, x, y){
     if(_n_press == 2){

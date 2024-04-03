@@ -23,8 +23,12 @@
                 <class name="iconsGridView" />
               </style>
               <property name="model">
-                <object class="GtkSingleSelection">
-                  <property name="model" bind-source="IcoMainPanelView" bind-property="icons"/>
+                <object class="GtkSingleSelection" id="icons_selection">
+                  <property name="model">
+                    <object class="GtkFilterListModel" id="icons_filter_model">
+			                <property name="model" bind-source="IcoMainPanelView" bind-property="icons"/>
+                    </object>
+                  </property>
                   <property name="autoselect">false</property>
                   <signal name="selection-changed" handler="onIconActivated"/>
                 </object>

@@ -217,10 +217,12 @@ export const Window = GObject.registerClass({
       this.bind_property('sidebarVisible', stackPageChild, 'sidebarVisible', GObject.BindingFlags.SYNC_CREATE);
       this.bind_property('iconPreviewSize', stackPageChild, 'iconPreviewSize', GObject.BindingFlags.SYNC_CREATE);
 
-
+      // Add the stack page
       this._main_stack.add_titled(stackPageChild, set.id, set.name);
 
     });
+
+    //this._main_stack.connect('notify::visible-child-name', this.onStackPageChange);
 
   }
 
@@ -312,8 +314,8 @@ export const Window = GObject.registerClass({
 	  this.notify('sidebarVisible');
 	}
 
-	onStackPageChange(e){
-	  const visiblePageName = e.visibleChildName;
+	onStackPageChange(stack){
+	  const visiblePageName = stack.visibleChildName;
 	  if(visiblePageName === 'all_sets'){
       this.sidebarButtonVisible = false;
       // TODO: Make this translateable
@@ -322,10 +324,10 @@ export const Window = GObject.registerClass({
 	    this.sidebarButtonVisible = true;
 	    this.searchPlaceholderText = 'Search icons in this set';
 
-	    const visiblePage = e.get_visible_child();
+	    const visiblePage = stack.get_visible_child();
 	    visiblePage.loadAllIcons();
-
 	  }
+
 	}
 
 	onSetActivated(_flowbox, setName){

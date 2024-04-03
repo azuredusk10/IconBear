@@ -90,6 +90,7 @@ export const IconSetStackView = GObject.registerClass({
   }
 
   loadAllIcons(){
+
     // Open the icon bundle resource Dir
     const bundledIconsDir = '/design/chris_wood/IconBear/icon-sets/';
     const resourceDir = bundledIconsDir + this.setId;

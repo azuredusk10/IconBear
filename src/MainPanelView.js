@@ -148,8 +148,14 @@ export const MainPanelView = GObject.registerClass({
         cssClasses: ['caption', 'icon-grid__label']
       });
 
+      const leftClickGesture = new Gtk.GestureClick({
+        button: 1
+      });
+      leftClickGesture.connect('pressed', (_self, _n_press, x, y) => this.onIconLeftClick(_self, _n_press, x, y));
+
       topLevelBox.append(drawingArea);
       topLevelBox.append(label);
+      topLevelBox.add_controller(leftClickGesture);
 
 
       listItem.set_child(topLevelBox);
@@ -197,6 +203,11 @@ export const MainPanelView = GObject.registerClass({
   }
   */
 
+  onIconLeftClick(_self, _n_press, x, y){
+    if(_n_press == 2){
+      this.emit('icon-copied');
+    }
+  }
 
   onIconActivated(selection) {
     const icon = selection.get_selected_item();

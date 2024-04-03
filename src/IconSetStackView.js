@@ -25,10 +25,17 @@ export const IconSetStackView = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       ''
     ),
+    setLicense: GObject.ParamSpec.string(
+      'setLicense',
+      'Set License',
+      'The license of the currently selected icon set',
+      GObject.ParamFlags.READWRITE,
+      ''
+    ),
     setId: GObject.ParamSpec.string(
       'setId',
       'Set ID',
-      'The id of the currently selected icon set',
+      'The ID of the currently selected icon set',
       GObject.ParamFlags.READWRITE,
       ''
     ),

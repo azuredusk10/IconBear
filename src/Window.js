@@ -123,11 +123,22 @@ export const Window = GObject.registerClass({
       // Establish the structure of the set object
       let set = {
         id: bundleId,
-        name: bundleId, // TODO: get from info.json
-        licence: '', // TODO: get from info.json
+        name: '',
+        license: '',
         icons: Gio.ListStore.new(Icon),
         iconsCount: 0
       };
+
+      // Load info.json to get the set metadata
+      const metaFile = Gio.File.new_for_uri('resource://' + bundledIconsDir + bundleDirName + 'info.json');
+      const metaFileBytes = metaFile.read(null).read_bytes(8192, null).get_data();
+      const decoder = new TextDecoder;
+      const metaFileData = decoder.decode(metaFileBytes);
+      const metaJson = JSON.parse(metaFileData);
+
+      // Populate the json data into the set object
+      set.name = metaJson.name;
+      set.license = metaJson.license;
 
       // Get an array of all the files in this bundle resource directory
       const iconsDir = bundledIconsDir + bundleDirName + 'icons/';
@@ -209,6 +220,7 @@ export const Window = GObject.registerClass({
       stackPageChild.setName = set.name;
       stackPageChild.iconsCount = set.iconsCount;
       stackPageChild.setId = set.id;
+      stackPageChild.setLicense = set.license;
       stackPageChild.notify('setId');
       stackPageChild.maxPreviewIcons = this.maxPreviewIcons;
 
@@ -218,7 +230,7 @@ export const Window = GObject.registerClass({
       this.bind_property('iconPreviewSize', stackPageChild, 'iconPreviewSize', GObject.BindingFlags.SYNC_CREATE);
 
       // Add the stack page
-      this._main_stack.add_titled(stackPageChild, set.id, set.name);
+      this._main_stack.add_titled(stackPageChild, set.name, set.name);
 
     });
 

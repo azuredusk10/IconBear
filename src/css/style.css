@@ -21,3 +21,6 @@
 .iconsGridView {
   background-color: transparent;
 }
+.detailsPanelActionBox {
+  border-top: 1px solid @borders;
+}

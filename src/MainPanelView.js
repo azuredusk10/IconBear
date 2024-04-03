@@ -198,9 +198,8 @@ export const MainPanelView = GObject.registerClass({
   */
 
 
-  onIconActivated(position) {
-    const icon = this.icons.get_item(position);
-    console.log(position, icon);
+  onIconActivated(selection) {
+    const icon = selection.get_selected_item();
     this.emit('icon-activated', icon.label, icon);
   }
 

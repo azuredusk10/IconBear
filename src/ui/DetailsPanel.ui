@@ -6,8 +6,73 @@
 				<property name="orientation">vertical</property>
 			</object>
 		</property>
+    <!-- No icon selected view -->
     <child>
       <object class="GtkBox">
+        <property name="visible" bind-source="IcoDetailsPanel" bind-property="iconIsSelected" bind-flags="invert-boolean" />
+        <property name="orientation">vertical</property>
+        <property name="vexpand">true</property>
+        <child>
+          <object class="GtkScrolledWindow">
+          <property name="vexpand">true</property>
+          <property name="min-content-width">250</property>
+          <property name="max-content-width">300</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="margin-start">16</property>
+                <property name="margin-end">16</property>
+                <property name="margin-top">16</property>
+                <property name="margin-bottom">16</property>
+                <child>
+                  <object class="GtkFrame">
+                    <property name="width-request">172</property>
+                    <property name="height-request">172</property>
+                    <property name="margin-bottom">24</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="true">Select an icon</property>
+                        <property name="opacity">0.7</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" bind-source="IcoDetailsPanel" bind-property="setName" bind-flags="sync-create"/>
+                    <property name="halign">1</property>
+                    <property name="margin-bottom">6</property>
+                    <style>
+                      <class name="title-3"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="icons_count">
+                    <property name="halign">1</property>
+                    <property name="margin-bottom">6</property>
+                    <style>
+                    </style>
+                  </object>
+                </child>
+
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" bind-source="IcoDetailsPanel" bind-property="setLicense" bind-flags="sync-create"/>
+                    <property name="halign">1</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          </child>
+      </object>
+    </child>
+
+    <!-- Icon selected view -->
+    <child>
+      <object class="GtkBox">
+        <property name="visible" bind-source="IcoDetailsPanel" bind-property="iconIsSelected" />
         <property name="orientation">vertical</property>
         <property name="vexpand">true</property>
         <child>
@@ -62,7 +127,7 @@
                     <child>
                       <object class="AdwActionRow">
                         <property name="title" translatable="yes">Name</property>
-                        <property name="subtitle" bind-source="IcoDetailsPanel" bind-property="label" bind-flags="sync-create"/>
+                        <property name="subtitle" bind-source="IcoDetailsPanel" bind-property="iconLabel" bind-flags="sync-create"/>
                         <property name="subtitle-selectable">True</property>
                         <style>
                           <class name="property"/>
@@ -81,16 +146,18 @@
                       </object>
                     </child>
                     -->
-                    <!-- <child>
+                    <child>
                       <object class="AdwActionRow">
-                        <property name="title" translatable="yes">Open containing folder</property>
+                        <property name="title" translatable="yes">Filename</property>
+                        <property name="subtitle">Filename.svg</property>
                         <child type="suffix">
-                          <object class="GtkImage">
-                            <property name="icon-name">ico-grid-large-symbolic</property>
+                          <object class="GtkButton">
+                            <property name="icon-name">folder-open-symbolic</property>
+                            <property name="valign">3</property>
                           </object>
                         </child>
                       </object>
-                    </child> -->
+                    </child>
                   </object>
                 </child>
               </object>

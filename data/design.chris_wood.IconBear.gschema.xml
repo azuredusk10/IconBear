@@ -2,13 +2,10 @@
 <schemalist gettext-domain="icon-bear">
 	<schema id="design.chris_wood.IconBear" path="/design/chris_wood/IconBear/">
 	  <key name="window-width" type="i">
-	    <default>-1</default>
+	    <default>700</default>
 	  </key>
 	  <key name="window-height" type="i">
-	    <default>-1</default>
-	  </key>
-	  <key name="show-hidden-files" type="b">
-	    <default>false</default>
+	    <default>450</default>
 	  </key>
 	</schema>
 </schemalist>

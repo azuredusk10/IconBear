@@ -1,5 +1,6 @@
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
+import GdkPixbuf from 'gi://GdkPixbuf';
 
 import { drawSvg } from './drawSvg.js';
 
@@ -57,7 +58,7 @@ export const DetailsPanel = GObject.registerClass({
       false,
     ),
   },
-  InternalChildren: ['preview_image', 'icons_count'],
+  InternalChildren: ['preview_image', 'icons_count', 'icon_size_row'],
   Signals: {
     'icon-copied': {},
   }
@@ -65,7 +66,7 @@ export const DetailsPanel = GObject.registerClass({
   constructor(params){
     super(params);
     this.connect('notify::icon', () => this.#updateIconDetails());
-    this.#bindIconsCount();
+    this.#bindProperties();
   }
 
   #updateIconDetails(){
@@ -81,6 +82,13 @@ export const DetailsPanel = GObject.registerClass({
       // Show the "icon selected" view
       this.iconIsSelected = true;
 
+      // Calculate the icon's width and height
+      const pixbuf = GdkPixbuf.Pixbuf.new_from_resource_at_scale(this.icon.filepath, -1, -1, true);
+      const width = pixbuf.width;
+      const height = pixbuf.height;
+
+      this._icon_size_row.subtitle = `${width} × ${height}`;
+
     } else {
       // Show the empty state view
       this.iconIsSelected = false;
@@ -88,9 +96,12 @@ export const DetailsPanel = GObject.registerClass({
 
   }
 
-  #bindIconsCount(){
+  #bindProperties(){
     // Appends the word "icons" onto the setIconsCount property and binds it to the label in the empty state
     this.bind_property_full('setIconsCount', this._icons_count, 'label', GObject.BindingFlags.SYNC_CREATE, (binding, value) => [true, value + ' icons'], null);
+
+    // Output the original width and height of the icon as the string "[width] x [height]"
+
   }
 
   onCopyButtonClicked(emitter){

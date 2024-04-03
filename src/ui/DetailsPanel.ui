@@ -146,6 +146,7 @@
                       </object>
                     </child>
                     -->
+                    <!-- This wouldn't work for a resource file, only for a file in the data directory.
                     <child>
                       <object class="AdwActionRow">
                         <property name="title" translatable="yes">Filename</property>
@@ -159,6 +160,15 @@
                             </style>
                           </object>
                         </child>
+                      </object>
+                    </child> -->
+                    <child>
+                      <object class="AdwActionRow" id="icon_size_row">
+                        <property name="title" translatable="yes">Original size (px)</property>
+                        <property name="subtitle-selectable">True</property>
+                        <style>
+                          <class name="property"/>
+                        </style>
                       </object>
                     </child>
                   </object>

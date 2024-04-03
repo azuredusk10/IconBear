@@ -135,22 +135,6 @@
                         </property>
                       </object>
                     </child>
-                    <!--
-                    <child>
-                      <object class="GtkStackPage">
-                        <property name="title">Carbon</property>
-                        <property name="name">Carbon</property>
-                        <property name="child">
-                          <object class="IcoIconSetStackView" id="set_view">
-                            <property name="icons" bind-source="IcoWindow" bind-property="currentSetIcons" bind-flags="sync-create"></property>
-                            <property name="setName" bind-source="IcoWindow" bind-property="currentSetName" bind-flags="sync-create"></property>
-                            <property name="searchEntryText" bind-source="search_entry" bind-property="text" bind-flags="sync-create"></property>
-                            <property name="sidebarVisible" bind-source="IcoWindow" bind-property="sidebarVisible" bind-flags="sync-create" />
-                          </object>
-                        </property>
-                      </object>
-                    </child>
-                    -->
                   </object>
                 </property>
               </object>

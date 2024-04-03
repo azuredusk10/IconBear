@@ -6,7 +6,7 @@
 				<property name="orientation">vertical</property>
 			</object>
 		</property>
-    <child>
+    <!-- <child>
       <object class="GtkBox" id="container">
         <property name="orientation">vertical</property>
         <property name="margin-start">16</property>
@@ -40,16 +40,23 @@
   		          <class name="mb-8"/>
             </style>
           </object>
-        </child>
-        <!-- <child>
+        </child> -->
+        <child>
           <object class="GtkScrolledWindow">
             <property name="hscrollbar-policy">2</property>
-            <property name="propagate-natural-height">true</property>
-            <property name="has-frame">true</property>
-            <property name="valign">1</property> -->
+            <property name="vexpand">true</property>
             <child>
               <object class="GtkGridView" id="icons_grid_view">
                 <property name="orientation">1</property>
+                <property name="max-columns">12</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="margin-top">12</property>
+                <property name="margin-bottom">12</property>
+                <property name="overflow">0</property>
+                <style>
+                  <class name="iconsGridView" />
+                </style>
                 <property name="model">
                   <object class="GtkSingleSelection">
                     <property name="model" bind-source="IcoMainPanelView" bind-property="icons"/>
@@ -57,11 +64,11 @@
                   </object>
                 </property>
               </object>
-            <!-- </child>
-          </object> -->
+            </child>
+          </object>
         </child>
 
-      </object>
-    </child>
+      <!-- </object>
+    </child> -->
   </template>
 </interface>

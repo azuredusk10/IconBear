@@ -120,6 +120,10 @@ export const MainPanelView = GObject.registerClass({
       const topLevelBox = new Gtk.Box({
         spacing: 4,
         orientation: 1,
+        marginStart: 4,
+        marginEnd: 4,
+        marginTop: 4,
+        marginBottom: 4,
         cssClasses: ['card', 'card--icon', 'activatable'],
       });
 

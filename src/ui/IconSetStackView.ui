@@ -14,17 +14,12 @@
         <property name="content">
           <object class="AdwToastOverlay" id="toast_overlay">
             <child>
-              <object class="GtkScrolledWindow">
-                <property name="vexpand">true</property>
-                <child>
-                  <object class="IcoMainPanelView" id="main_panel">
-                    <signal name="icon-activated" handler="onIconActivated" />
-                    <property name="icons" bind-source="IcoIconSetStackView" bind-property="icons" bind-flags="sync-create" />
-                    <property name="setName" bind-source="IcoIconSetStackView" bind-property="setName" bind-flags="sync-create" />
-                    <property name="iconsCount" bind-source="IcoIconSetStackView" bind-property="iconsCount" bind-flags="sync-create" />
-                    <property name="searchEntryText" bind-source="IcoIconSetStackView" bind-property="searchEntryText" bind-flags="sync-create" />
-                  </object>
-                </child>
+              <object class="IcoMainPanelView" id="main_panel">
+                <signal name="icon-activated" handler="onIconActivated" />
+                <property name="icons" bind-source="IcoIconSetStackView" bind-property="icons" bind-flags="sync-create" />
+                <property name="setName" bind-source="IcoIconSetStackView" bind-property="setName" bind-flags="sync-create" />
+                <property name="iconsCount" bind-source="IcoIconSetStackView" bind-property="iconsCount" bind-flags="sync-create" />
+                <property name="searchEntryText" bind-source="IcoIconSetStackView" bind-property="searchEntryText" bind-flags="sync-create" />
               </object>
             </child>
           </object>

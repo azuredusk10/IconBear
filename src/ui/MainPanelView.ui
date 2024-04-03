@@ -60,6 +60,7 @@
                 <property name="model">
                   <object class="GtkSingleSelection">
                     <property name="model" bind-source="IcoMainPanelView" bind-property="icons"/>
+                    <property name="autoselect">false</property>
                     <signal name="selection-changed" handler="onIconActivated"/>
                   </object>
                 </property>

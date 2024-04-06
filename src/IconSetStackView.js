@@ -92,8 +92,23 @@ export const IconSetStackView = GObject.registerClass({
 
     // Connect the icon-copied signals and pass this widget's activeIcon property gfile through
     this._main_panel.connect('icon-copied', (emitter) => this.onIconCopied(emitter, this.activeIcon.gfile));
-    this._details_panel.connect('icon-copied', (emitter) => this.onIconCopied(emitter, this.activeIcon.gfile));
+    // this._details_panel.connect('icon-copied', (emitter) => this.onIconCopied(emitter, this.activeIcon.gfile));
+    this.#setUpActions();
 
+  }
+
+  #setUpActions(){
+    const actionGroup = new Gio.SimpleActionGroup();
+
+    const copyAction = new Gio.SimpleAction({
+		  name: 'copy',
+    });
+    copyAction.connect('activate', (_action, _params) => {
+      this.onIconCopied(_action, this.activeIcon.gfile)
+    });
+    actionGroup.insert(copyAction);
+
+    this.insert_action_group('set-view', actionGroup);
   }
 
   loadAllIcons(){
@@ -205,6 +220,7 @@ export const IconSetStackView = GObject.registerClass({
 
     this._toast_overlay.add_toast(toast);
 	}
+
 
 });
 

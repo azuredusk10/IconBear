@@ -34,5 +34,15 @@
         </property>
       </object>
     </child>
+    <child>
+	    <object class="GtkShortcutController">
+		    <child>
+			    <object class="GtkShortcut">
+				    <property name="trigger">&lt;Control&gt;c</property>
+				    <property name="action">action(set-view.copy)</property>
+			    </object>
+		    </child>
+	    </object>
+    </child>
   </template>
 </interface>

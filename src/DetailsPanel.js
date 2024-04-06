@@ -59,9 +59,6 @@ export const DetailsPanel = GObject.registerClass({
     ),
   },
   InternalChildren: ['preview_image', 'icons_count', 'icon_size_row'],
-  Signals: {
-    'icon-copied': {},
-  }
 }, class extends Gtk.Widget {
   constructor(params){
     super(params);
@@ -104,8 +101,5 @@ export const DetailsPanel = GObject.registerClass({
 
   }
 
-  onCopyButtonClicked(emitter){
-    this.emit('icon-copied');
-  }
 
 });

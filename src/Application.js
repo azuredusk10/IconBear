@@ -21,6 +21,7 @@ export const Application = GObject.registerClass({
 		super.vfunc_startup();
 		this.#loadSettings();
 		this.#loadStylesheet();
+		this.#setUpAccelerators();
 	}
 
 	vfunc_activate() {
@@ -43,6 +44,10 @@ export const Application = GObject.registerClass({
 			provider,
 			Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
 		);
+	}
+
+	#setUpAccelerators(){
+	  this.set_accels_for_action('window.close', ['<Control>w']);
 	}
 
 });

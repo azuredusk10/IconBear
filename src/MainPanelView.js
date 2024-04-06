@@ -26,6 +26,13 @@ export const MainPanelView = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       ''
     ),
+    prevSearchEntryText: GObject.ParamSpec.string(
+      'prevSearchEntryText',
+      'Previous Search Entry Text',
+      'The user-inputted value of the search entry prior to the current entry',
+      GObject.ParamFlags.READWRITE,
+      ''
+    ),
     setName: GObject.ParamSpec.string(
       'setName',
       'Set Name',
@@ -67,7 +74,27 @@ export const MainPanelView = GObject.registerClass({
     this.connect('notify::searchEntryText', (a, b) => {
       if(this.icons){
          if(this.icons.get_n_items() > 0){
-          this._icons_filter_model.filter.changed(0);
+
+          // By default, the filter will be applied without optimisation.
+          let filterSpecificity = Gtk.FilterChange.DIFFERENT;
+
+          // Detect whether the model should be filtered for more or less items
+          // If search entry contains the contents of the previous entry and the new entry is longer, then assume filter is more specific.
+          // clo -> CLOu
+          if (RegExp(this.prevSearchEntryText, "i").test(this.searchEntryText) && this.prevSearchEntryText.length < this.searchEntryText.length){
+            filterSpecificity = Gtk.FilterChange.MORE_STRICT;
+
+            // If prev search entry contains the contents of the new entry and the new entry is shorter, then assume filter is less specific.
+            // CLOu -> clo
+          } else if(RegExp(this.searchEntryText, "i").test(this.prevSearchEntryText) && this.prevSearchEntryText.length > this.searchEntryText.length) {
+            filterSpecificity = Gtk.FilterChange.LESS_STRICT;
+          }
+
+          // Apply the filter
+          this._icons_filter_model.filter.changed(filterSpecificity);
+
+          // Store the now-applied search entry in the prevSearchEntry property
+          this.prevSearchEntryText = this.searchEntryText
          }
       }
     });

@@ -7,5 +7,8 @@
 	  <key name="window-height" type="i">
 	    <default>450</default>
 	  </key>
+	  <key name="visible-page-name" type="s">
+	    <default>"all_sets"</default>
+	  </key>
 	</schema>
 </schemalist>

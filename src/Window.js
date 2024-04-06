@@ -81,7 +81,7 @@ export const Window = GObject.registerClass({
 }, class extends Adw.ApplicationWindow {
   constructor(params={}){
     super(params);
-    this.#bindSizeToSettings();
+    this.#bindToSettings();
     // this.#importBundledIcons();
     this.#setupActions();
     this.#initializeIcons();
@@ -94,7 +94,7 @@ export const Window = GObject.registerClass({
 	}
 
 
-	#bindSizeToSettings(){
+	#bindToSettings(){
 	  settings.bind('window-width', this, 'default-width', Gio.SettingsBindFlags.DEFAULT);
 	  settings.bind('window-height', this, 'default-height', Gio.SettingsBindFlags.DEFAULT);
 	}
@@ -233,6 +233,9 @@ export const Window = GObject.registerClass({
       this._main_stack.add_titled(stackPageChild, set.name, set.name);
 
     });
+
+    // Bind the visible stack page to a setting
+    settings.bind('visible-page-name', this._main_stack, 'visible-child-name', Gio.SettingsBindFlags.DEFAULT)
 
   }
 

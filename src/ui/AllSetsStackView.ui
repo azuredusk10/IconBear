@@ -86,7 +86,6 @@
                 <property name="min-children-per-line">1</property>
                 <property name="selection-mode">single</property>
                 <property name="vexpand">0</property>
-                <property name="activatable">false</property>
                 <!-- <signal name="child-activated" handler="onSetActivated"/> -->
                 <!-- TODO: Hide this first tile if the user has no sets yet. The large CTA in "My sets" will be displayed instead. -->
                   <child>

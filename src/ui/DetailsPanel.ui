@@ -181,6 +181,37 @@
                         </child>
                       </object>
                     </child>
+                  </object>
+                </child>
+
+                <child>
+                  <object class="GtkListBox">
+                    <property name="selection-mode">none</property>
+                    <property name="margin-top">16</property>
+                    <style>
+                      <class name="boxed-list"/>
+                    </style>
+                    <child>
+                      <object class="AdwActionRow">
+                        <property name="title" translatable="yes">Style</property>
+                        <property name="subtitle">Outline</property>
+                        <child type="suffix">
+                          <object class="GtkMenuButton">
+                            <property name="valign">3</property>
+                            <property name="icon-name">document-edit-symbolic</property>
+                            <property name="tooltip-text" translatable="true">Edit style</property>
+                            <property name="popover">details_style_popover</property>
+                            <property name="direction">2</property>
+                            <style>
+                              <class name="flat"/>
+                            </style>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="property"/>
+                        </style>
+                      </object>
+                    </child>
                     <!--
                     <child>
                       <object class="AdwActionRow">
@@ -313,5 +344,45 @@
         </item>
       </section>
     </menu>
+
+    <object class="GtkPopover" id="details_style_popover">
+      <property name="has-arrow">true</property>
+      <property name="name">details_style_popover</property>
+      <property name="child">
+        <object class="AdwClamp">
+          <property name="hexpand">true</property>
+          <property name="maximum-size">150</property>
+          <child>
+            <object class="GtkBox">
+              <property name="orientation">vertical</property>
+              <!-- <child>
+                <object class="GtkLabel">
+                  <property name="label" translatable="true">Edit style</property>
+                  <property name="halign">1</property>
+                  <property name="margin-bottom">8</property>
+                </object>
+              </child> -->
+              <child>
+                <object class="GtkDropDown">
+                  <property name="enable-search">false</property>
+                  <property name="model">
+                    <object class="GtkStringList">
+                      <items>
+                        <item translatable="true">None</item>
+                        <item translatable="true">Outline</item>
+                        <!-- <item translatable="true">Outline two-tone</item> -->
+                        <item translatable="true">Fill</item>
+                        <!-- <item translatable="true">Fill two-tone</item> -->
+                        <item translatable="true">Colour</item>
+                      </items>
+                    </object>
+                  </property>
+                </object>
+              </child>
+            </object>
+          </child>
+        </object>
+      </property>
+    </object>
   </template>
 </interface>

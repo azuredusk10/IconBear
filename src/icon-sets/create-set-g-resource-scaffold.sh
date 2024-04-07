@@ -13,7 +13,7 @@ do
     if [ -f "$file" ]
     then
         # Append the filename to "icons.txt" with the desired format
-        echo "<file>icon-sets/phosphorus/icons/$file</file>" >> ../icons.txt
+        echo "<file>icon-sets/feather/icons/$file</file>" >> ../icons.txt
     fi
 done
 

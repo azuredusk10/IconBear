@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
+  <gresource prefix="/design/chris_wood/IconBear/icons/scalable/actions/">
+    <!-- UI icons -->
+    <file alias="ico-funnel-outline-symbolic.svg" preprocess="xml-stripblanks">icons/funnel-outline-symbolic.svg</file>
+  </gresource>
   <gresource prefix="/design/chris_wood/IconBear">
     <file>css/style.css</file>
     <file alias="style-dark.css">css/style-dark.css</file>

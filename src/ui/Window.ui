@@ -83,13 +83,30 @@
                     <property name="title-widget">
                       <object class="AdwClamp">
                         <property name="hexpand">true</property>
-                        <property name="maximum-size">400</property>
+                        <property name="maximum-size">350</property>
                         <property name="tightening-threshold">200</property>
                         <child>
-                          <object class="GtkSearchEntry" id="search_entry">
-                            <property name="search-delay">100</property>
-                            <property name="placeholder-text" bind-source="IcoWindow" bind-property="searchPlaceholderText" bind-flags="sync-create" />
-                            <signal name="search-changed" handler="onSearchEntrySearchChanged" />
+                          <object class="GtkBox">
+                            <property name="spacing">4</property>
+
+                            <child>
+                              <object class="GtkSearchEntry" id="search_entry">
+                                <property name="search-delay">100</property>
+                                <property name="hexpand">true</property>
+                                <property name="placeholder-text" bind-source="IcoWindow" bind-property="searchPlaceholderText" bind-flags="sync-create" />
+                                <signal name="search-changed" handler="onSearchEntrySearchChanged" />
+                              </object>
+                             </child>
+                             <child>
+                              <object class="GtkMenuButton">
+                                <property name="visible" bind-source="IcoWindow" bind-property="sidebarButtonVisible" bind-flags="sync-create" />
+                                <property name="icon-name">ico-funnel-outline-symbolic</property>
+                                <!-- <property name="icon-name">ico-funnel-symbolic</property> -->
+                                <property name="always-show-arrow">true</property>
+                                <property name="tooltip-text" translatable="true">Filters</property>
+                                <property name="popover">icon_filters_popover</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -97,10 +114,10 @@
 
                     <!-- <child type="start">
                       <object class="GtkMenuButton">
-                        <property name="label">24px</property>
+                        <property name="icon-name">ico-funnel-outline-symbolic</property>
                         <property name="always-show-arrow">true</property>
-                        <property name="tooltip-text" translatable="true">Icon Size</property>
-                        <property name="popover">icon_size_popover</property>
+                        <property name="tooltip-text" translatable="true">Filters</property>
+                        <property name="popover">icon_filters_popover</property>
                       </object>
                     </child> -->
 
@@ -165,79 +182,63 @@
       </item>
     </section>
   </menu>
-  <menu id="icon_size_menu">
-    <section>
-      <attribute name="label" translatable="true">Icon size</attribute>
-      <item>
-        <attribute name="label" translatable="yes">16px</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">24px</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">32px</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">48px</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">64px</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">96px</attribute>
-      </item>
-    </section>
-  </menu>
-  <object class="GtkPopover" id="icon_size_popover">
+  <object class="GtkPopover" id="icon_filters_popover">
     <property name="has-arrow">true</property>
-    <property name="name">icon_size_popover</property>
+    <property name="name">icon_filters_popover</property>
     <property name="child">
       <object class="AdwClamp">
         <property name="hexpand">true</property>
-        <property name="maximum-size">300</property>
+        <property name="maximum-size">150</property>
         <child>
-          <object class="GtkBox" id="">
+          <object class="GtkBox">
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="true">Size</property>
-                <style>
-                  <class name="mb-2"/>
-                </style>
+                <property name="label" translatable="true">Style</property>
+                <property name="halign">1</property>
+                <property name="margin-bottom">8</property>
               </object>
             </child>
             <child>
-              <object class="GtkScale" id="icon_size_scale">
-                <property name="orientation">0</property>
-                <property name="margin-bottom">18</property>
-                <property name="hexpand">true</property>
-                <property name="draw-value">true</property>
-                <property name="digits">0</property>
-                <property name="adjustment">
-                  <object class="GtkAdjustment">
-                    <property name="lower">16</property>
-                    <property name="upper">96</property>
-
+              <object class="GtkDropDown">
+                <property name="enable-search">false</property>
+                <property name="margin-bottom">16</property>
+                <property name="model">
+                  <object class="GtkStringList">
+                    <items>
+                      <item translatable="true">All styles</item>
+                      <item translatable="true">Outline</item>
+                      <!-- <item translatable="true">Outline two-tone</item> -->
+                      <item translatable="true">Fill</item>
+                      <!-- <item translatable="true">Fill two-tone</item> -->
+                      <item translatable="true">Colour</item>
+                    </items>
                   </object>
                 </property>
-                <property name="draw-value">true</property>
-                <marks>
-                  <mark value="16" position="top"></mark>
-                  <mark value="24" position="top"></mark>
-                  <mark value="32" position="top"></mark>
-                  <mark value="48" position="top"></mark>
-                  <mark value="64" position="top"></mark>
-                  <mark value="96" position="top"></mark>
-                </marks>
-                <signal name="value-changed" handler="onIconSizeChanged"/>
               </object>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="true">Color</property>
-                <style>
-                  <class name="mb-2"/>
-                </style>
+                <property name="label" translatable="true">Size</property>
+                <property name="halign">1</property>
+                <property name="margin-bottom">8</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkDropDown">
+                <property name="enable-search">false</property>
+                <property name="margin-bottom">16</property>
+                <property name="model">
+                  <object class="GtkStringList">
+                    <items>
+                      <item translatable="true">All sizes</item>
+                      <item translatable="true">12px</item>
+                      <item translatable="true">16px</item>
+                      <item translatable="true">24px</item>
+                      <item translatable="true">32px</item>
+                    </items>
+                  </object>
+                </property>
               </object>
             </child>
           </object>

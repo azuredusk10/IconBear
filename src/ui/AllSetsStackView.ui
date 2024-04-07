@@ -91,7 +91,7 @@
                   <child>
                     <object class="GtkFlowBoxChild">
                       <signal name="activate" handler="onAddNewSetClicked" /> <!-- TODO: This isn't firing -->
-                      <property name="visible">true</property>
+                      <property name="visible">false</property>
                       <property name="name">Add a new set from a folder</property>
                       <property name="child">
                         <object class="GtkBox">

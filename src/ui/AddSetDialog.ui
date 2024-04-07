@@ -7,7 +7,7 @@
 			</object>
 		</property>
     <object class="AdwDialog" id="add_set_dialog">
-      <property name="title" translatable="true">Add new set</property>
+      <property name="title" translatable="true">Import X icons</property>
       <child>
         <object class="AdwToolbarView">
           <child type="top">
@@ -22,7 +22,7 @@
               </child>
               <child type="end">
                 <object class="GtkButton" id="create_btn">
-                  <property name="label">Add</property>
+                  <property name="label">Import</property>
                   <style>
                     <class name="suggested-action"/>
                   </style>
@@ -31,8 +31,48 @@
             </object>
           </child>
           <child>
-            <object class="GtkLabel">
-              <property name="label">Hello world</property>
+            <object class="AdwClamp">
+              <property name="maximum-size">600</property>
+              <property name="child">
+                <object class="GtkBox">
+                  <property name="orientation">vertical</property>
+                  <style>
+                    <class name="mx-8"/>
+                    <class name="my-16"/>
+                  </style>
+                  <child>
+                    <object class="GtkListBox">
+                      <property name="selection-mode">0</property>
+                      <style>
+                        <class name="boxed-list"/>
+                      </style>
+                      <child>
+                        <object class="AdwComboRow">
+                          <property name="title" translatable="true">Set</property>
+                          <property name="subtitle" translatable="true"></property>
+                          <property name="model">
+                            <object class="GtkStringList" id="list">
+                              <items>
+                                <item>New set</item>
+                                <item>Carbon</item>
+                                <item>Phosphorus</item>
+                                <item>Bootstrap Icons</item>
+                                <item>Feather</item>
+                              </items>
+                            </object>
+                          </property>
+                        </object>
+                      </child>
+                      <!-- TODO: Only show this entry row if "New set" (the first option) is selected -->
+                      <child>
+                        <object class="AdwEntryRow">
+                          <property name="title" translatable="true">New set name</property>
+                        </object>
+                      </child>
+                    </object>
+                  </child>
+                </object>
+              </property>
             </object>
           </child>
         </object>

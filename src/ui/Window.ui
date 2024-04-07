@@ -139,7 +139,7 @@
                     <signal name="notify::visible-child-name" handler="onStackPageChange"/>
                     <child>
                       <object class="GtkStackPage">
-                        <property name="title">All sets</property>
+                        <property name="title">My sets</property>
                         <property name="name">all_sets</property>
                         <property name="child">
                           <object class="IcoAllSetsStackView" id="all_sets_view">

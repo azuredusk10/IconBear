@@ -17,16 +17,64 @@
             <property name="margin-end">16</property>
             <property name="margin-top">16</property>
             <property name="margin-bottom">16</property>
-            <!-- <child>
+            <child>
               <object class="GtkLabel">
-                <property name="label">All sets</property>
+                <property name="label">My sets</property>
                 <property name="halign">1</property>
                 <style>
                   <class name="title-1"/>
                   <class name="mb-8"/>
                 </style>
               </object>
-            </child> -->
+            </child>
+            <child>
+              <object class="GtkFrame">
+              <style>
+                <class name="px-8"/>
+                <class name="py-24"/>
+                <class name="mb-16"/>
+                <class name="dropTargetFrame"/>
+              </style>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <style>
+                    </style>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="true">Drag a folder of icons here to add them as a set</property>
+                        <style>
+                          <class name="heading-2"/>
+                          <class name="mb-8"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="label" translatable="true">Add a set from a folder</property>
+                        <property name="halign">center</property>
+                        <style>
+                          <class name="pill" />
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Install more sets</property>
+                <property name="halign">1</property>
+                <style>
+                  <class name="title-1"/>
+                  <class name="mb-8"/>
+                </style>
+              </object>
+            </child>
             <child>
               <object class="GtkFlowBox" id="sets_flowbox">
                 <property name="orientation">0</property>
@@ -38,6 +86,49 @@
                 <property name="selection-mode">single</property>
                 <property name="vexpand">0</property>
                 <signal name="child-activated" handler="onSetActivated"/>
+                <!-- TODO: Hide this first tile if the user has no sets yet. The large CTA in "My sets" will be displayed instead. -->
+                  <child>
+                    <object class="GtkFlowBoxChild">
+                      <property name="visible">false</property>
+                      <property name="name">Add a new set from a folder</property>
+                      <property name="child">
+                        <object class="GtkBox">
+                          <property name="hexpand">true</property>
+                          <property name="vexpand">true</property>
+                          <style>
+                            <class name="card"/>
+                            <class name="activatable"/>
+                          </style>
+                          <child>
+                            <object class="GtkBox">
+                              <property name="orientation">vertical</property>
+                              <property name="valign">3</property>
+                              <property name="hexpand">true</property>
+                              <property name="margin-start">8</property>
+                              <property name="margin-end">8</property>
+                              <property name="margin-top">8</property>
+                              <property name="margin-bottom">8</property>
+                              <child>
+                                <object class="GtkImage">
+                                  <property name="icon-name">list-add-symbolic</property>
+                                  <property name="icon-size">large</property>
+                                  <property name="margin-bottom">12</property>
+                                </object>
+                              </child>
+                              <child>
+                                <object class="GtkLabel">
+                                  <property name="label">Add a new set from a folder</property>
+                                  <style>
+                                    <class name="heading"/>
+                                  </style>
+                                </object>
+                              </child>
+                            </object>
+                          </child>
+                        </object>
+                      </property>
+                    </object>
+                  </child>
               </object>
             </child>
           </object>

@@ -89,7 +89,7 @@ export const AllSetsStackView = GObject.registerClass({
 
       console.log(set);
 
-      // FlowBoxChild -> Box -> (FlowBox -> FlowBoxChild -> DrawingArea * 6), (Box -> (Label, Label))
+      // FlowBoxChild -> Box -> (FlowBox -> FlowBoxChild -> DrawingArea * 6), (Box -> (Box -> (Label, Label), Button))
 
       const setTile = new Gtk.Box({
         orientation: 1,
@@ -116,28 +116,40 @@ export const AllSetsStackView = GObject.registerClass({
       const setIconCount = new Gtk.Label({
         label: set.iconsCount.toString(),
         opacity: 0.7,
-        halign: 2,
+        halign: 1,
       });
 
       const setTileTextBox = new Gtk.Box({
+        spacing: 2,
+        orientation: 1,
+      });
+
+      const setTileInfoRowBox = new Gtk.Box({
         spacing: 8,
         hexpand: true,
-        marginStart: 8,
-        marginEnd: 8,
-        marginTop: 8,
-        marginBottom: 8,
+        cssClasses: ['m-2'],
+      });
+
+      const setTileInstallButton = new Gtk.Button({
+        label: "Install",
+        cssClasses: ['suggested-action'],
+        halign: 2,
+        valign: 3,
       });
 
       setTileTextBox.append(setLabel);
       setTileTextBox.append(setIconCount);
 
+      setTileInfoRowBox.append(setTileTextBox);
+      setTileInfoRowBox.append(setTileInstallButton);
+
       setTile.append(setTilePreviewFlowBox);
-      setTile.append(setTileTextBox);
+      setTile.append(setTileInfoRowBox);
 
       const setFlowBoxChild = new Gtk.FlowBoxChild({
         child: setTile,
         name: set.name,
-        cssClasses: ['card', 'activatable'],
+        cssClasses: ['card'],
       });
 
       this._sets_flowbox.append(setFlowBoxChild);

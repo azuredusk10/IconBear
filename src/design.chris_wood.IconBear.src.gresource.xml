@@ -11,6 +11,7 @@
     <file>IconTile.js</file>
     <file>AllSetsStackView.js</file>
     <file>IconSetStackView.js</file>
+    <file>AddSetDialog.js</file>
     <file>drawSvg.js</file>
   </gresource>
 </gresources>

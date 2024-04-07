@@ -55,6 +55,7 @@
                       <object class="GtkButton">
                         <property name="label" translatable="true">Add a set from a folder</property>
                         <property name="halign">center</property>
+                        <signal name="clicked" handler="onAddNewSetClicked" />
                         <style>
                           <class name="pill" />
                         </style>
@@ -85,11 +86,13 @@
                 <property name="min-children-per-line">1</property>
                 <property name="selection-mode">single</property>
                 <property name="vexpand">0</property>
-                <signal name="child-activated" handler="onSetActivated"/>
+                <property name="activatable">false</property>
+                <!-- <signal name="child-activated" handler="onSetActivated"/> -->
                 <!-- TODO: Hide this first tile if the user has no sets yet. The large CTA in "My sets" will be displayed instead. -->
                   <child>
                     <object class="GtkFlowBoxChild">
-                      <property name="visible">false</property>
+                      <signal name="activate" handler="onAddNewSetClicked" /> <!-- TODO: This isn't firing -->
+                      <property name="visible">true</property>
                       <property name="name">Add a new set from a folder</property>
                       <property name="child">
                         <object class="GtkBox">
@@ -129,6 +132,10 @@
                       </property>
                     </object>
                   </child>
+              </object>
+            </child>
+            <child>
+              <object class="IcoAddSetDialog" id="add_set_dialog_widget">
               </object>
             </child>
           </object>

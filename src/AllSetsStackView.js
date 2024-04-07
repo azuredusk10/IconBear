@@ -9,7 +9,7 @@ import { drawSvg } from './drawSvg.js';
 export const AllSetsStackView = GObject.registerClass({
   GTypeName: 'IcoAllSetsStackView',
   Template: 'resource:///design/chris_wood/IconBear/ui/AllSetsStackView.ui',
-  InternalChildren: ['sets_flowbox'],
+  InternalChildren: ['sets_flowbox', 'add_set_dialog_widget'],
   Properties: {
     searchEntryText: GObject.ParamSpec.string(
       'searchEntryText',
@@ -161,5 +161,9 @@ export const AllSetsStackView = GObject.registerClass({
     this.emit('set-activated', _child.name);
     _flowbox.unselect_all();
   }
+
+  onAddNewSetClicked() {
+	  this._add_set_dialog_widget._add_set_dialog.present(this);
+	}
 
 });

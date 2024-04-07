@@ -10,6 +10,7 @@ import './DetailsPanel.js';
 import './IconTile.js';
 import './AllSetsStackView.js';
 import './IconSetStackView.js';
+import './AddSetDialog.js';
 import { Window } from './Window.js';
 
 

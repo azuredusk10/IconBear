@@ -17,6 +17,7 @@
     <file preprocess="xml-stripblanks">ui/IconListItem.ui</file>
     <file preprocess="xml-stripblanks">ui/AllSetsStackView.ui</file>
     <file preprocess="xml-stripblanks">ui/IconSetStackView.ui</file>
+    <file preprocess="xml-stripblanks">ui/AddSetDialog.ui</file>
     <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
     <!-- Bundled icon sets -->
     <!-- Carbon -->

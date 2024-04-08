@@ -9,14 +9,8 @@
   /* Reverse this for rtl languages */
   background-color: #1d1d1d;
 }
-.icon-grid__label {
-  opacity: 0.6;
-}
 .iconsGridView {
   background-color: transparent;
-}
-.detailsPanelActionBox {
-  border-top: 1px solid @borders;
 }
 .mainStackSidebar {
   border: none;

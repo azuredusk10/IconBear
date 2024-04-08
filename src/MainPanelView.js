@@ -134,8 +134,8 @@ export const MainPanelView = GObject.registerClass({
         widthRequest: 60,
         marginStart: 4,
         marginEnd: 4,
-        opacity: 0.7,
-        cssClasses: ['caption', 'icon-grid__label']
+        opacity: 0.6,
+        cssClasses: ['caption']
       });
 
       const leftClickGesture = new Gtk.GestureClick({

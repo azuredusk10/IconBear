@@ -44,7 +44,7 @@
                     </style>
                     <child>
                       <object class="GtkLabel">
-                        <property name="label" translatable="true">Drag a folder of icons here to add them as a set</property>
+                        <property name="label" translatable="true">Drag icons here to import them</property>
                         <style>
                           <class name="heading-2"/>
                           <class name="mb-8"/>
@@ -53,7 +53,7 @@
                     </child>
                     <child>
                       <object class="GtkButton">
-                        <property name="label" translatable="true">Add a set from a folder</property>
+                        <property name="label" translatable="true">Select a folder to import</property>
                         <property name="halign">center</property>
                         <signal name="clicked" handler="onAddNewSetClicked" />
                         <style>
@@ -68,11 +68,11 @@
 
             <child>
               <object class="GtkLabel">
-                <property name="label">Install more sets</property>
+                <property name="label">Get more sets</property>
                 <property name="halign">1</property>
                 <style>
-                  <class name="title-1"/>
-                  <class name="mb-8"/>
+                  <class name="title-2"/>
+                  <class name="mb-6"/>
                 </style>
               </object>
             </child>
@@ -92,7 +92,7 @@
                     <object class="GtkFlowBoxChild">
                       <signal name="activate" handler="onAddNewSetClicked" /> <!-- TODO: This isn't firing -->
                       <property name="visible">false</property>
-                      <property name="name">Add a new set from a folder</property>
+                      <property name="name">Import icons from a folder</property>
                       <property name="child">
                         <object class="GtkBox">
                           <property name="hexpand">true</property>

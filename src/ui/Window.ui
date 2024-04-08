@@ -76,10 +76,10 @@
             <property name="title" translatable="true">Icon grid</property>
             <property name="tag">icon_grid</property>
             <property name="child">
-              <object class="AdwToolbarView">
-                <property name="top-bar-style">raised</property>
+              <object class="AdwToolbarView" id="main_toolbar_view">
+                <!-- <property name="top-bar-style">raised</property> -->
                 <child type="top">
-                  <object class="AdwHeaderBar">
+                  <object class="AdwHeaderBar" id="main_header_bar">
                     <property name="title-widget">
                       <object class="AdwClamp">
                         <property name="hexpand">true</property>
@@ -88,7 +88,6 @@
                         <child>
                           <object class="GtkBox">
                             <property name="spacing">4</property>
-
                             <child>
                               <object class="GtkSearchEntry" id="search_entry">
                                 <property name="search-delay">100</property>
@@ -248,4 +247,5 @@
   </object>
 
 </interface>
+
 

@@ -10,7 +10,7 @@ import { Icon } from './Icon.js';
 export const Window = GObject.registerClass({
 	GTypeName: 'IcoWindow',
 	Template: 'resource:///design/chris_wood/IconBear/ui/Window.ui',
-	InternalChildren: ['search_entry', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button'],
+	InternalChildren: ['search_entry', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button', 'main_toolbar_view', 'main_header_bar'],
 	Properties: {
 	  sets: GObject.ParamSpec.jsobject(
       'sets',
@@ -261,11 +261,24 @@ export const Window = GObject.registerClass({
 	onStackPageChange(stack){
 	  const visiblePageName = stack.visibleChildName;
 	  if(visiblePageName === 'all_sets'){
+
+	    // Visually hide the header bar
       this.sidebarButtonVisible = false;
+      this._main_toolbar_view.topBarStyle = 0;
+      this._main_toolbar_view.extendContentToTopEdge = true;
+      this._main_header_bar.showTitle = false;
+
       // TODO: Make this translateable
       this.searchPlaceholderText = 'Search sets';
+
 	  } else {
+
+	    // Show the header bar
 	    this.sidebarButtonVisible = true;
+	    this._main_toolbar_view.topBarStyle = 1;
+	    this._main_toolbar_view.extendContentToTopEdge = false;
+	    this._main_header_bar.showTitle = true;
+
 	    this.searchPlaceholderText = 'Search icons in this set';
 
 	    const visiblePage = stack.get_visible_child();

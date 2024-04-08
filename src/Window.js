@@ -123,10 +123,12 @@ export const Window = GObject.registerClass({
       // Establish the structure of the set object
       let set = {
         id: bundleId,
+        author: '',
         name: '',
         license: '',
         icons: Gio.ListStore.new(Icon),
-        iconsCount: 0
+        iconsCount: 0,
+        website: '',
       };
 
       // Load info.json to get the set metadata
@@ -139,6 +141,8 @@ export const Window = GObject.registerClass({
       // Populate the json data into the set object
       set.name = metaJson.name;
       set.license = metaJson.license;
+      set.author = metaJson.author;
+      set.website = metaJson.website;
 
       // Get an array of all the files in this bundle resource directory
       const iconsDir = bundledIconsDir + bundleDirName + 'icons/';
@@ -221,6 +225,8 @@ export const Window = GObject.registerClass({
       stackPageChild.iconsCount = set.iconsCount;
       stackPageChild.setId = set.id;
       stackPageChild.setLicense = set.license;
+      stackPageChild.setAuthor = set.author;
+      stackPageChild.setWebsite = set.website;
       stackPageChild.notify('setId');
       stackPageChild.maxPreviewIcons = this.maxPreviewIcons;
 

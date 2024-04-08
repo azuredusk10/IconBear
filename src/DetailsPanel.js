@@ -50,6 +50,20 @@ export const DetailsPanel = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       ''
     ),
+    setAuthor: GObject.ParamSpec.string(
+      'setAuthor',
+      'Set author',
+      'The author of the currently selected icon set',
+      GObject.ParamFlags.READWRITE,
+      ''
+    ),
+    setWebsite: GObject.ParamSpec.string(
+      'setWebsite',
+      'Set website',
+      'The website of the currently selected icon set',
+      GObject.ParamFlags.READWRITE,
+      ''
+    ),
     iconIsSelected: GObject.ParamSpec.boolean(
       'iconIsSelected',
       'Icon Is Selected',

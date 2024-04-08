@@ -41,25 +41,46 @@
                   <object class="GtkLabel">
                     <property name="label" bind-source="IcoDetailsPanel" bind-property="setName" bind-flags="sync-create"/>
                     <property name="halign">1</property>
-                    <property name="margin-bottom">8</property>
                     <style>
                       <class name="title-3"/>
+                      <class name="mb-1"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" bind-source="IcoDetailsPanel" bind-property="setAuthor" bind-flags="sync-create"/>
+                    <property name="halign">1</property>
+                    <style>
+                      <class name="mb-1"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" bind-source="IcoDetailsPanel" bind-property="setLicense" bind-flags="sync-create"/>
+                    <property name="halign">1</property>
+                    <style>
+                      <class name="mb-4"/>
                     </style>
                   </object>
                 </child>
                 <child>
                   <object class="GtkLabel" id="icons_count">
                     <property name="halign">1</property>
-                    <property name="margin-bottom">4</property>
                     <style>
+                      <class name="mb-4"/>
                     </style>
                   </object>
                 </child>
-
                 <child>
-                  <object class="GtkLabel">
-                    <property name="label" bind-source="IcoDetailsPanel" bind-property="setLicense" bind-flags="sync-create"/>
+                  <object class="GtkLinkButton">
                     <property name="halign">1</property>
+                    <property name="label" translatable="true">Visit website</property>
+                    <property name="uri" bind-source="IcoDetailsPanel" bind-property="setWebsite" bind-flags="sync-create"/>
+                    <style>
+                      <class name="p-0"/>
+                    </style>
                   </object>
                 </child>
               </object>

@@ -30,6 +30,8 @@
             <property name="setName" bind-source="IcoIconSetStackView" bind-property="setName" bind-flags="sync-create" />
             <property name="setIconsCount" bind-source="IcoIconSetStackView" bind-property="iconsCount" bind-flags="sync-create" />
             <property name="setLicense" bind-source="IcoIconSetStackView" bind-property="setLicense" bind-flags="sync-create" />
+            <property name="setAuthor" bind-source="IcoIconSetStackView" bind-property="setAuthor" bind-flags="sync-create" />
+            <property name="setWebsite" bind-source="IcoIconSetStackView" bind-property="setWebsite" bind-flags="sync-create" />
           </object>
         </property>
       </object>

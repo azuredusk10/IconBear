@@ -10,7 +10,7 @@ import { Icon } from './Icon.js';
 export const Window = GObject.registerClass({
 	GTypeName: 'IcoWindow',
 	Template: 'resource:///design/chris_wood/IconBear/ui/Window.ui',
-	InternalChildren: ['search_entry', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button', 'main_toolbar_view', 'main_header_bar'],
+	InternalChildren: ['search_entry', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button', 'main_toolbar_view', 'main_header_bar', 'add_set_dialog_widget'],
 	Properties: {
 	  sets: GObject.ParamSpec.jsobject(
       'sets',
@@ -83,7 +83,7 @@ export const Window = GObject.registerClass({
     super(params);
     this.#bindToSettings();
     // this.#importBundledIcons();
-    this.#setupActions();
+    this.#initializeActions();
     this.#initializeIcons();
     this.#initializeMainStack();
   }
@@ -99,7 +99,11 @@ export const Window = GObject.registerClass({
 	  settings.bind('window-height', this, 'default-height', Gio.SettingsBindFlags.DEFAULT);
 	}
 
-	#setupActions(){
+	#initializeActions(){
+    // Add icons
+    const openAction = new Gio.SimpleAction({name: 'add_set'});
+    openAction.connect('activate', () => this.#openMultipleFiles());
+    this.add_action(openAction);
 
   }
 
@@ -245,10 +249,44 @@ export const Window = GObject.registerClass({
 
   }
 
+  #openMultipleFiles() {
+
+    // Only accept svg files
+    const fileFilter = Gtk.FileFilter.new();
+    fileFilter.add_mime_type('image/svg+xml');
+
+    // Create a new file selection dialog
+   const fileDialog = new Gtk.FileDialog({ default_filter: fileFilter });
+
+   // Open the dialog and handle user's selection
+   fileDialog.select_folder(this, null, async (self, result) => {
+      try {
+         const folder = self.select_folder_finish(result);
+
+         if (folder) {
+               console.log(this.getFileName(folder));
+
+               // Pass the GFile object containing the folder to the AddSetDialog widget, which will trigger it to open and process the folder via its setter function
+               this._add_set_dialog_widget.folder = folder;
+
+         }
+      } catch(_) {
+         // user closed the dialog without selecting any file
+      }
+   });
+  }
+
+  getFileName(file) {
+    const info = file.query_info(
+      "standard::name",
+      Gio.FileQueryInfoFlags.NONE,
+      null,
+    );
+    return info.get_name();
+  }
+
 	onSearchEntrySearchChanged() {
 	  const searchEntryText = this._search_entry.text;
-    // TODO: Set searchEntryText property of the active stack page
-    // this._main_panel.searchEntryText = this._search_entry.text;
 	}
 
 	onIconSizeChanged(_scale){

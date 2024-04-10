@@ -44,7 +44,7 @@
                     </style>
                     <child>
                       <object class="GtkLabel">
-                        <property name="label" translatable="true">Drag icons here to import them</property>
+                        <property name="label" translatable="true">Drag a folder of icons here to import them as a new set</property>
                         <style>
                           <class name="heading-2"/>
                           <class name="mb-8"/>
@@ -55,7 +55,7 @@
                       <object class="GtkButton">
                         <property name="label" translatable="true">Select a folder to import</property>
                         <property name="halign">center</property>
-                        <signal name="clicked" handler="onAddNewSetClicked" />
+                        <property name="action-name">win.add_set</property>
                         <style>
                           <class name="pill" />
                         </style>
@@ -90,7 +90,7 @@
                 <!-- TODO: Hide this first tile if the user has no sets yet. The large CTA in "My sets" will be displayed instead. -->
                   <child>
                     <object class="GtkFlowBoxChild">
-                      <signal name="activate" handler="onAddNewSetClicked" /> <!-- TODO: This isn't firing -->
+                      <!-- This will need to contain a button that triggers the win.add_set action -->
                       <property name="visible">false</property>
                       <property name="name">Import icons from a folder</property>
                       <property name="child">
@@ -131,10 +131,6 @@
                       </property>
                     </object>
                   </child>
-              </object>
-            </child>
-            <child>
-              <object class="IcoAddSetDialog" id="add_set_dialog_widget">
               </object>
             </child>
           </object>

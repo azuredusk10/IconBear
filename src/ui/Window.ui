@@ -63,6 +63,10 @@
                           <property name="vexpand">true</property>
                         </object>
                       </child>
+                      <child>
+                        <object class="IcoAddSetDialog" id="add_set_dialog_widget">
+                        </object>
+                      </child>
                     </object>
                   </child>
                 </object>

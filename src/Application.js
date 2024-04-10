@@ -22,7 +22,7 @@ export const Application = GObject.registerClass({
 		super.vfunc_startup();
 		this.#loadSettings();
 		this.#loadStylesheet();
-		this.#setUpAccelerators();
+		this.#initializeAccelerators();
 	}
 
 	vfunc_activate() {
@@ -47,8 +47,9 @@ export const Application = GObject.registerClass({
 		);
 	}
 
-	#setUpAccelerators(){
+	#initializeAccelerators(){
 	  this.set_accels_for_action('window.close', ['<Control>w']);
+	  this.set_accels_for_action('win.add_set', [ '<Ctrl>o' ]);
 	}
 
 });

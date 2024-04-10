@@ -17,6 +17,13 @@
         <setter object="button" property="visible">true</setter>
       </object>
     </child>
+    <child>
+	    <object class="GtkDropTarget">
+		    <property name="actions">copy</property>
+		    <property name="formats">GFile</property>
+	      <signal name="drop" handler="onDrop"/>
+	    </object>
+    </child>
     <property name="content">
       <object class="AdwNavigationSplitView" id="split_view">
         <property name="max-sidebar-width">240</property>

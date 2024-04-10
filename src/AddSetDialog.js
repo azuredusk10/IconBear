@@ -57,7 +57,7 @@ export const AddSetDialog = GObject.registerClass({
     let iconsCount = 0;
     let info;
 
-
+    // TODO: Iterate through child folders and get svgs from them too.
 
     while ((info = enumerator.next_file(null)) !== null) {
 

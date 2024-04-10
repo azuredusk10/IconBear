@@ -102,7 +102,7 @@ export const Window = GObject.registerClass({
 	#initializeActions(){
     // Add icons
     const openAction = new Gio.SimpleAction({name: 'add_set'});
-    openAction.connect('activate', () => this.#openMultipleFiles());
+    openAction.connect('activate', () => this.#importSet());
     this.add_action(openAction);
 
   }
@@ -249,14 +249,20 @@ export const Window = GObject.registerClass({
 
   }
 
-  #openMultipleFiles() {
+  #importSet(folder = null) {
+
+    if(folder){
+      this._add_set_dialog_widget.folder = folder;
+      return;
+    }
 
     // Only accept svg files
-    const fileFilter = Gtk.FileFilter.new();
-    fileFilter.add_mime_type('image/svg+xml');
+    //const fileFilter = Gtk.FileFilter.new();
+    //fileFilter.add_mime_type('image/svg+xml');
 
     // Create a new file selection dialog
-   const fileDialog = new Gtk.FileDialog({ default_filter: fileFilter });
+    // const fileDialog = new Gtk.FileDialog({ default_filter: fileFilter });
+    const fileDialog = new Gtk.FileDialog();
 
    // Open the dialog and handle user's selection
    fileDialog.select_folder(this, null, async (self, result) => {
@@ -334,6 +340,25 @@ export const Window = GObject.registerClass({
 	onSetActivated(_flowbox, setName){
 	  this._main_stack.set_visible_child_name(setName);
 	}
+
+	onDrop(_target, value, _x, _y) {
+    console.log(`Dropped file: '${value}'`);
+
+    const info = value.query_info('standard::type', Gio.FileQueryInfoFlags.NONE, null);
+    const fileType = info.get_file_type();
+
+    console.log(fileType);
+
+    if (fileType === Gio.FileType.DIRECTORY) {
+        // Handle dropped directory
+        this.#importSet(value);
+    } else {
+        // Ignore non-directory files
+        print('This is not a directory. Ignoring.');
+    }
+
+    return true;
+  }
 
 });
 

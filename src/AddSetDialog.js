@@ -55,8 +55,9 @@ export const AddSetDialog = GObject.registerClass({
     // Populate the iconFiles ListStore
     const enumerator = folder.enumerate_children('standard::*', Gio.FileQueryInfoFlags.NONE, null);
     const folderPath = folder.get_path();
+    const folderName = folder.get_basename();
 
-    console.log(folderPath);
+    console.log('folder name:', folderName );
 
     let iconsCount = 0;
     let info;
@@ -80,42 +81,63 @@ export const AddSetDialog = GObject.registerClass({
         const [, contents] = gFile.load_contents(null);
         const stringContents = new TextDecoder().decode(contents);
         //console.log(stringContents);
-        let style; // 1 = outlined, 2 = filled, 3 = duotone, 4 = color
+        let style; // 1 = outline, 2 = filled, 3 = duotone, 4 = color
 
-        // Take an educated guess as to the icon's style
+        // Try guessing the icon's style from the name of its parent folder
+        const outlineFolderMatches = folderName.match(/outline/i) || [];
+        const filledFolderMatches = folderName.match(/fill|solid/i) || [];
+        const duotoneFolderMatches = folderName.match(/twotone|duotone/i) || [];
 
-        // Detect if a "stroke" attribute is present, but not if it's followed by "none"
-        const strokeMatches = stringContents.match(/\bstroke=(?!"none")/g) || [];
-        // console.log('stroke matches', strokeMatches.length);
-
-        // Detect if a "fill" attribute is present, but not if it's followed by "none"
-        const fillMatches = stringContents.match(/\bfill=(?!"none")/g) || [];
-        // console.log('fill matches', fillMatches.length);
-
-        // Detect the number of colours present
-        const uniqueColors = this.countUniqueColorsFromString(stringContents);
-        // console.log('colors', uniqueColors)
-
-        if(uniqueColors > 2){
-          // It has multiple colors, it's a color icon
-          style = 4;
-
-        } else if(uniqueColors == 2){
-          // It has 2 colors, it's a duotone icon
-          style = 3;
-
-        } else if(fillMatches.length > 0){
-          // It has at least 1 fill, it's a filled icon
-          style = 2;
-
-        } else if(strokeMatches.length > 0){
-          // It contains no fills, only strokes; it's an outlined icon
+        if(outlineFolderMatches.lenth > 0){
           style = 1;
+        } else if(filledFolderMatches.lenth > 0){
+          style = 2;
+        } else if(duotoneFolderMatches.lenth > 0){
+          style = 3;
+        }
+
+        // TODO: Read the parent folder name. If any of these matches, skip reading the icon file:
+        //  "outline" / "outlined" : 1
+        //  "fill" / "filled" / "solid": 2
+        //  "twotone" / "duotone": 3
+
+        // Try guessing the icon's style from its SVG attributes
+        if(typeof style === "undefined"){
+
+          // Detect if a "stroke" attribute is present, but not if it's followed by "none"
+          const strokeMatches = stringContents.match(/\bstroke=(?!"none")/g) || [];
+          // console.log('stroke matches', strokeMatches.length);
+
+          // Detect if a "fill" attribute is present, but not if it's followed by "none"
+          const fillMatches = stringContents.match(/\bfill=(?!"none")/g) || [];
+          // console.log('fill matches', fillMatches.length);
+
+          // Detect the number of colours present
+          const uniqueColors = this.countUniqueColorsFromString(stringContents);
+          // console.log('colors', uniqueColors)
+
+          if(uniqueColors > 2){
+            // It has multiple colors, it's a color icon
+            style = 4;
+
+          } else if(uniqueColors == 2){
+            // It has 2 colors, it's a duotone icon
+            style = 3;
+
+          } else if(fillMatches.length > 0){
+            // It has at least 1 fill, it's a filled icon
+            style = 2;
+
+          } else if(strokeMatches.length > 0){
+            // It contains no fills, only strokes; it's an outlined icon
+            style = 1;
+
+          }
 
         }
 
         console.log('style', style);
-        console.log('name', info.get_name());
+        // console.log('name', info.get_name());
 
 
         const iconMeta = {

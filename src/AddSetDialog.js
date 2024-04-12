@@ -3,6 +3,7 @@ import Gtk from 'gi://Gtk';
 import Adw from 'gi://Adw?version=1';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
+import GdkPixbuf from 'gi://GdkPixbuf';
 
 import { Icon } from './Icon.js';
 import { drawSvg } from './drawSvg.js';
@@ -41,6 +42,9 @@ export const AddSetDialog = GObject.registerClass({
 
   }
 
+  /* Load a directory of icons for import
+   * @param {Gio.File} folder - the user-selected folder containing the svg icons to import
+   */
   set folder(folder){
     // Open the dialog
     this._add_set_dialog.present(this);
@@ -61,19 +65,31 @@ export const AddSetDialog = GObject.registerClass({
 
     while ((info = enumerator.next_file(null)) !== null) {
 
-        if (info.get_content_type() === 'image/svg+xml') {
+
+      if (info.get_content_type() === 'image/svg+xml') {
+
+        const iconPath = folderPath + '/' + info.get_name();
+
+        // Determine the width and height of the icon
+        const pixbuf = GdkPixbuf.Pixbuf.new_from_file(iconPath);
+        const width = pixbuf.width;
+        const height = pixbuf.height;
+
+        // Parse the SVG file
+        const gFile = Gio.File.new_for_path(iconPath);
+        const [, contents] = gFile.load_contents(null);
 
 
-            // TODO: get the relevant properties for creating the new Icon and saving it to the listStore
-            const icon = new Icon({
-              //label,
-              //filepath: folderPath + iconFilename,
-              //type: fileInfo.get_file_type(),
-              //gfile: iconFile,
-            });
 
-            iconsCount++;
-        }
+
+        const iconMeta = {
+          width,
+          height,
+          style: 0
+        };
+
+        iconsCount++;
+      }
     }
 
     // Update the dialog header to state how many icons the folder contains

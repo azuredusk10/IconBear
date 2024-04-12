@@ -121,7 +121,7 @@ export const AddSetDialog = GObject.registerClass({
         const iconMeta = {
           width,
           height,
-          style: 0
+          style,
         };
 
         iconsCount++;

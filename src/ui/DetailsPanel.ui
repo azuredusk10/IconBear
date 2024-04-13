@@ -220,7 +220,7 @@
                               <property name="icon-name">document-edit-symbolic</property>
                               <property name="tooltip-text" translatable="true">Edit style</property>
                               <property name="popover">details_style_popover</property>
-                              <property name="direction">2</property>
+                              <!-- <property name="direction">2</property> -->
                               <style>
                                 <class name="flat"/>
                               </style>
@@ -372,28 +372,44 @@
           <child>
             <object class="GtkBox">
               <property name="orientation">vertical</property>
-              <!-- <child>
-                <object class="GtkLabel">
-                  <property name="label" translatable="true">Edit style</property>
-                  <property name="halign">1</property>
-                  <property name="margin-bottom">8</property>
-                </object>
-              </child> -->
               <child>
-                <object class="GtkDropDown">
-                  <property name="enable-search">false</property>
-                  <property name="model">
-                    <object class="GtkStringList">
-                      <items>
-                        <item translatable="true">None</item>
-                        <item translatable="true">Outline</item>
-                        <!-- <item translatable="true">Outline two-tone</item> -->
-                        <item translatable="true">Fill</item>
-                        <!-- <item translatable="true">Fill two-tone</item> -->
-                        <item translatable="true">Colour</item>
-                      </items>
-                    </object>
-                  </property>
+                <object class="GtkLabel">
+                  <property name="label" translatable="true">Style</property>
+                  <property name="halign">1</property>
+                  <style>
+                    <class name="mb-4"/>
+                    <class name="heading"/>
+                  </style>
+                </object>
+              </child>
+              <child>
+                <object class="GtkCheckButton" id="radio_style_not_set">
+                  <property name="label" translatable="true">Not set</property>
+                </object>
+              </child>
+              <child>
+                <object class="GtkCheckButton" id="radio_style_outline">
+                  <property name="label" translatable="true">Outline</property>
+                  <property name="active">true</property>
+                  <property name="group">radio_style_not_set</property>
+                </object>
+              </child>
+              <child>
+                <object class="GtkCheckButton" id="radio_style_fill">
+                  <property name="label" translatable="true">Fill</property>
+                  <property name="group">radio_style_not_set</property>
+                </object>
+              </child>
+              <child>
+                <object class="GtkCheckButton" id="radio_style_duotone">
+                  <property name="label" translatable="true">Duotone</property>
+                  <property name="group">radio_style_not_set</property>
+                </object>
+              </child>
+              <child>
+                <object class="GtkCheckButton" id="radio_style_color">
+                  <property name="label" translatable="true">Color</property>
+                  <property name="group">radio_style_not_set</property>
                 </object>
               </child>
             </object>

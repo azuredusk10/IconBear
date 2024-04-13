@@ -270,10 +270,10 @@ export const Window = GObject.registerClass({
          const folder = self.select_folder_finish(result);
 
          if (folder) {
-               console.log(this.getFileName(folder));
+               //console.log(this.getFileName(folder));
 
                // Pass the GFile object containing the folder to the AddSetDialog widget, which will trigger it to open and process the folder via its setter function
-               this._add_set_dialog_widget.folder = folder;
+               this._add_set_dialog_widget.prepareImport(folder);
 
          }
       } catch(_) {

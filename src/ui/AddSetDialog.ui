@@ -21,8 +21,10 @@
                 </object>
               </child>
               <child type="end">
-                <object class="GtkButton" id="create_btn">
+                <object class="GtkButton" id="import_button">
                   <property name="label">Import</property>
+                  <property name="sensitive">false</property>
+                  <signal name="clicked" handler="importSet" />
                   <style>
                     <class name="suggested-action"/>
                   </style>
@@ -65,7 +67,7 @@
                       </child>
                       <!-- TODO: Only show this entry row if "New set" (the first option) is selected -->
                       <child>
-                        <object class="AdwEntryRow">
+                        <object class="AdwEntryRow" id="new_set_name_entry">
                           <property name="title" translatable="true">New set name</property>
                         </object>
                       </child>

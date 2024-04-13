@@ -8,6 +8,7 @@ import GdkPixbuf from 'gi://GdkPixbuf';
 import { Icon } from './Icon.js';
 import { drawSvg } from './drawSvg.js';
 
+// TODO: Not needed. Will need the equivalent for opening folders asynchronously.
 Gio._promisify(
   Gtk.FileDialog.prototype,
   "open_multiple",
@@ -17,7 +18,7 @@ Gio._promisify(
 export const AddSetDialog = GObject.registerClass({
   GTypeName: 'IcoAddSetDialog',
   Template: 'resource:///design/chris_wood/IconBear/ui/AddSetDialog.ui',
-  InternalChildren: ['add_set_dialog'],
+  InternalChildren: ['add_set_dialog', 'new_set_name_entry', 'import_button'],
   Properties: {
     folder: GObject.ParamSpec.object(
       'folder',
@@ -26,12 +27,12 @@ export const AddSetDialog = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       Gio.File
     ),
-    iconFiles: GObject.ParamSpec.object(
-      'iconFiles',
-      'Icon Files',
-      'A ListStore of the icon files that are inside the folder',
+    icons: GObject.ParamSpec.jsobject(
+      'icons',
+      'Icons',
+      'An array of icons that are processed and ready to import',
       GObject.ParamFlags.READWRITE,
-      Gio.ListStore
+      []
     ),
   },
   Signals: {
@@ -42,15 +43,23 @@ export const AddSetDialog = GObject.registerClass({
 
   }
 
-  /* Load a directory of icons for import
+
+  /* Load a directory of icons for import. Called by Window.js to activate this widget.
    * @param {Gio.File} folder - the user-selected folder containing the svg icons to import
    */
-  set folder(folder){
-    // Open the dialog
-    this._add_set_dialog.present(this);
+  prepareImport(folder){
 
-    // This property was changed by a parent widget; tell the widget that it's changed.
+     // Open the dialog
+    this._add_set_dialog.present(this);
+    this._import_button.sensitive = false;
+
+    // Update the 'folder' property
+    this.folder = folder;
     this.notify('folder');
+
+    // Clear the 'icons' property
+    this.icons = [];
+    this.notify('icons');
 
     // Populate the iconFiles ListStore
     const enumerator = folder.enumerate_children('standard::*', Gio.FileQueryInfoFlags.NONE, null);
@@ -58,7 +67,6 @@ export const AddSetDialog = GObject.registerClass({
     const folderName = folder.get_basename();
 
     console.log('folder name:', folderName );
-
     let iconsCount = 0;
     let info;
 
@@ -69,7 +77,8 @@ export const AddSetDialog = GObject.registerClass({
 
       if (info.get_content_type() === 'image/svg+xml') {
 
-        const iconPath = folderPath + '/' + info.get_name();
+        const iconFilename = info.get_name();
+        const iconPath = folderPath + '/' + iconFilename;
 
         // Determine the width and height of the icon
         const pixbuf = GdkPixbuf.Pixbuf.new_from_file(iconPath);
@@ -88,11 +97,11 @@ export const AddSetDialog = GObject.registerClass({
         const filledFolderMatches = folderName.match(/fill|solid/i) || [];
         const duotoneFolderMatches = folderName.match(/twotone|duotone/i) || [];
 
-        if(outlineFolderMatches.lenth > 0){
+        if(outlineFolderMatches.length > 0){
           style = 1;
-        } else if(filledFolderMatches.lenth > 0){
+        } else if(filledFolderMatches.length > 0){
           style = 2;
-        } else if(duotoneFolderMatches.lenth > 0){
+        } else if(duotoneFolderMatches.length > 0){
           style = 3;
         }
 
@@ -141,10 +150,16 @@ export const AddSetDialog = GObject.registerClass({
 
 
         const iconMeta = {
+          fileName: iconFilename,
           width,
           height,
           style,
         };
+
+        console.log(JSON.stringify(iconMeta));
+
+        // Push this to the icon store
+        this.icons.push(iconMeta);
 
         iconsCount++;
       }
@@ -153,7 +168,7 @@ export const AddSetDialog = GObject.registerClass({
     // Update the dialog header to state how many icons the folder contains
     this._add_set_dialog.title = `Import ${iconsCount} icons`;
 
-
+    this._import_button.sensitive = true;
   }
 
   countUniqueColorsFromString(str) {
@@ -174,6 +189,45 @@ export const AddSetDialog = GObject.registerClass({
 
     // Return the size of the Set (number of unique colors)
     return uniqueColors.size;
+  }
+
+   /* Import the user-selected directory. Pulls the values of the "Set" and "New set name" entries.
+   */
+  importSet() {
+
+    const newSetName = this._new_set_name_entry.text;
+
+    // TODO: Handle importing to an existing set.
+
+    // Import icons to a new set
+
+    // Create the set's ID by converting spaces to hyphens and making all characters lowercase, then appending current timestamp.
+    const newSetId = newSetName.replace(/\s+/g, "-").replace(/[A-Z]/g, (match) => match.toLowerCase()) + '-' + Date.now();
+
+    // Create the set data directory
+    const dataDir = GLib.get_user_data_dir();
+    const targetPath = dataDir + '/' + newSetId;
+
+    const targetDir = Gio.File.new_for_path(targetPath);
+
+    targetDir.make_directory(null);
+
+    // Prepare the set object which will eventually be saved to info.json
+    const set = {
+      name: newSetName,
+      createdOn: Date.now(),
+      icons: this.icons
+    }
+
+    // Add the iconSet
+    console.log(JSON.stringify(set));
+
+    // TODO: save the "set" object as JSON in a new file called info.json
+
+    // TODO: Copy the icon files to the targetDir/icons, OR targetDir/[preserve child folder names from original import folder]
+
+
+
   }
 
   onCancelClicked() {

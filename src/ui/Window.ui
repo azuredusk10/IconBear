@@ -201,54 +201,99 @@
         <property name="maximum-size">150</property>
         <child>
           <object class="GtkBox">
-            <property name="orientation">vertical</property>
+            <property name="orientation">horizontal</property>
+            <property name="spacing">24</property>
+            <style>
+              <class name="py-2"/>
+              <class name="px-4"/>
+            </style>
             <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="true">Style</property>
-                <property name="halign">1</property>
-                <property name="margin-bottom">8</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkDropDown">
-                <property name="enable-search">false</property>
-                <property name="margin-bottom">16</property>
-                <property name="model">
-                  <object class="GtkStringList">
-                    <items>
-                      <item translatable="true">All styles</item>
-                      <item translatable="true">Outline</item>
-                      <!-- <item translatable="true">Outline two-tone</item> -->
-                      <item translatable="true">Fill</item>
-                      <!-- <item translatable="true">Fill two-tone</item> -->
-                      <item translatable="true">Colour</item>
-                    </items>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="true">Style</property>
+                    <property name="halign">1</property>
+                    <style>
+                      <class name="mb-4"/>
+                      <class name="heading"/>
+                    </style>
                   </object>
-                </property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="true">Size</property>
-                <property name="halign">1</property>
-                <property name="margin-bottom">8</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkDropDown">
-                <property name="enable-search">false</property>
-                <property name="margin-bottom">16</property>
-                <property name="model">
-                  <object class="GtkStringList">
-                    <items>
-                      <item translatable="true">All sizes</item>
-                      <item translatable="true">12px</item>
-                      <item translatable="true">16px</item>
-                      <item translatable="true">24px</item>
-                      <item translatable="true">32px</item>
-                    </items>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="radio_all_styles">
+                    <property name="active">true</property>
+                    <property name="label" translatable="true">All styles</property>
                   </object>
-                </property>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="radio_outline">
+                    <property name="label" translatable="true">Outline</property>
+                    <property name="group">radio_all_styles</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="radio_fill">
+                    <property name="label" translatable="true">Fill</property>
+                    <property name="group">radio_all_styles</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="radio_duotone">
+                    <property name="label" translatable="true">Duotone</property>
+                    <property name="group">radio_all_styles</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="radio_color">
+                    <property name="label" translatable="true">Color</property>
+                    <property name="group">radio_all_styles</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="orientation">vertical</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="true">Size</property>
+                    <property name="halign">1</property>
+                    <style>
+                      <class name="heading"/>
+                      <class name="mb-4"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="radio_all_sizes">
+                    <property name="active">true</property>
+                    <property name="label" translatable="true">All sizes</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="radio_test_size_1">
+                    <property name="label" translatable="true">16x16</property>
+                    <property name="group">radio_all_sizes</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="radio_test_size_2">
+                    <property name="label" translatable="true">24x24</property>
+                    <property name="group">radio_all_sizes</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="radio_test_size_3">
+                    <property name="label" translatable="true">32x32</property>
+                    <property name="group">radio_all_sizes</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>

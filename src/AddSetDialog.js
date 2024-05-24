@@ -6,19 +6,14 @@ import GLib from 'gi://GLib';
 import GdkPixbuf from 'gi://GdkPixbuf';
 
 import { Icon } from './Icon.js';
-import { drawSvg } from './drawSvg.js';
 
-// TODO: Not needed. Will need the equivalent for opening folders asynchronously.
-Gio._promisify(
-  Gtk.FileDialog.prototype,
-  "open_multiple",
-  "open_multiple_finish",
-);
+// Set up async file methods
+Gio._promisify(Gio.File.prototype, 'enumerate_children_async');
 
 export const AddSetDialog = GObject.registerClass({
   GTypeName: 'IcoAddSetDialog',
   Template: 'resource:///design/chris_wood/IconBear/ui/AddSetDialog.ui',
-  InternalChildren: ['add_set_dialog', 'new_set_name_entry', 'import_button'],
+  InternalChildren: ['add_set_dialog', 'new_set_name_entry', 'import_button', 'spinner', 'form_wrapper'],
   Properties: {
     folder: GObject.ParamSpec.object(
       'folder',
@@ -34,6 +29,13 @@ export const AddSetDialog = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       []
     ),
+    processing: GObject.ParamSpec.boolean(
+      'processing',
+      'Processing',
+      'Whether file operations are in progress',
+      GObject.ParamFlags.READWRITE,
+      true
+    ),
   },
   Signals: {
   },
@@ -47,11 +49,10 @@ export const AddSetDialog = GObject.registerClass({
   /* Load a directory of icons for import. Called by Window.js to activate this widget.
    * @param {Gio.File} folder - the user-selected folder containing the svg icons to import
    */
-  prepareImport(folder){
+  async prepareImport(folder){
 
      // Open the dialog
     this._add_set_dialog.present(this);
-    this._import_button.sensitive = false;
 
     // Update the 'folder' property
     this.folder = folder;
@@ -62,18 +63,16 @@ export const AddSetDialog = GObject.registerClass({
     this.notify('icons');
 
     // Populate the iconFiles ListStore
-    const enumerator = folder.enumerate_children('standard::*', Gio.FileQueryInfoFlags.NONE, null);
+    const iter = await folder.enumerate_children_async('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null);
     const folderPath = folder.get_path();
     const folderName = folder.get_basename();
 
     console.log('folder name:', folderName );
     let iconsCount = 0;
-    let info;
 
     // TODO: Iterate through child folders and get svgs from them too.
 
-    while ((info = enumerator.next_file(null)) !== null) {
-
+    for await (const info of iter) {
 
       if (info.get_content_type() === 'image/svg+xml') {
 
@@ -105,12 +104,7 @@ export const AddSetDialog = GObject.registerClass({
           style = 3;
         }
 
-        // TODO: Read the parent folder name. If any of these matches, skip reading the icon file:
-        //  "outline" / "outlined" : 1
-        //  "fill" / "filled" / "solid": 2
-        //  "twotone" / "duotone": 3
-
-        // Try guessing the icon's style from its SVG attributes
+        // If the icon style can't be determined by its parent folder name, then try guessing the icon's style from its SVG attributes
         if(typeof style === "undefined"){
 
           // Detect if a "stroke" attribute is present, but not if it's followed by "none"
@@ -145,7 +139,7 @@ export const AddSetDialog = GObject.registerClass({
 
         }
 
-        console.log('style', style);
+        //console.log('style', style);
         // console.log('name', info.get_name());
 
 
@@ -156,7 +150,7 @@ export const AddSetDialog = GObject.registerClass({
           style,
         };
 
-        console.log(JSON.stringify(iconMeta));
+        //console.log(JSON.stringify(iconMeta));
 
         // Push this to the icon store
         this.icons.push(iconMeta);
@@ -165,10 +159,16 @@ export const AddSetDialog = GObject.registerClass({
       }
     }
 
+    console.log('after for loop');
+
     // Update the dialog header to state how many icons the folder contains
     this._add_set_dialog.title = `Import ${iconsCount} icons`;
+    this.processing = false;
+    this._import_button.sensitive  = true;
+    this._spinner.visible = false;
+    this._form_wrapper.visible = true;
 
-    this._import_button.sensitive = true;
+
   }
 
   countUniqueColorsFromString(str) {

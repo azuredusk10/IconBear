@@ -7,7 +7,7 @@
 			</object>
 		</property>
     <object class="AdwDialog" id="add_set_dialog">
-      <property name="title" translatable="true">Import X icons</property>
+      <property name="title" translatable="true">Processing...</property>
       <child>
         <object class="AdwToolbarView">
           <child type="top">
@@ -43,7 +43,13 @@
                     <class name="my-16"/>
                   </style>
                   <child>
-                    <object class="GtkListBox">
+                    <object class="GtkSpinner" id="spinner">
+                      <property name="spinning">true</property>
+                    </object>
+                  </child>
+                  <child>
+                    <object class="GtkListBox" id="form_wrapper">
+                      <property name="visible">false</property>
                       <property name="selection-mode">0</property>
                       <style>
                         <class name="boxed-list"/>

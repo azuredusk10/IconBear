@@ -7,6 +7,11 @@ import GLib from 'gi://GLib';
 import { IconSetStackView } from './IconSetStackView.js';
 import { Icon } from './Icon.js';
 
+// Set up async file methods
+Gio._promisify(Gio.File.prototype, 'enumerate_children_async');
+Gio._promisify(Gio.File.prototype, 'query_info_async');
+
+
 export const Window = GObject.registerClass({
 	GTypeName: 'IcoWindow',
 	Template: 'resource:///design/chris_wood/IconBear/ui/Window.ui',
@@ -108,94 +113,109 @@ export const Window = GObject.registerClass({
   }
 
 
-	#initializeIcons() {
+	async #initializeIcons() {
 
 	  this.sets = [];
 
-    // loop through icon-sets resource directory
-    // Icons: icon-sets/[bundle-name]/icons/*.svg
-    // Info: icon-sets/[bundle-name]/info.json
-    const bundledIconsDir = '/design/chris_wood/IconBear/icon-sets/';
+    // loop through the app's data directory to find and initialize icon sets
+    try {
+      const dataDir = GLib.get_user_data_dir();
+      const dataDirFile = Gio.File.new_for_path(dataDir);
+      const dataIter = await dataDirFile.enumerate_children_async('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null);
 
-    const bundleDirNames = Gio.resources_enumerate_children(bundledIconsDir, 0);
+      // Check each folder for a meta.json file
+      for await (const info of dataIter) {
 
-    bundleDirNames.forEach(bundleDirName => {
+        const fileType = info.get_file_type();
+        const fileName = info.get_name();
 
-      // Remove the trailing slash from the directory
-      const bundleId = bundleDirName.slice(0, -1);
+        if (fileType === Gio.FileType.DIRECTORY) {
+            const folderPath = GLib.build_filenamev([dataDir, fileName]);
+            const metaFile = Gio.File.new_for_path(GLib.build_filenamev([folderPath, 'meta.json']));
 
-      // Establish the structure of the set object
-      let set = {
-        id: bundleId,
-        author: '',
-        name: '',
-        license: '',
-        icons: Gio.ListStore.new(Icon),
-        iconsCount: 0,
-        website: '',
-      };
+            if (metaFile.query_exists(null)) {
+                print(`Found "meta.json" file in ${folderPath}`);
 
-      // Load info.json to get the set metadata
-      const metaFile = Gio.File.new_for_uri('resource://' + bundledIconsDir + bundleDirName + 'info.json');
-      const metaFileBytes = metaFile.read(null).read_bytes(8192, null).get_data();
-      const decoder = new TextDecoder;
-      const metaFileData = decoder.decode(metaFileBytes);
-      const metaJson = JSON.parse(metaFileData);
+                // Remove the trailing slash from the directory
+                const setId = folderPath.slice(0, -1);
 
-      // Populate the json data into the set object
-      set.name = metaJson.name;
-      set.license = metaJson.license;
-      set.author = metaJson.author;
-      set.website = metaJson.website;
+                // Establish the structure of the set object
+                let set = {
+                  id: setId,
+                  author: '',
+                  name: '',
+                  license: '',
+                  icons: Gio.ListStore.new(Icon),
+                  iconsCount: 0,
+                  website: '',
+                };
 
-      // Get an array of all the files in this bundle resource directory
-      const iconsDir = bundledIconsDir + bundleDirName + 'icons/';
-      const iconFilenames = Gio.resources_enumerate_children(iconsDir, 0);
+                // Load meta.json to get the set metadata
+                const metaFileSize = await metaFile.query_info('standard::size', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null).get_size();
+                const metaFileBytes = metaFile.read(null).read_bytes(metaFileSize, null).get_data();
+                const decoder = new TextDecoder;
+                const metaFileData = decoder.decode(metaFileBytes);
+                const metaJson = JSON.parse(metaFileData);
 
-      set.iconsCount = iconFilenames.length;
+                // Populate the json data into the set object
+                set.name = metaJson.name;
+                set.license = metaJson.license;
+                set.author = metaJson.author;
+                set.website = metaJson.website;
 
-      // Sort the icons in alphabetical order
-      iconFilenames.sort();
+                // Get an array of all the files in this bundle resource directory
+                const iconsDir = folderPath + '/icons/';
+                const iconFilenames = await Gio.File.new_for_path(iconsDir).enumerate_children_async('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null);
 
-      let i = 0;
-      const iconsArray = [];
+                set.iconsCount = metaJson.icons.length;
 
-      iconFilenames.forEach(iconFilename => {
+                let i = 0;
+                const iconsArray = [];
 
-        // Only load the number of icons needed to populate the set preview tile for the "All sets" view
-        if(i < this.maxPreviewIcons){
+                metaJson.icons.forEach(icon => {
 
-          // Create the Gio.File for this icon resource and get its file info
-          const iconFile = Gio.File.new_for_uri('resource://' + iconsDir + iconFilename);
-          console.log(iconsDir + iconFilename);
-          const fileInfo = iconFile.query_info('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
+                  const iconFilename = icon.fileName;
 
-          const label = iconFilename.replace(/\.[^/.]+$/, "");
+                  // Only load the number of icons needed to populate the set preview tile for the "All sets" view
+                  if(i < this.maxPreviewIcons){
 
-          // Create a new Icon
-          const icon = new Icon({
-            label,
-            filepath: iconsDir + iconFilename,
-            type: fileInfo.get_file_type(),
-            gfile: iconFile,
-          });
+                    // Create the Gio.File for this icon and get its file info
+                    const iconFile = Gio.File.new_for_path(iconsDir + iconFilename);
+                    const fileInfo = iconFile.query_info('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
 
-	        // TODO: Using the list store's splice method to add all icons at once would be more efficient.
-          iconsArray.push(icon);
+                    const label = iconFilename.replace(/\.[^/.]+$/, "");
+
+                    // Create a new Icon
+                    const icon = new Icon({
+                      label,
+                      filepath: iconsDir + iconFilename,
+                      type: fileInfo.get_file_type(),
+                      gfile: iconFile,
+                    });
+
+	                  // TODO: Using the list store's splice method to add all icons at once would be more efficient.
+                    iconsArray.push(icon);
+                  }
+
+                  i++;
+
+                });
+
+                // Add the loaded icons into the list store
+                set.icons.splice(0, 0, iconsArray);
+
+
+                this.sets.push(set);
+
+            } else {
+                print(`"meta.json" file not found in ${folderPath}`);
+            }
         }
-
-        i++;
-
-      });
-
-      // Add the loaded icons into the list store
-      set.icons.splice(0, 0, iconsArray);
-
-
-      this.sets.push(set);
-
-    });
-
+      }
+    } catch(e) {
+      console.log('Error loading sets: ' + e);
+      return false;
+    }
     this.notify('sets');
   }
 

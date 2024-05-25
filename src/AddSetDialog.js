@@ -212,8 +212,10 @@ export const AddSetDialog = GObject.registerClass({
     const targetPath = dataDir + '/' + newSetId;
 
     const targetDir = Gio.File.new_for_path(targetPath);
-
     targetDir.make_directory(null);
+
+    const targetIconsDir = Gio.File.new_for_path(targetPath + '/icons');
+    targetIconsDir.make_directory(null);
 
     // Prepare the set object which will eventually be saved to meta.json
     const set = {
@@ -246,7 +248,7 @@ export const AddSetDialog = GObject.registerClass({
     try {
       for (const icon of this.icons) {
         const source = Gio.File.new_for_path(this.folder.get_path() + '/' + icon.fileName);
-        const target = Gio.File.new_for_path(targetPath + '/' + icon.fileName);
+        const target = Gio.File.new_for_path(targetPath + '/icons/' + icon.fileName);
 
         await source.copy_async(target, Gio.FileCopyFlags.NONE, GLib.PRIORITY_DEFAULT, null, null, null);
 

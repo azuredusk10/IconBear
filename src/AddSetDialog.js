@@ -9,11 +9,12 @@ import { Icon } from './Icon.js';
 
 // Set up async file methods
 Gio._promisify(Gio.File.prototype, 'enumerate_children_async');
+Gio._promisify(Gio.File.prototype, 'create_async');
 
 export const AddSetDialog = GObject.registerClass({
   GTypeName: 'IcoAddSetDialog',
   Template: 'resource:///design/chris_wood/IconBear/ui/AddSetDialog.ui',
-  InternalChildren: ['add_set_dialog', 'new_set_name_entry', 'import_button', 'spinner', 'form_wrapper'],
+  InternalChildren: ['add_set_dialog', 'new_set_name_entry', 'import_button', 'spinner', 'form_wrapper', 'completed_wrapper'],
   Properties: {
     folder: GObject.ParamSpec.object(
       'folder',
@@ -69,8 +70,6 @@ export const AddSetDialog = GObject.registerClass({
 
     console.log('folder name:', folderName );
     let iconsCount = 0;
-
-    // TODO: Iterate through child folders and get svgs from them too.
 
     for await (const info of iter) {
 
@@ -193,7 +192,11 @@ export const AddSetDialog = GObject.registerClass({
 
    /* Import the user-selected directory. Pulls the values of the "Set" and "New set name" entries.
    */
-  importSet() {
+  async importSet() {
+
+    // Show a "Processing" state
+    this._import_button.label = 'Importing...';
+    this._import_button.sensitive = false;
 
     const newSetName = this._new_set_name_entry.text;
 
@@ -212,7 +215,7 @@ export const AddSetDialog = GObject.registerClass({
 
     targetDir.make_directory(null);
 
-    // Prepare the set object which will eventually be saved to info.json
+    // Prepare the set object which will eventually be saved to meta.json
     const set = {
       name: newSetName,
       createdOn: Date.now(),
@@ -222,12 +225,45 @@ export const AddSetDialog = GObject.registerClass({
     // Add the iconSet
     console.log(JSON.stringify(set));
 
-    // TODO: save the "set" object as JSON in a new file called info.json
+    // Save the "set" object as JSON in a new file called meta.json
+    // Create the new file in the set directory
+    try {
+      const metaFile = Gio.File.new_for_path(targetPath + '/meta.json');
+      const metaOutputStream = await metaFile.create_async(Gio.FileCreateFlags.NONE,
+      GLib.PRIORITY_DEFAULT, null);
 
-    // TODO: Copy the icon files to the targetDir/icons, OR targetDir/[preserve child folder names from original import folder]
+      // Populate the file with the JSON contents
+      const metaBytes = new GLib.Bytes(JSON.stringify(set));
+      const metaBytesWritten = await metaOutputStream.write_bytes_async(metaBytes,
+      GLib.PRIORITY_DEFAULT, null, null);
+    } catch(e) {
+      console.log('Error writing meta file: ' + e)
+      return false;
+    }
+
+
+    // Copy the icon files to the targetDir/icons
+    try {
+      for (const icon of this.icons) {
+        const source = Gio.File.new_for_path(this.folder.get_path() + '/' + icon.fileName);
+        const target = Gio.File.new_for_path(targetPath + '/' + icon.fileName);
+
+        await source.copy_async(target, Gio.FileCopyFlags.NONE, GLib.PRIORITY_DEFAULT, null, null, null);
+
+        console.log(`copied icon from ${this.folder.get_path()}/${icon.fileName} to ${targetPath}/${icon.fileName}`);
+      }
+    } catch(e) {
+      console.log('Error copying icon files: ' + e);
+    }
+
+
+    // Show the "Completed" state
+    this._form_wrapper.visible = false;
+    this._completed_wrapper.visible = true;
 
 
 
+    return true;
   }
 
   onCancelClicked() {

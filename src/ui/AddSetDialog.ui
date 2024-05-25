@@ -15,7 +15,7 @@
               <property name="show-start-title-buttons">false</property>
               <property name="show-end-title-buttons">false</property>
               <child type="start">
-                <object class="GtkButton">
+                <object class="GtkButton" id="cancel_button">
                   <property name="label">Cancel</property>
                   <signal name="clicked" handler="onCancelClicked"/>
                 </object>
@@ -75,6 +75,25 @@
                       <child>
                         <object class="AdwEntryRow" id="new_set_name_entry">
                           <property name="title" translatable="true">New set name</property>
+                        </object>
+                      </child>
+                    </object>
+                  </child>
+                  <child>
+                    <object class="GtkBox" id="completed_wrapper">
+                      <property name="visible">false</property>
+                      <property name="orientation">vertical</property>
+                      <child>
+                        <object class="GtkImage">
+                          <property name="icon-name">emblem-default-symbolic</property>
+                          <style>
+                            <class name="mb-2"/>
+                          </style>
+                        </object>
+                      </child>
+                      <child>
+                        <object class="GtkLabel">
+                          <property name="label" translatable="true">Icon set imported</property>
                         </object>
                       </child>
                     </object>

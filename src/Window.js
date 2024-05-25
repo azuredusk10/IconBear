@@ -86,16 +86,19 @@ export const Window = GObject.registerClass({
 }, class extends Adw.ApplicationWindow {
   constructor(params={}){
     super(params);
-    this.#bindToSettings();
-    // this.#importBundledIcons();
-    this.#initializeActions();
-    this.#initializeIcons();
-    this.#initializeMainStack();
+    this.#initializeWindow();
   }
 
 	vfunc_close_request() {
 		super.vfunc_close_request();
 		this.run_dispose();
+	}
+
+	async #initializeWindow(){
+	  this.#bindToSettings();
+    this.#initializeActions();
+    await this.#initializeIcons();
+    this.#initializeMainStack();
 	}
 
 

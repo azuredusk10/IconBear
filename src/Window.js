@@ -179,8 +179,9 @@ export const Window = GObject.registerClass({
 
                   const iconFilename = icon.fileName;
 
-                  // Only load the number of icons needed to populate the set preview tile for the "All sets" view
-                  if(i < this.maxPreviewIcons){
+                  // TODO: Only load the number of icons needed to populate the set preview tile for the "All sets" view
+                  // Loads all icons in the set
+                  if(i < set.iconsCount){
 
                     // Create the Gio.File for this icon and get its file info
                     const iconFile = Gio.File.new_for_path(iconsDir + iconFilename);
@@ -196,7 +197,6 @@ export const Window = GObject.registerClass({
                       gfile: iconFile,
                     });
 
-	                  // TODO: Using the list store's splice method to add all icons at once would be more efficient.
                     iconsArray.push(icon);
                   }
 
@@ -251,9 +251,9 @@ export const Window = GObject.registerClass({
       stackPageChild.setName = set.name;
       stackPageChild.iconsCount = set.iconsCount;
       stackPageChild.setId = set.id;
-      stackPageChild.setLicense = set.license;
-      stackPageChild.setAuthor = set.author;
-      stackPageChild.setWebsite = set.website;
+      stackPageChild.setLicense = set.license || '';
+      stackPageChild.setAuthor = set.author || '';
+      stackPageChild.setWebsite = set.website || '';
       stackPageChild.notify('setId');
       stackPageChild.maxPreviewIcons = this.maxPreviewIcons;
 

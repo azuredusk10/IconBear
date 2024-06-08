@@ -125,8 +125,10 @@ export const IconSetStackView = GObject.registerClass({
     this.insert_action_group('set-view', actionGroup);
   }
 
+  // Load all icons in the set
   loadAllIcons(){
 
+    /*
     // Open the icon bundle resource Dir
     const bundledIconsDir = '/design/chris_wood/IconBear/icon-sets/';
     const resourceDir = bundledIconsDir + this.setId;
@@ -173,6 +175,7 @@ export const IconSetStackView = GObject.registerClass({
 
     this.notify('icons');
 
+    */
   }
 
   onIconActivated(emitter, label, icon){

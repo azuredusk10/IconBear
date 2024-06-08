@@ -44,7 +44,7 @@ export const AllSetsStackView = GObject.registerClass({
       'The size to render icon previews at',
       GObject.ParamFlags.READWRITE,
       0, 1024,
-      0
+      24
     ),
   },
   Signals: {
@@ -199,6 +199,22 @@ export const AllSetsStackView = GObject.registerClass({
         website: '',
       };
 
+      const metaFile = Gio.File.new_for_uri('resource://' + bundledIconsDir + folderPath + 'meta.json');
+
+      // Load meta.json to get the set metadata
+      const metaFileSize = metaFile.query_info('standard::size', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null).get_size();
+      const metaFileBytes = metaFile.read(null).read_bytes(metaFileSize, null).get_data();
+      const decoder = new TextDecoder;
+      const metaFileData = decoder.decode(metaFileBytes);
+      const metaJson = JSON.parse(metaFileData);
+
+      // Populate the json data into the set object
+      set.name = metaJson.name;
+      set.license = metaJson.license;
+      set.author = metaJson.author;
+      set.website = metaJson.website;
+
+
       const resourceDir = bundledIconsDir + setId;
       const iconsDir = resourceDir + '/icons/';
       const iconFilenames = Gio.resources_enumerate_children(iconsDir, 0);
@@ -228,12 +244,18 @@ export const AllSetsStackView = GObject.registerClass({
             filepath: iconsDir + iconFilename,
             type: fileInfo.get_file_type(),
             gfile: iconFile,
+            width: 12,
+            height: 12,
+            style: 1,
           });
 
           console.log(icon.label);
           iconsArray.push(icon);
 
           i++;
+
+          // Add the icon into the set's list store
+          set.icons.append(icon);
 
         }
 
@@ -243,21 +265,84 @@ export const AllSetsStackView = GObject.registerClass({
       });
 
 
-
-      // Add the loaded icons into the list store
-      set.icons.splice(this.maxPreviewIcons, 0, iconsArray);
-
       console.log(set);
 
-      // Store in the defaultSets property
+      // Store this set in the defaultSets property
       this.defaultSets.push(set);
 
-    })
+      // Initialise the flowbox
+      // FlowBoxChild -> Box -> (FlowBox -> FlowBoxChild -> DrawingArea * 6), (Box -> (Box -> (Label, Label), Button))
+
+      const setTile = new Gtk.Box({
+        orientation: 1,
+        hexpand: true,
+      });
+
+      const setTilePreviewFlowBox = new Gtk.FlowBox({
+        sensitive: false,
+        minChildrenPerLine: 3,
+        maxChildrenPerLine: 6,
+      });
+
+      const previewModel = Gio.ListStore.new(Icon);
+
+      for (let i = 0; i < this.maxPreviewIcons && i < set.icons.get_n_items(); i++) {
+        const icon = set.icons.get_item(i);
+        previewModel.append(icon);
+      }
+
+      setTilePreviewFlowBox.bind_model(previewModel, (icon) => this._addPreviewItem(icon, this.iconPreviewSize));
 
 
-    // Store them in the "defaultSets" property
+      const setLabel = new Gtk.Label({
+        label: set.name,
+        cssClasses: ['title-3'],
+        hexpand: true,
+        halign: 1,
+      });
 
-    // Initialise the flowbox
+      const setIconCount = new Gtk.Label({
+        label: set.iconsCount.toString(),
+        opacity: 0.7,
+        halign: 1,
+      });
+
+      const setTileTextBox = new Gtk.Box({
+        spacing: 2,
+        orientation: 1,
+      });
+
+      const setTileInfoRowBox = new Gtk.Box({
+        spacing: 8,
+        hexpand: true,
+        cssClasses: ['m-2'],
+      });
+
+      const setTileButton = new Gtk.Button({
+        label: "Install",
+        cssClasses: ['suggested-action'],
+        halign: 2,
+        valign: 3,
+      });
+
+      setTileTextBox.append(setLabel);
+      setTileTextBox.append(setIconCount);
+
+      setTileInfoRowBox.append(setTileTextBox);
+      setTileInfoRowBox.append(setTileButton);
+
+      setTile.append(setTilePreviewFlowBox);
+      setTile.append(setTileInfoRowBox);
+
+      const setFlowBoxChild = new Gtk.FlowBoxChild({
+        child: setTile,
+        name: set.name,
+        cssClasses: ['card'],
+      });
+
+      this._default_sets_flowbox.append(setFlowBoxChild);
+
+    });
 
   }
 

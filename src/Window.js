@@ -154,7 +154,7 @@ export const Window = GObject.registerClass({
                 };
 
                 // Load meta.json to get the set metadata
-                const metaFileSize = await metaFile.query_info('standard::size', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null).get_size();
+                const metaFileSize = metaFile.query_info('standard::size', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null).get_size();
                 const metaFileBytes = metaFile.read(null).read_bytes(metaFileSize, null).get_data();
                 const decoder = new TextDecoder;
                 const metaFileData = decoder.decode(metaFileBytes);

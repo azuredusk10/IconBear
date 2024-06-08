@@ -15,7 +15,7 @@ Gio._promisify(Gio.File.prototype, 'query_info_async');
 export const Window = GObject.registerClass({
 	GTypeName: 'IcoWindow',
 	Template: 'resource:///design/chris_wood/IconBear/ui/Window.ui',
-	InternalChildren: ['search_entry', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button', 'main_toolbar_view', 'main_header_bar', 'add_set_dialog_widget'],
+	InternalChildren: ['search_entry', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button', 'main_toolbar_view', 'main_header_bar', 'add_set_dialog_widget', 'all_sets_view'],
 	Properties: {
 	  sets: GObject.ParamSpec.jsobject(
       'sets',
@@ -87,6 +87,10 @@ export const Window = GObject.registerClass({
   constructor(params={}){
     super(params);
     this.#initializeWindow();
+
+    this._all_sets_view.connect('set-added', (emittingObject, setName) => {
+      this.#createSetStackPage(setName);
+    });
   }
 
 	vfunc_close_request() {
@@ -236,7 +240,7 @@ export const Window = GObject.registerClass({
     // Create a new StackPage for each set
     this.sets.forEach(set => {
 
-      this.#createSetStackPage(set);
+      this.#createSetStackPage(set.name);
 
     });
 
@@ -247,9 +251,9 @@ export const Window = GObject.registerClass({
 
   /**
   * Add a new IconSetStackView to the main_stack GtkStack
-  * @params {Set} set - the icon set that the new StackPage will display
+  * @params {string} setName - the name of the icon set that the new StackPage will display. Used to look up the corresponding set in the "set" property.
   **/
-  #createSetStackPage(set){
+  #createSetStackPage(setName){
     // Create a copy of the preview icon set list store to pass into the IconSetStackView
       /*
       // Doesn't seem necessary any more
@@ -267,6 +271,10 @@ export const Window = GObject.registerClass({
         i++;
       }
       */
+
+      const set = this.sets.find((object) => {
+          return object.name === setName;
+      });
 
       // Create the composite widget child of the StackPage
       const stackPageChild = new IconSetStackView({

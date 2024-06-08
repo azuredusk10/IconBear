@@ -57,6 +57,9 @@ export const AllSetsStackView = GObject.registerClass({
     'set-activated': {
       param_types: [GObject.TYPE_STRING]
     },
+    'set-added': {
+      param_types: [GObject.TYPE_STRING]
+    }
   }
 }, class extends Gtk.Widget {
   constructor(params){
@@ -505,8 +508,15 @@ export const AllSetsStackView = GObject.registerClass({
       console.log('Error copying icon files: ' + e);
     }
 
+    try {
+      console.log(set);
 
-    console.log(set);
+      this.installedSets.push(set);
+
+      this.emit('set-added', set.name);
+    } catch(e) {
+      console.log('Error updating the sets in the app: ' + e);
+    }
   }
 
 });

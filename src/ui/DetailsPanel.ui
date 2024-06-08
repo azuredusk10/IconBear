@@ -213,7 +213,7 @@
                       <child>
                         <object class="AdwActionRow">
                           <property name="title" translatable="yes">Style</property>
-                          <property name="subtitle">Outline</property>
+                          <property name="subtitle" bind-source="IcoDetailsPanel" bind-property="iconStyle" bind-flags="sync-create"/>
                           <child type="suffix">
                             <object class="GtkMenuButton">
                               <property name="valign">3</property>

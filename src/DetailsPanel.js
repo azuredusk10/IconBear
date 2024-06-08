@@ -22,6 +22,13 @@ export const DetailsPanel = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       ''
     ),
+    iconStyle: GObject.ParamSpec.string(
+      'iconStyle',
+      'Icon Style',
+      'The icon style in readable text',
+      GObject.ParamFlags.READWRITE,
+      'Unknown'
+    ),
     setName: GObject.ParamSpec.string(
       'setName',
       'Set Name',
@@ -94,6 +101,27 @@ export const DetailsPanel = GObject.registerClass({
       this.iconIsSelected = true;
 
       this._icon_size_row.subtitle = `${this.icon.width} × ${this.icon.height}`;
+
+      // Show the correct word for the style
+      switch(this.icon.style){
+        case 1:
+          this.iconStyle = 'Outline';
+          break;
+        case 2:
+          this.iconStyle = 'Filled';
+          break;
+        case 3:
+          this.iconStyle = 'Duotone';
+          break;
+        case 4:
+          this.iconStyle = 'Color';
+          break;
+        default:
+          this.iconStyle = 'Unknown';
+
+      }
+
+
 
     } else {
       // Show the empty state view

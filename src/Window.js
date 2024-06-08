@@ -197,6 +197,7 @@ export const Window = GObject.registerClass({
                       gfile: iconFile,
                       width: icon.width,
                       height: icon.height,
+                      style: icon.style,
                     });
 
                     iconsArray.push(newIcon);

@@ -513,7 +513,7 @@ export const AllSetsStackView = GObject.registerClass({
 
       this.installedSets.push(set);
 
-      this.emit('set-added', set.name);
+      this.emit('set-added', set.id);
     } catch(e) {
       console.log('Error updating the sets in the app: ' + e);
     }

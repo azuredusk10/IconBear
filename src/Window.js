@@ -88,11 +88,13 @@ export const Window = GObject.registerClass({
     super(params);
     this.#initializeWindow();
 
-    this._all_sets_view.connect('set-added', (emittingObject, setName) => {
+    this._all_sets_view.connect('set-added', async (emittingObject, folderName) => {
+      const setName = await this.#loadSet(folderName);
       this.#createSetStackPage(setName);
     });
 
-     this._add_set_dialog_widget.connect('set-added', (emittingObject, setName) => {
+     this._add_set_dialog_widget.connect('set-added', async (emittingObject, folderName) => {
+      const setName = await this.#loadSet(folderName);
       this.#createSetStackPage(setName);
     });
   }
@@ -160,6 +162,7 @@ export const Window = GObject.registerClass({
   /**
   * Locate a set's folder in the user's data directory. Then, process its metadata, load its icons, and store all this in the "sets" property
   * @param {string} folderName - the name of the folder to look for in the user's data directory
+  * @return {string} setName - the name of the set, as defined in its meta.json file
   **/
   async #loadSet(folderName){
     const dataDir = GLib.get_user_data_dir();
@@ -209,7 +212,7 @@ export const Window = GObject.registerClass({
 
           const iconFilename = icon.fileName;
 
-          // TODO: Only load the number of icons needed to populate the set preview tile for the "All sets" view
+          // TODO: When specified by a parameter, only load the number of icons needed to populate the set preview tile for the "All sets" view
           // Loads all icons in the set
           if(i < set.iconsCount){
 
@@ -242,6 +245,8 @@ export const Window = GObject.registerClass({
 
 
         this.sets.push(set);
+
+        return set.name;
 
     } else {
         print(`"meta.json" file not found in ${folderPath}`);

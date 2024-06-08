@@ -200,7 +200,7 @@ export const AddSetDialog = GObject.registerClass({
 
 
     // Tell Window.js that a new set was added
-    this.emit('set-added', set.name);
+    this.emit('set-added', newSetId);
 
     return true;
   }

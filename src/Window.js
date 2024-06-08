@@ -236,7 +236,24 @@ export const Window = GObject.registerClass({
     // Create a new StackPage for each set
     this.sets.forEach(set => {
 
-      // Create a copy of the preview icon set list store to pass into the IconSetStackView
+      this.#createSetStackPage(set);
+
+    });
+
+    // Bind the visible stack page to a setting
+    settings.bind('visible-page-name', this._main_stack, 'visible-child-name', Gio.SettingsBindFlags.DEFAULT)
+
+  }
+
+  /**
+  * Add a new IconSetStackView to the main_stack GtkStack
+  * @params {Set} set - the icon set that the new StackPage will display
+  **/
+  #createSetStackPage(set){
+    // Create a copy of the preview icon set list store to pass into the IconSetStackView
+      /*
+      // Doesn't seem necessary any more
+
       const copiedIconsListStore = new Gio.ListStore();
 
       const sourceIconsListStoreCount = set.icons.n_items;
@@ -249,10 +266,11 @@ export const Window = GObject.registerClass({
 
         i++;
       }
+      */
 
       // Create the composite widget child of the StackPage
       const stackPageChild = new IconSetStackView({
-        icons: copiedIconsListStore,
+        icons: set.icons,
       });
 
       stackPageChild.setName = set.name;
@@ -271,12 +289,6 @@ export const Window = GObject.registerClass({
 
       // Add the stack page
       this._main_stack.add_titled(stackPageChild, set.name, set.name);
-
-    });
-
-    // Bind the visible stack page to a setting
-    settings.bind('visible-page-name', this._main_stack, 'visible-child-name', Gio.SettingsBindFlags.DEFAULT)
-
   }
 
   #importSet(folder = null) {

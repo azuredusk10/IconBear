@@ -13,5 +13,6 @@
     <file>IconSetStackView.js</file>
     <file>AddSetDialog.js</file>
     <file>drawSvg.js</file>
+    <file>helperFunctions.js</file>
   </gresource>
 </gresources>

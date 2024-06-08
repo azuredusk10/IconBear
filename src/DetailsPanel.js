@@ -1,6 +1,6 @@
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
-import GdkPixbuf from 'gi://GdkPixbuf';
+import Gio from 'gi://Gio';
 
 import { drawSvg } from './drawSvg.js';
 
@@ -137,6 +137,21 @@ export const DetailsPanel = GObject.registerClass({
     // Output the original width and height of the icon as the string "[width] x [height]"
 
   }
+
+  /*
+  onOpenLocation(){
+    const location = this.icon.filepath.substring(0, this.icon.filepath.lastIndexOf("/"));
+
+    try {
+        Gio.AppInfo.launch_default_for_uri('file:///' + location, null);
+
+    } catch (e) {
+        logError(e);
+    }
+
+
+  }
+  */
 
 
 });

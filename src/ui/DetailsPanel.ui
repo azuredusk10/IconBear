@@ -151,6 +151,14 @@
                           <style>
                             <class name="property"/>
                           </style>
+                          <!--
+                          <child type="suffix">
+                            <object class="GtkButton">
+                              <property name="icon-name">system-file-manager-symbolic</property>
+                              <property name="valign">3</property>
+                              <signal name="clicked" handler="onOpenLocation"/>
+                            </object>
+                          </child> -->
                         </object>
                       </child>
                       <child>

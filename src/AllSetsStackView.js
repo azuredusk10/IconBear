@@ -364,7 +364,7 @@ export const AllSetsStackView = GObject.registerClass({
         const setFlowBoxChild = new Gtk.FlowBoxChild({
           child: setTile,
           name: set.name,
-          cssClasses: ['card'],
+          cssClasses: ['frame'],
         });
 
         this._default_sets_flowbox.append(setFlowBoxChild);

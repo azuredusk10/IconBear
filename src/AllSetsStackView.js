@@ -24,6 +24,12 @@ export const AllSetsStackView = GObject.registerClass({
       'Icon sets that have been installed by the user',
       GObject.ParamFlags.READWRITE
 	  ),
+	  defaultSets: GObject.ParamSpec.jsobject(
+      'defaultSets',
+      'Default Sets',
+      'Icon sets that come bundled with the app',
+      GObject.ParamFlags.READWRITE
+	  ),
 	  maxPreviewIcons: GObject.ParamSpec.int(
       'maxPreviewIcons',
       'Max Preview Icons',
@@ -64,6 +70,8 @@ export const AllSetsStackView = GObject.registerClass({
         }
       }
     });
+
+    this.#initializeDefaultSets();
 
   }
 
@@ -159,6 +167,97 @@ export const AllSetsStackView = GObject.registerClass({
 
       this._installed_sets_flowbox.append(setFlowBoxChild);
     });
+
+  }
+
+  #initializeDefaultSets(){
+    this.defaultSets = [];
+
+    // Load the resource files
+    // Open the icon bundle resource Dir
+    const bundledIconsDir = '/design/chris_wood/IconBear/icon-sets/';
+
+    // Loop over the subdirectories of resources
+    const bundledIconsDirs = Gio.resources_enumerate_children(bundledIconsDir, 0);
+
+    // Sort in alphabetical order
+    bundledIconsDirs.sort();
+
+    bundledIconsDirs.forEach(folderPath => {
+
+      // Remove the trailing slash from the directory
+      const setId = folderPath.slice(0, -1);
+
+      // Establish the structure of the set object
+      let set = {
+        id: setId,
+        author: '',
+        name: '',
+        license: '',
+        icons: Gio.ListStore.new(Icon),
+        iconsCount: 0,
+        website: '',
+      };
+
+      const resourceDir = bundledIconsDir + setId;
+      const iconsDir = resourceDir + '/icons/';
+      const iconFilenames = Gio.resources_enumerate_children(iconsDir, 0);
+
+
+      // Remove the icons from the array which have already been loaded during initial app load
+      iconFilenames.sort();
+      iconFilenames.splice(0, this.maxPreviewIcons);
+
+      const iconsArray = [];
+      let i = 0;
+
+      // Load the maxPreviewIcons number of icons into the icons list store property in alphabetical order
+      iconFilenames.forEach(iconFilename => {
+
+        if (i < this.maxPreviewIcons){
+
+          // Create the Gio.File for this icon resource and get its file info
+          const iconFile = Gio.File.new_for_uri('resource://' + iconsDir + iconFilename);
+          const fileInfo = iconFile.query_info('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
+
+          const label = iconFilename.replace(/\.[^/.]+$/, "");
+
+          // Create a new Icon
+          const icon = new Icon({
+            label,
+            filepath: iconsDir + iconFilename,
+            type: fileInfo.get_file_type(),
+            gfile: iconFile,
+          });
+
+          console.log(icon.label);
+          iconsArray.push(icon);
+
+          i++;
+
+        }
+
+        set.iconsCount ++;
+
+
+      });
+
+
+
+      // Add the loaded icons into the list store
+      set.icons.splice(this.maxPreviewIcons, 0, iconsArray);
+
+      console.log(set);
+
+      // Store in the defaultSets property
+      this.defaultSets.push(set);
+
+    })
+
+
+    // Store them in the "defaultSets" property
+
+    // Initialise the flowbox
 
   }
 

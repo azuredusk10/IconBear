@@ -21,7 +21,7 @@
     <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
     <!-- Bundled icon sets -->
     <!-- Carbon -->
-    <file>icon-sets/carbon/info.json</file>
+    <file>icon-sets/carbon/meta.json</file>
     <file>icon-sets/carbon/icons/3d-cursor-alt.svg</file>
     <file>icon-sets/carbon/icons/3d-cursor.svg</file>
     <file>icon-sets/carbon/icons/3d-curve-auto-colon.svg</file>
@@ -2248,7 +2248,7 @@
     <file>icon-sets/carbon/icons/z.svg</file>
     <file>icon-sets/carbon/icons/z-systems.svg</file>
     <!-- Bootstrap icons -->
-    <file>icon-sets/bootstrap-icons/info.json</file>
+    <file>icon-sets/bootstrap-icons/meta.json</file>
     <file>icon-sets/bootstrap-icons/icons/0-circle-fill.svg</file>
     <file>icon-sets/bootstrap-icons/icons/0-circle.svg</file>
     <file>icon-sets/bootstrap-icons/icons/0-square-fill.svg</file>
@@ -4306,7 +4306,7 @@
     <file>icon-sets/bootstrap-icons/icons/zoom-in.svg</file>
     <file>icon-sets/bootstrap-icons/icons/zoom-out.svg</file>
     <!-- Phosphor -->
-    <file>icon-sets/phosphor/info.json</file>
+    <file>icon-sets/phosphor/meta.json</file>
     <file>icon-sets/phosphor/icons/activity-bold.svg</file>
     <file>icon-sets/phosphor/icons/activity-light.svg</file>
     <file>icon-sets/phosphor/icons/activity.svg</file>
@@ -11860,7 +11860,7 @@
     <file>icon-sets/phosphor/icons/youtube-logo.svg</file>
     <file>icon-sets/phosphor/icons/youtube-logo-thin.svg</file>
     <!-- Feather -->
-    <file>icon-sets/feather/info.json</file>
+    <file>icon-sets/feather/meta.json</file>
     <file>icon-sets/feather/LICENSE</file>
     <file>icon-sets/feather/icons/activity.svg</file>
     <file>icon-sets/feather/icons/airplay.svg</file>

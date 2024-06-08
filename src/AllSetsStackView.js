@@ -9,7 +9,7 @@ import { drawSvg } from './drawSvg.js';
 export const AllSetsStackView = GObject.registerClass({
   GTypeName: 'IcoAllSetsStackView',
   Template: 'resource:///design/chris_wood/IconBear/ui/AllSetsStackView.ui',
-  InternalChildren: ['sets_flowbox'],
+  InternalChildren: ['default_sets_flowbox', 'installed_sets_flowbox', 'installed_sets_empty_state'],
   Properties: {
     searchEntryText: GObject.ParamSpec.string(
       'searchEntryText',
@@ -18,10 +18,10 @@ export const AllSetsStackView = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       ''
     ),
-	  sets: GObject.ParamSpec.jsobject(
-      'sets',
-      'Sets',
-      'All icon sets',
+	  installedSets: GObject.ParamSpec.jsobject(
+      'installedSets',
+      'Installed Sets',
+      'Icon sets that have been installed by the user',
       GObject.ParamFlags.READWRITE
 	  ),
 	  maxPreviewIcons: GObject.ParamSpec.int(
@@ -30,7 +30,7 @@ export const AllSetsStackView = GObject.registerClass({
       'The maximum number of items to show when previewing a set',
       GObject.ParamFlags.READWRITE,
       0, 100,
-      0
+      12
     ),
     iconPreviewSize: GObject.ParamSpec.int(
       'iconPreviewSize',
@@ -51,15 +51,16 @@ export const AllSetsStackView = GObject.registerClass({
     super(params);
 
     // May need to call this once the icon sets have been loaded in correctly via properties
-    this.connect('notify::sets', () => {
+    this.connect('notify::installedSets', () => {
       // Filter the icons whenever the parent list store changes and when it's been fully populated.
 
-      if(this.sets && this.sets[0]){
+      if(this.installedSets && this.installedSets[0]){
+
         // The number of items in the list store property returns 0 until it's been fully populated.
         // Once populated, filter it and bind the model.
-        if(this.sets[0].icons && this.sets[0].icons.get_n_items() > 0){
+        if(this.installedSets[0].icons && this.installedSets[0].icons.get_n_items() > 0){
           console.log('preview icons list store loaded')
-          this.#initializeFlowbox();
+          this.#initializeInstalledSetsFlowbox();
         }
       }
     });
@@ -83,11 +84,10 @@ export const AllSetsStackView = GObject.registerClass({
 
   }
 
-  #initializeFlowbox(){
+  #initializeInstalledSetsFlowbox(){
+    this._installed_sets_empty_state.visible = false;
 
-    this.sets.forEach(set => {
-
-      console.log(set);
+    this.installedSets.forEach(set => {
 
       // FlowBoxChild -> Box -> (FlowBox -> FlowBoxChild -> DrawingArea * 6), (Box -> (Box -> (Label, Label), Button))
 
@@ -102,8 +102,14 @@ export const AllSetsStackView = GObject.registerClass({
         maxChildrenPerLine: 6,
       });
 
-      // TODO: ensure only the first maxPreviewIcons number of icons are rendered in the Flowbox grid.
-      setTilePreviewFlowBox.bind_model(set.icons, (icon) => this._addPreviewItem(icon, this.iconPreviewSize));
+      const previewModel = Gio.ListStore.new(Icon);
+
+      for (let i = 0; i < this.maxPreviewIcons && i < set.icons.get_n_items(); i++) {
+        const icon = set.icons.get_item(i);
+        previewModel.append(icon);
+      }
+
+      setTilePreviewFlowBox.bind_model(previewModel, (icon) => this._addPreviewItem(icon, this.iconPreviewSize));
 
 
       const setLabel = new Gtk.Label({
@@ -130,9 +136,8 @@ export const AllSetsStackView = GObject.registerClass({
         cssClasses: ['m-2'],
       });
 
-      const setTileInstallButton = new Gtk.Button({
-        label: "Install",
-        cssClasses: ['suggested-action'],
+      const setTileButton = new Gtk.Button({
+        iconName: "view-more-symbolic",
         halign: 2,
         valign: 3,
       });
@@ -141,7 +146,7 @@ export const AllSetsStackView = GObject.registerClass({
       setTileTextBox.append(setIconCount);
 
       setTileInfoRowBox.append(setTileTextBox);
-      setTileInfoRowBox.append(setTileInstallButton);
+      setTileInfoRowBox.append(setTileButton);
 
       setTile.append(setTilePreviewFlowBox);
       setTile.append(setTileInfoRowBox);
@@ -149,10 +154,10 @@ export const AllSetsStackView = GObject.registerClass({
       const setFlowBoxChild = new Gtk.FlowBoxChild({
         child: setTile,
         name: set.name,
-        cssClasses: ['card'],
+        cssClasses: ['card', 'activatable'],
       });
 
-      this._sets_flowbox.append(setFlowBoxChild);
+      this._installed_sets_flowbox.append(setFlowBoxChild);
     });
 
   }

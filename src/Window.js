@@ -190,14 +190,16 @@ export const Window = GObject.registerClass({
                     const label = iconFilename.replace(/\.[^/.]+$/, "");
 
                     // Create a new Icon
-                    const icon = new Icon({
+                    const newIcon = new Icon({
                       label,
                       filepath: iconsDir + iconFilename,
                       type: fileInfo.get_file_type(),
                       gfile: iconFile,
+                      width: icon.width,
+                      height: icon.height,
                     });
 
-                    iconsArray.push(icon);
+                    iconsArray.push(newIcon);
                   }
 
                   i++;

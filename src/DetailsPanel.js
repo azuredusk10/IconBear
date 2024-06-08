@@ -93,12 +93,7 @@ export const DetailsPanel = GObject.registerClass({
       // Show the "icon selected" view
       this.iconIsSelected = true;
 
-      // Calculate the icon's width and height
-      const pixbuf = GdkPixbuf.Pixbuf.new_from_resource_at_scale(this.icon.filepath, -1, -1, true);
-      const width = pixbuf.width;
-      const height = pixbuf.height;
-
-      this._icon_size_row.subtitle = `${width} × ${height}`;
+      this._icon_size_row.subtitle = `${this.icon.width} × ${this.icon.height}`;
 
     } else {
       // Show the empty state view

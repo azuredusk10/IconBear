@@ -178,7 +178,7 @@ export const IconSetStackView = GObject.registerClass({
     */
   }
 
-  onIconActivated(emitter, label, icon){
+  onIconActivated(emitter, icon){
     this.activeIcon = icon;
     this.notify('activeIcon');
 	}

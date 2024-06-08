@@ -60,7 +60,7 @@ export const MainPanelView = GObject.registerClass({
   },
   Signals: {
     'icon-activated': {
-      param_types: [GObject.TYPE_STRING, GObject.TYPE_OBJECT]
+      param_types: [GObject.TYPE_OBJECT]
     },
     'icon-copied': {},
   }
@@ -192,7 +192,7 @@ export const MainPanelView = GObject.registerClass({
 
   onIconActivated(selection) {
     const icon = selection.get_selected_item();
-    this.emit('icon-activated', icon.label, icon);
+    this.emit('icon-activated', icon);
   }
 
   onIconCopied(emitter) {

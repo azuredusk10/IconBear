@@ -95,10 +95,14 @@ export const Window = GObject.registerClass({
 	}
 
 	async #initializeWindow(){
-	  this.#bindToSettings();
-    this.#initializeActions();
-    await this.#initializeIcons();
-    this.#initializeMainStack();
+	  try {
+	    this.#bindToSettings();
+      this.#initializeActions();
+      await this.#initializeIcons();
+      this.#initializeMainStack();
+    } catch(e) {
+      console.log('Could not initialize window: ' + e);
+    }
 	}
 
 

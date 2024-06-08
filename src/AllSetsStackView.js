@@ -282,8 +282,19 @@ export const AllSetsStackView = GObject.registerClass({
       // Store this set in the defaultSets property
       this.defaultSets.push(set);
 
+      // Detect whether this set has already been installed
+      let setIsInstalled = false;
+
+      this.installedSets.filter((entry) => {
+        console.log(entry.name, set.name);
+        if(entry.name === set.name){
+          setIsInstalled = true;
+        }
+      });
+
       // If this set has not already been installed, create a FlowBoxChild for this set with an "Install" button
-      if(this.installedSets.find(o => o.name !== set.name)){
+      if(!setIsInstalled){
+
         console.log(set.name + ' has not been installed');
         // FlowBoxChild -> Box -> (FlowBox -> FlowBoxChild -> DrawingArea * 6), (Box -> (Box -> (Label, Label), Button))
 

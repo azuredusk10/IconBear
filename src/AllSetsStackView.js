@@ -67,11 +67,12 @@ export const AllSetsStackView = GObject.registerClass({
         if(this.installedSets[0].icons && this.installedSets[0].icons.get_n_items() > 0){
           console.log('preview icons list store loaded')
           this.#initializeInstalledSetsFlowbox();
+          this.#initializeDefaultSets();
         }
       }
     });
 
-    this.#initializeDefaultSets();
+
 
   }
 
@@ -270,77 +271,81 @@ export const AllSetsStackView = GObject.registerClass({
       // Store this set in the defaultSets property
       this.defaultSets.push(set);
 
-      // Initialise the flowbox
-      // FlowBoxChild -> Box -> (FlowBox -> FlowBoxChild -> DrawingArea * 6), (Box -> (Box -> (Label, Label), Button))
+      // If this set has not already been installed, create a FlowBoxChild for this set with an "Install" button
+      if(this.installedSets.find(o => o.name !== set.name)){
+        console.log(set.name + ' has not been installed');
+        // FlowBoxChild -> Box -> (FlowBox -> FlowBoxChild -> DrawingArea * 6), (Box -> (Box -> (Label, Label), Button))
 
-      const setTile = new Gtk.Box({
-        orientation: 1,
-        hexpand: true,
-      });
+        const setTile = new Gtk.Box({
+          orientation: 1,
+          hexpand: true,
+        });
 
-      const setTilePreviewFlowBox = new Gtk.FlowBox({
-        sensitive: false,
-        minChildrenPerLine: 3,
-        maxChildrenPerLine: 6,
-      });
+        const setTilePreviewFlowBox = new Gtk.FlowBox({
+          sensitive: false,
+          minChildrenPerLine: 3,
+          maxChildrenPerLine: 6,
+        });
 
-      const previewModel = Gio.ListStore.new(Icon);
+        const previewModel = Gio.ListStore.new(Icon);
 
-      for (let i = 0; i < this.maxPreviewIcons && i < set.icons.get_n_items(); i++) {
-        const icon = set.icons.get_item(i);
-        previewModel.append(icon);
+        for (let i = 0; i < this.maxPreviewIcons && i < set.icons.get_n_items(); i++) {
+          const icon = set.icons.get_item(i);
+          previewModel.append(icon);
+        }
+
+        setTilePreviewFlowBox.bind_model(previewModel, (icon) => this._addPreviewItem(icon, this.iconPreviewSize));
+
+
+        const setLabel = new Gtk.Label({
+          label: set.name,
+          cssClasses: ['title-3'],
+          hexpand: true,
+          halign: 1,
+        });
+
+        const setIconCount = new Gtk.Label({
+          label: set.iconsCount.toString(),
+          opacity: 0.7,
+          halign: 1,
+        });
+
+        const setTileTextBox = new Gtk.Box({
+          spacing: 2,
+          orientation: 1,
+        });
+
+        const setTileInfoRowBox = new Gtk.Box({
+          spacing: 8,
+          hexpand: true,
+          cssClasses: ['m-2'],
+        });
+
+        const setTileButton = new Gtk.Button({
+          label: "Install",
+          cssClasses: ['suggested-action'],
+          halign: 2,
+          valign: 3,
+        });
+
+        setTileTextBox.append(setLabel);
+        setTileTextBox.append(setIconCount);
+
+        setTileInfoRowBox.append(setTileTextBox);
+        setTileInfoRowBox.append(setTileButton);
+
+        setTile.append(setTilePreviewFlowBox);
+        setTile.append(setTileInfoRowBox);
+
+        const setFlowBoxChild = new Gtk.FlowBoxChild({
+          child: setTile,
+          name: set.name,
+          cssClasses: ['card'],
+        });
+
+        this._default_sets_flowbox.append(setFlowBoxChild);
+
       }
-
-      setTilePreviewFlowBox.bind_model(previewModel, (icon) => this._addPreviewItem(icon, this.iconPreviewSize));
-
-
-      const setLabel = new Gtk.Label({
-        label: set.name,
-        cssClasses: ['title-3'],
-        hexpand: true,
-        halign: 1,
-      });
-
-      const setIconCount = new Gtk.Label({
-        label: set.iconsCount.toString(),
-        opacity: 0.7,
-        halign: 1,
-      });
-
-      const setTileTextBox = new Gtk.Box({
-        spacing: 2,
-        orientation: 1,
-      });
-
-      const setTileInfoRowBox = new Gtk.Box({
-        spacing: 8,
-        hexpand: true,
-        cssClasses: ['m-2'],
-      });
-
-      const setTileButton = new Gtk.Button({
-        label: "Install",
-        cssClasses: ['suggested-action'],
-        halign: 2,
-        valign: 3,
-      });
-
-      setTileTextBox.append(setLabel);
-      setTileTextBox.append(setIconCount);
-
-      setTileInfoRowBox.append(setTileTextBox);
-      setTileInfoRowBox.append(setTileButton);
-
-      setTile.append(setTilePreviewFlowBox);
-      setTile.append(setTileInfoRowBox);
-
-      const setFlowBoxChild = new Gtk.FlowBoxChild({
-        child: setTile,
-        name: set.name,
-        cssClasses: ['card'],
-      });
-
-      this._default_sets_flowbox.append(setFlowBoxChild);
 
     });
 

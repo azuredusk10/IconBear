@@ -27,10 +27,10 @@ export const Icon = GObject.registerClass({
     style: GObject.ParamSpec.int(
       'style',
       'Style',
-      'Style of the icon. 1 = outline, 2 = filled, 3 = duotone, 4 = color',
+      'Style of the icon. 0 = undefined, 1 = outline, 2 = filled, 3 = duotone, 4 = color',
       GObject.ParamFlags.READWRITE,
-      1, 4,
-      1
+      0, 4,
+      0
     ),
   },
 }, class extends GObject.Object {});

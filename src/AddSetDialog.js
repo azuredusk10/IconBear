@@ -86,11 +86,9 @@ export const AddSetDialog = GObject.registerClass({
 
         // Load the contents of the SVG file
         const gFile = Gio.File.new_for_path(iconPath);
-        const [, contents] = gFile.load_contents(null);
-        const stringContents = new TextDecoder().decode(contents);
         //console.log(stringContents);
 
-        const style = estimateIconStyle(folderName, stringContents);
+        const style = estimateIconStyle(gFile, folderName);
 
         //console.log('style', style);
         // console.log('name', info.get_name());
@@ -122,26 +120,6 @@ export const AddSetDialog = GObject.registerClass({
     this._form_wrapper.visible = true;
 
 
-  }
-
-  countUniqueColorsFromString(str) {
-    // Regular expression to match hex color codes
-    // Source: https://stackoverflow.com/a/53330328
-    const hexColorRegex = /#(?:(?:[\da-f]{3}){1,2}|(?:[\da-f]{4}){1,2})/gi;
-
-    // Find all matches of hex color codes in the string
-    const matches = str.match(hexColorRegex) || [];
-
-    // Create a Set to store unique colors
-    const uniqueColors = new Set(matches.map(match => match.replace('#', '')));
-
-    // Check if "currentColor" is present in the string and count it as an additional color
-    if (/\bcurrentColor\b/i.test(str)) {
-      uniqueColors.add('currentColor');
-    }
-
-    // Return the size of the Set (number of unique colors)
-    return uniqueColors.size;
   }
 
    /* Import the user-selected directory. Pulls the values of the "Set" and "New set name" entries.

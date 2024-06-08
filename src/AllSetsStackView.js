@@ -2,9 +2,15 @@ import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
+import GdkPixbuf from 'gi://GdkPixbuf';
 
 import { Icon } from './Icon.js';
 import { drawSvg } from './drawSvg.js';
+import { estimateIconStyle } from './helperFunctions.js';
+
+// Set up async file methods
+Gio._promisify(Gio.File.prototype, 'create_async');
+Gio._promisify(Gio.File.prototype, 'copy_async');
 
 export const AllSetsStackView = GObject.registerClass({
   GTypeName: 'IcoAllSetsStackView',
@@ -94,7 +100,7 @@ export const AllSetsStackView = GObject.registerClass({
   }
 
   #initializeInstalledSetsFlowbox(){
-    this._installed_sets_empty_state.visible = false;
+    // this._installed_sets_empty_state.visible = false;
 
     let i = 0;
 
@@ -333,6 +339,8 @@ export const AllSetsStackView = GObject.registerClass({
           valign: 3,
         });
 
+        setTileButton.connect('clicked', () => this.onDefaultSetInstall(set, resourceDir));
+
         setTileTextBox.append(setLabel);
         setTileTextBox.append(setIconCount);
 
@@ -359,6 +367,135 @@ export const AllSetsStackView = GObject.registerClass({
   onSetActivated(_flowbox, _child){
     this.emit('set-activated', _child.name);
     _flowbox.unselect_all();
+  }
+
+  /**
+  * Import a default set from GResource to the user's data directory.
+  * @param {Set} set - The set object to import
+  * @param {string} resourceDir - the resource uri where this set lives
+  **/
+  async onDefaultSetInstall(set, resourceDir){
+    /*
+			** Generate the icon-specific meta.json data with icon sizes and styles.
+			** * Additionally, if no folder name present, check for the ending of the filename. e.g. ("-fill", "-filled", "-outline", "-duotone", "-color", "-colored")
+			** Copy the meta.json to the user's data directory
+			** Copy the contents of icons folder to the user's data directory.
+		*/
+
+		// Create the set data directory
+    const dataDir = GLib.get_user_data_dir();
+    const targetPath = dataDir + '/' + set.id;
+
+    const targetDir = Gio.File.new_for_path(targetPath);
+    targetDir.make_directory(null);
+
+    const targetIconsDir = Gio.File.new_for_path(targetPath + '/icons');
+    targetIconsDir.make_directory(null);
+
+    // Set additional properties
+    const setMeta = {
+      name: set.name,
+      license: set.license,
+      author: set.author,
+      website: set.website,
+      createdOn: Date.now(),
+      icons: [],
+      iconCount: 0
+    }
+
+    // Get all the icons
+    const iconsDir = resourceDir + '/icons/';
+    const iconFilenames = Gio.resources_enumerate_children(iconsDir, 0);
+
+    // Sort icons alphabetically
+    iconFilenames.sort();
+
+    const iconsArray = [];
+
+    // Load all icons
+    iconFilenames.forEach(iconFilename => {
+
+      try {
+
+        // Create the Gio.File for this icon resource and get its file info
+        const iconFile = Gio.File.new_for_uri('resource://' + iconsDir + iconFilename);
+        const fileInfo = iconFile.query_info('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
+
+        const label = iconFilename.replace(/\.[^/.]+$/, "");
+
+        // Determine the width and height of the icon
+        const pixbuf = GdkPixbuf.Pixbuf.new_from_resource(iconsDir + iconFilename);
+        const width = pixbuf.width;
+        const height = pixbuf.height;
+
+
+        const style = estimateIconStyle(iconFile);
+
+        // Create a new Icon
+        /*
+        const icon = new Icon({
+          label,
+          filepath: iconsDir + iconFilename,
+          type: fileInfo.get_file_type(),
+          gfile: iconFile,
+          width: width,
+          height: height,
+          style: style,
+        });
+        */
+
+        // Set up the icon metadata
+        const iconMeta = {
+          fileName: iconFilename,
+          width,
+          height,
+          style,
+        };
+
+        console.log(iconMeta.style);
+        setMeta.icons.push(iconMeta);
+
+        setMeta.iconCount++;
+
+      } catch(e) {
+        console.log('Error creating iconMeta object: ' + e);
+      }
+
+    });
+
+    // Save the "set" object as JSON in a new file called meta.json
+    // Create the new file in the set directory
+    try {
+      const metaFile = Gio.File.new_for_path(targetPath + '/meta.json');
+      const metaOutputStream = await metaFile.create_async(Gio.FileCreateFlags.NONE,
+      GLib.PRIORITY_DEFAULT, null);
+
+      // Populate the file with the JSON contents
+      const metaBytes = new GLib.Bytes(JSON.stringify(setMeta));
+      const metaBytesWritten = await metaOutputStream.write_bytes_async(metaBytes,
+      GLib.PRIORITY_DEFAULT, null, null);
+    } catch(e) {
+      console.log('Error writing meta file: ' + e)
+      return false;
+    }
+
+
+    // Copy the icon files to the targetDir/icons
+    try {
+      for (const icon of setMeta.icons) {
+        const source = Gio.File.new_for_uri('resource://' + resourceDir + '/icons/' + icon.fileName);
+        const target = Gio.File.new_for_path(targetPath + '/icons/' + icon.fileName);
+
+        await source.copy_async(target, Gio.FileCopyFlags.NONE, GLib.PRIORITY_DEFAULT, null, null, null);
+
+        console.log(`copied icon from resource://${resourceDir}/icons/${icon.fileName} to ${targetPath}/icons/${icon.fileName}`);
+      }
+    } catch(e) {
+      console.log('Error copying icon files: ' + e);
+    }
+
+
+    console.log(set);
   }
 
 });

@@ -96,6 +96,8 @@ export const AllSetsStackView = GObject.registerClass({
   #initializeInstalledSetsFlowbox(){
     this._installed_sets_empty_state.visible = false;
 
+    let i = 0;
+
     this.installedSets.forEach(set => {
 
       // FlowBoxChild -> Box -> (FlowBox -> FlowBoxChild -> DrawingArea * 6), (Box -> (Box -> (Label, Label), Button))
@@ -166,7 +168,10 @@ export const AllSetsStackView = GObject.registerClass({
         cssClasses: ['card', 'activatable'],
       });
 
-      this._installed_sets_flowbox.append(setFlowBoxChild);
+      // Explicitly set the position of the new FlowBoxChild so that the "Add more sets" CTA tile is always last.
+      this._installed_sets_flowbox.insert(setFlowBoxChild, i);
+
+      i++;
     });
 
   }

@@ -75,36 +75,10 @@
                 <property name="min-children-per-line">1</property>
                 <property name="selection-mode">single</property>
                 <property name="vexpand">0</property>
-              </object>
-            </child>
-
-            <child>
-              <object class="GtkLabel">
-                <property name="label">Get more sets</property>
-                <property name="halign">1</property>
-                <style>
-                  <class name="title-2"/>
-                  <class name="mb-6"/>
-                  <class name="mt-16"/>
-                </style>
-              </object>
-            </child>
-            <child>
-              <object class="GtkFlowBox" id="default_sets_flowbox">
-                <property name="orientation">0</property>
-                <property name="row-spacing">16</property>
-                <property name="column-spacing">16</property>
-                <property name="homogeneous">true</property>
-                <property name="max-children-per-line">-1</property>
-                <property name="min-children-per-line">1</property>
-                <property name="selection-mode">single</property>
-                <property name="vexpand">0</property>
-                <!-- <signal name="child-activated" handler="onSetActivated"/> -->
-                <!-- TODO: Hide this first tile if the user has no sets yet. The large CTA in "My sets" will be displayed instead. -->
-                  <child>
+                <child>
                     <object class="GtkFlowBoxChild">
                       <!-- This will need to contain a button that triggers the win.add_set action -->
-                      <property name="visible">false</property>
+                      <property name="visible">true</property>
                       <property name="name">Import icons from a folder</property>
                       <property name="child">
                         <object class="GtkBox">
@@ -144,6 +118,31 @@
                       </property>
                     </object>
                   </child>
+              </object>
+            </child>
+
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Get more sets</property>
+                <property name="halign">1</property>
+                <style>
+                  <class name="title-2"/>
+                  <class name="mb-6"/>
+                  <class name="mt-16"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkFlowBox" id="default_sets_flowbox">
+                <property name="orientation">0</property>
+                <property name="row-spacing">16</property>
+                <property name="column-spacing">16</property>
+                <property name="homogeneous">true</property>
+                <property name="max-children-per-line">-1</property>
+                <property name="min-children-per-line">1</property>
+                <property name="selection-mode">none</property>
+                <property name="vexpand">0</property>
+                <!-- <signal name="child-activated" handler="onSetActivated"/> -->
               </object>
             </child>
           </object>

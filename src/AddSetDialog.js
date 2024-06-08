@@ -37,9 +37,12 @@ export const AddSetDialog = GObject.registerClass({
       'Whether file operations are in progress',
       GObject.ParamFlags.READWRITE,
       true
-    ),
+    )
   },
   Signals: {
+    'set-added': {
+      param_types: [GObject.TYPE_STRING]
+    }
   },
 }, class extends Gtk.Widget {
   constructor(params){
@@ -196,6 +199,8 @@ export const AddSetDialog = GObject.registerClass({
     this._completed_wrapper.visible = true;
 
 
+    // Tell Window.js that a new set was added
+    this.emit('set-added', set.name);
 
     return true;
   }

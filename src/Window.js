@@ -91,6 +91,10 @@ export const Window = GObject.registerClass({
     this._all_sets_view.connect('set-added', (emittingObject, setName) => {
       this.#createSetStackPage(setName);
     });
+
+     this._add_set_dialog_widget.connect('set-added', (emittingObject, setName) => {
+      this.#createSetStackPage(setName);
+    });
   }
 
 	vfunc_close_request() {
@@ -138,92 +142,12 @@ export const Window = GObject.registerClass({
       for await (const info of dataIter) {
 
         const fileType = info.get_file_type();
-        const fileName = info.get_name();
+        const folderName = info.get_name();
 
         if (fileType === Gio.FileType.DIRECTORY) {
-            const folderPath = GLib.build_filenamev([dataDir, fileName]);
-            const metaFile = Gio.File.new_for_path(GLib.build_filenamev([folderPath, 'meta.json']));
 
-            if (metaFile.query_exists(null)) {
-                print(`Found "meta.json" file in ${folderPath}`);
+            await this.#loadSet(folderName);
 
-                // Remove the trailing slash from the directory
-                const setId = folderPath.slice(0, -1);
-
-                // Establish the structure of the set object
-                let set = {
-                  id: setId,
-                  author: '',
-                  name: '',
-                  license: '',
-                  icons: Gio.ListStore.new(Icon),
-                  iconsCount: 0,
-                  website: '',
-                };
-
-                // Load meta.json to get the set metadata
-                const metaFileSize = metaFile.query_info('standard::size', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null).get_size();
-                const metaFileBytes = metaFile.read(null).read_bytes(metaFileSize, null).get_data();
-                const decoder = new TextDecoder;
-                const metaFileData = decoder.decode(metaFileBytes);
-                const metaJson = JSON.parse(metaFileData);
-
-                // Populate the json data into the set object
-                set.name = metaJson.name;
-                set.license = metaJson.license;
-                set.author = metaJson.author;
-                set.website = metaJson.website;
-
-                // Get an array of all the files in this bundle resource directory
-                const iconsDir = folderPath + '/icons/';
-                const iconFilenames = await Gio.File.new_for_path(iconsDir).enumerate_children_async('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null);
-
-                set.iconsCount = metaJson.icons.length;
-
-                let i = 0;
-                const iconsArray = [];
-
-                metaJson.icons.forEach(icon => {
-
-                  const iconFilename = icon.fileName;
-
-                  // TODO: Only load the number of icons needed to populate the set preview tile for the "All sets" view
-                  // Loads all icons in the set
-                  if(i < set.iconsCount){
-
-                    // Create the Gio.File for this icon and get its file info
-                    const iconFile = Gio.File.new_for_path(iconsDir + iconFilename);
-                    const fileInfo = iconFile.query_info('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
-
-                    const label = iconFilename.replace(/\.[^/.]+$/, "");
-
-                    // Create a new Icon
-                    const newIcon = new Icon({
-                      label,
-                      filepath: iconsDir + iconFilename,
-                      type: fileInfo.get_file_type(),
-                      gfile: iconFile,
-                      width: icon.width,
-                      height: icon.height,
-                      style: icon.style,
-                    });
-
-                    iconsArray.push(newIcon);
-                  }
-
-                  i++;
-
-                });
-
-                // Add the loaded icons into the list store
-                set.icons.splice(0, 0, iconsArray);
-
-
-                this.sets.push(set);
-
-            } else {
-                print(`"meta.json" file not found in ${folderPath}`);
-            }
         }
       }
     } catch(e) {
@@ -231,6 +155,97 @@ export const Window = GObject.registerClass({
       return false;
     }
     this.notify('sets');
+  }
+
+  /**
+  * Locate a set's folder in the user's data directory. Then, process its metadata, load its icons, and store all this in the "sets" property
+  * @param {string} folderName - the name of the folder to look for in the user's data directory
+  **/
+  async #loadSet(folderName){
+    const dataDir = GLib.get_user_data_dir();
+    const folderPath = GLib.build_filenamev([dataDir, folderName]);
+    const metaFile = Gio.File.new_for_path(GLib.build_filenamev([folderPath, 'meta.json']));
+
+    if (metaFile.query_exists(null)) {
+        print(`Found "meta.json" file in ${folderPath}`);
+
+        // Remove the trailing slash from the directory
+        const setId = folderPath.slice(0, -1);
+
+        // Establish the structure of the set object
+        let set = {
+          id: setId,
+          author: '',
+          name: '',
+          license: '',
+          icons: Gio.ListStore.new(Icon),
+          iconsCount: 0,
+          website: '',
+        };
+
+        // Load meta.json to get the set metadata
+        const metaFileSize = metaFile.query_info('standard::size', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null).get_size();
+        const metaFileBytes = metaFile.read(null).read_bytes(metaFileSize, null).get_data();
+        const decoder = new TextDecoder;
+        const metaFileData = decoder.decode(metaFileBytes);
+        const metaJson = JSON.parse(metaFileData);
+
+        // Populate the json data into the set object
+        set.name = metaJson.name;
+        set.license = metaJson.license;
+        set.author = metaJson.author;
+        set.website = metaJson.website;
+
+        // Get an array of all the files in this bundle resource directory
+        const iconsDir = folderPath + '/icons/';
+        const iconFilenames = await Gio.File.new_for_path(iconsDir).enumerate_children_async('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null);
+
+        set.iconsCount = metaJson.icons.length;
+
+        let i = 0;
+        const iconsArray = [];
+
+        metaJson.icons.forEach(icon => {
+
+          const iconFilename = icon.fileName;
+
+          // TODO: Only load the number of icons needed to populate the set preview tile for the "All sets" view
+          // Loads all icons in the set
+          if(i < set.iconsCount){
+
+            // Create the Gio.File for this icon and get its file info
+            const iconFile = Gio.File.new_for_path(iconsDir + iconFilename);
+            const fileInfo = iconFile.query_info('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
+
+            const label = iconFilename.replace(/\.[^/.]+$/, "");
+
+            // Create a new Icon
+            const newIcon = new Icon({
+              label,
+              filepath: iconsDir + iconFilename,
+              type: fileInfo.get_file_type(),
+              gfile: iconFile,
+              width: icon.width,
+              height: icon.height,
+              style: icon.style,
+            });
+
+            iconsArray.push(newIcon);
+          }
+
+          i++;
+
+        });
+
+        // Add the loaded icons into the list store
+        set.icons.splice(0, 0, iconsArray);
+
+
+        this.sets.push(set);
+
+    } else {
+        print(`"meta.json" file not found in ${folderPath}`);
+    }
   }
 
   #initializeMainStack(){

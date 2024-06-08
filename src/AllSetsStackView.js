@@ -100,7 +100,7 @@ export const AllSetsStackView = GObject.registerClass({
   }
 
   #initializeInstalledSetsFlowbox(){
-    // this._installed_sets_empty_state.visible = false;
+    this._installed_sets_empty_state.visible = false;
 
     let i = 0;
 

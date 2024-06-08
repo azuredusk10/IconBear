@@ -85,31 +85,29 @@
                           <property name="hexpand">true</property>
                           <property name="vexpand">true</property>
                           <style>
-                            <class name="card"/>
-                            <class name="activatable"/>
+
                           </style>
                           <child>
                             <object class="GtkBox">
                               <property name="orientation">vertical</property>
                               <property name="valign">3</property>
                               <property name="hexpand">true</property>
-                              <property name="margin-start">8</property>
-                              <property name="margin-end">8</property>
-                              <property name="margin-top">8</property>
-                              <property name="margin-bottom">8</property>
+                              <style>
+                                <class name="p2"/>
+                              </style>
                               <child>
-                                <object class="GtkImage">
-                                  <property name="icon-name">list-add-symbolic</property>
-                                  <property name="icon-size">large</property>
-                                  <property name="margin-bottom">12</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="GtkLabel">
-                                  <property name="label">Add a new set from a folder</property>
+                                <object class="GtkButton">
+                                  <property name="halign">center</property>
+                                  <property name="action-name">win.add_set</property>
                                   <style>
-                                    <class name="heading"/>
+                                    <class name="pill" />
                                   </style>
+                                  <child>
+                                    <object class="AdwButtonContent">
+                                      <property name="label" translatable="true">Add another set</property>
+                                      <property name="icon-name">list-add</property>
+                                    </object>
+                                  </child>
                                 </object>
                               </child>
                             </object>

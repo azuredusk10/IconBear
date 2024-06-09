@@ -1,3 +1,5 @@
+import Rsvg from 'gi://Rsvg';
+
 /**
 * Guess which style an icon is.
 * @param {Gio.File} gFile - the Gio.File object that references the SVG image
@@ -75,3 +77,34 @@ const countUniqueColorsFromString = (str) => {
   // Return the size of the Set (number of unique colors)
   return uniqueColors.size;
 }
+
+
+/**
+* Draw an SVG from a Gio.File
+* @param [unused]
+* @param {Cairo} cr - the Cairo instance to use to draw the SVG
+* @param {number} width - the pixel width to draw the SVG at
+* @param {number} height - the pixel height to draw the SVG at
+* @param {Gio.File} gfile - the Gio.File object that references the SVG
+*
+* @returns Rsvg.Handle
+**/
+export const drawSvg = (widget, cr, width, height, gfile) => {
+
+    // Create an Rsvg handle
+    const rsvgHandle = Rsvg.Handle.new_from_gfile_sync(gfile, 0, null);
+
+    // const width = widget.get_allocated_width();
+    // const height = widget.get_allocated_height();
+
+    // Set the viewport width and height
+    const viewport = new Rsvg.Rectangle({
+      x: 0,
+      y: 0,
+      width,
+      height,
+    });
+
+    // Render the SVG
+    return rsvgHandle.render_document(cr, viewport);
+  };

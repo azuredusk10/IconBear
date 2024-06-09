@@ -4,9 +4,10 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import GdkPixbuf from 'gi://GdkPixbuf';
 
+// import { Icon, Set } from './classes.js';
+import { Set } from './classes.js';
 import { Icon } from './Icon.js';
-import { drawSvg } from './drawSvg.js';
-import { estimateIconStyle } from './helperFunctions.js';
+import { estimateIconStyle, drawSvg } from './helperFunctions.js';
 
 // Set up async file methods
 Gio._promisify(Gio.File.prototype, 'create_async');
@@ -105,6 +106,98 @@ export const AllSetsStackView = GObject.registerClass({
   #initializeInstalledSetsFlowbox(){
     this._installed_sets_empty_state.visible = false;
 
+    // Clear the contents of the Flowbox
+
+    // Bind the model
+    const newModel = Gio.ListStore.new(Set);
+
+    console.log(this.installedSets[0].icons);
+
+    const testSet = new Set();
+
+    testSet.name = 'hello';
+    testSet.author = 'author',
+    testSet.icons = this.installedSets[0].icons,
+    testSet.id = 'hello-id';
+    testSet.iconsCount = 1000;
+
+    newModel.append(testSet)
+
+    this._installed_sets_flowbox.bind_model(newModel, (set) => {
+
+      // FlowBoxChild -> Box -> (FlowBox -> FlowBoxChild -> DrawingArea * 6), (Box -> (Box -> (Label, Label), Button))
+
+      const setTile = new Gtk.Box({
+        orientation: 1,
+        hexpand: true,
+      });
+
+      const setTilePreviewFlowBox = new Gtk.FlowBox({
+        sensitive: false,
+        minChildrenPerLine: 3,
+        maxChildrenPerLine: 6,
+      });
+
+      const previewModel = Gio.ListStore.new(Icon);
+
+      for (let i = 0; i < this.maxPreviewIcons && i < set.icons.get_n_items(); i++) {
+        const icon = set.icons.get_item(i);
+        previewModel.append(icon);
+      }
+
+      setTilePreviewFlowBox.bind_model(previewModel, (icon) => this._addPreviewItem(icon, this.iconPreviewSize));
+
+
+      const setLabel = new Gtk.Label({
+        label: set.name,
+        cssClasses: ['title-3'],
+        hexpand: true,
+        halign: 1,
+      });
+
+      const setIconCount = new Gtk.Label({
+        label: set.iconsCount.toString(),
+        opacity: 0.7,
+        halign: 1,
+      });
+
+      const setTileTextBox = new Gtk.Box({
+        spacing: 2,
+        orientation: 1,
+      });
+
+      const setTileInfoRowBox = new Gtk.Box({
+        spacing: 8,
+        hexpand: true,
+        cssClasses: ['m-2'],
+      });
+
+      const setTileButton = new Gtk.Button({
+        iconName: "view-more-symbolic",
+        halign: 2,
+        valign: 3,
+      });
+
+      setTileTextBox.append(setLabel);
+      setTileTextBox.append(setIconCount);
+
+      setTileInfoRowBox.append(setTileTextBox);
+      setTileInfoRowBox.append(setTileButton);
+
+      setTile.append(setTilePreviewFlowBox);
+      setTile.append(setTileInfoRowBox);
+
+      const setFlowBoxChild = new Gtk.FlowBoxChild({
+        child: setTile,
+        name: set.name,
+        cssClasses: ['card', 'activatable'],
+      });
+
+      return setFlowBoxChild;
+
+    });
+
+    /*
     let i = 0;
 
     this.installedSets.forEach(set => {
@@ -182,6 +275,7 @@ export const AllSetsStackView = GObject.registerClass({
 
       i++;
     });
+    */
 
   }
 

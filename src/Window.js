@@ -249,18 +249,8 @@ export const Window = GObject.registerClass({
         // Add the loaded icons into the list store
         set.icons.splice(0, 0, iconsArray);
 
-        // When installing a default set, the set's meta info and the first maxPreviewIcons are already in the set object by this point for some reason. When that is the case, update the existing set's ListStore of icons rather than creating a 2nd copy of the set.
-        const existingSet = this.sets.find((object) => {
-          return object.name === set.name;
-        });
-        if(existingSet){
-          console.log('set with name ' + set.name + 'already exists. Updating icon ListStore instead');
-          existingSet.icons = set.icons;
-        } else {
-          this.sets.push(set);
-        }
+        this.sets.push(set);
 
-        this.sets.forEach(set => console.log('n_items in ' + set.name + ': ' + set.icons.n_items));
         this.notify('sets');
 
 

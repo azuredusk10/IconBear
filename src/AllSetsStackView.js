@@ -509,9 +509,6 @@ export const AllSetsStackView = GObject.registerClass({
     }
 
     try {
-      // console.log(set);
-
-      this.installedSets.push(set);
 
       this.emit('set-added', set.id);
     } catch(e) {

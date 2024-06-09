@@ -89,15 +89,7 @@ export const IconSetStackView = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       0, 100000,
       1234
-    ),
-    maxPreviewIcons: GObject.ParamSpec.int(
-      'maxPreviewIcons',
-      'Max Preview Icons',
-      'The maximum number of items to show when previewing a set',
-      GObject.ParamFlags.READWRITE,
-      0, 100,
-      12
-    ),
+    )
   },
   InternalChildren: ['main_panel', 'toast_overlay', 'details_panel'],
 }, class extends Gtk.Widget {
@@ -126,7 +118,7 @@ export const IconSetStackView = GObject.registerClass({
   }
 
   // Load all icons in the set
-  loadAllIcons(){
+  checkSetIsComplete(){
 
     /*
     // Open the icon bundle resource Dir

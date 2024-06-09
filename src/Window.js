@@ -165,6 +165,8 @@ export const Window = GObject.registerClass({
   * @return {string} setName - the name of the set, as defined in its meta.json file
   **/
   async #loadSet(folderName){
+    console.log('running #loadset for folderName: ' + folderName);
+
     const dataDir = GLib.get_user_data_dir();
     const folderPath = GLib.build_filenamev([dataDir, folderName]);
     const metaFile = Gio.File.new_for_path(GLib.build_filenamev([folderPath, 'meta.json']));
@@ -214,6 +216,8 @@ export const Window = GObject.registerClass({
 
           // TODO: When specified by a parameter, only load the number of icons needed to populate the set preview tile for the "All sets" view
           // Loads all icons in the set
+
+
           if(i < set.iconsCount){
 
             // Create the Gio.File for this icon and get its file info
@@ -234,6 +238,8 @@ export const Window = GObject.registerClass({
             });
 
             iconsArray.push(newIcon);
+
+            // console.log(newIcon.label);
           }
 
           i++;
@@ -243,8 +249,20 @@ export const Window = GObject.registerClass({
         // Add the loaded icons into the list store
         set.icons.splice(0, 0, iconsArray);
 
+        // When installing a default set, the set's meta info and the first maxPreviewIcons are already in the set object by this point for some reason. When that is the case, update the existing set's ListStore of icons rather than creating a 2nd copy of the set.
+        const existingSet = this.sets.find((object) => {
+          return object.name === set.name;
+        });
+        if(existingSet){
+          console.log('set with name ' + set.name + 'already exists. Updating icon ListStore instead');
+          existingSet.icons = set.icons;
+        } else {
+          this.sets.push(set);
+        }
 
-        this.sets.push(set);
+        this.sets.forEach(set => console.log('n_items in ' + set.name + ': ' + set.icons.n_items));
+        this.notify('sets');
+
 
         return set.name;
 
@@ -274,10 +292,15 @@ export const Window = GObject.registerClass({
   * @params {string} setName - the name of the icon set that the new StackPage will display. Used to look up the corresponding set in the "set" property.
   **/
   #createSetStackPage(setName){
-    // Create a copy of the preview icon set list store to pass into the IconSetStackView
-      /*
-      // Doesn't seem necessary any more
 
+    const set = this.sets.find((object) => {
+      return object.name === setName;
+    });
+
+    // Create a copy of the preview icon set list store to pass into the IconSetStackView
+
+      // Doesn't seem necessary any more
+      /*
       const copiedIconsListStore = new Gio.ListStore();
 
       const sourceIconsListStoreCount = set.icons.n_items;
@@ -292,9 +315,7 @@ export const Window = GObject.registerClass({
       }
       */
 
-      const set = this.sets.find((object) => {
-          return object.name === setName;
-      });
+      console.log('icons in set: ' + set.icons.n_items);
 
       // Create the composite widget child of the StackPage
       const stackPageChild = new IconSetStackView({
@@ -402,7 +423,7 @@ export const Window = GObject.registerClass({
 	    this.searchPlaceholderText = 'Search icons in this set';
 
 	    const visiblePage = stack.get_visible_child();
-	    visiblePage.loadAllIcons();
+	    //visiblePage.loadAllIcons();
 	  }
 
 	}

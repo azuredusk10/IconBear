@@ -264,7 +264,7 @@ export const AllSetsStackView = GObject.registerClass({
             style: 1,
           });
 
-          console.log(icon.label);
+          // console.log(icon.label);
           iconsArray.push(icon);
 
           i++;
@@ -289,7 +289,7 @@ export const AllSetsStackView = GObject.registerClass({
       let setIsInstalled = false;
 
       this.installedSets.filter((entry) => {
-        console.log(entry.name, set.name);
+        // console.log(entry.name, set.name);
         if(entry.name === set.name){
           setIsInstalled = true;
         }
@@ -466,7 +466,7 @@ export const AllSetsStackView = GObject.registerClass({
           style,
         };
 
-        console.log(iconMeta.style);
+        // console.log(iconMeta.style);
         setMeta.icons.push(iconMeta);
 
         setMeta.iconCount++;
@@ -509,7 +509,7 @@ export const AllSetsStackView = GObject.registerClass({
     }
 
     try {
-      console.log(set);
+      // console.log(set);
 
       this.installedSets.push(set);
 

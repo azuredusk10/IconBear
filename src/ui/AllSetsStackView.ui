@@ -173,5 +173,6 @@
         </child>
       </object>
     </child>
+
   </template>
 </interface>

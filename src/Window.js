@@ -129,6 +129,14 @@ export const Window = GObject.registerClass({
     openAction.connect('activate', () => this.#importSet());
     this.add_action(openAction);
 
+    // Delete an icon set
+    const deleteSetAction = new Gio.SimpleAction({
+      name: 'delete_set',
+      parameterType: new GLib.VariantType('s')
+    });
+    deleteSetAction.connect('activate', (action, parameter) => this.#deleteSet(parameter));
+    this.add_action(deleteSetAction);
+
   }
 
 
@@ -445,6 +453,15 @@ export const Window = GObject.registerClass({
     }
 
     return true;
+  }
+
+  /**
+  * Deletes a set folder from the user's data directory and removes it from the application
+  * @param {GLib.Variant} gVariantSetName - the name of the set to be deleted, stored in a GLib.Variant of type string
+  **/
+  #deleteSet(gVariantSetName){
+    const setName = gVariantSetName.get_string()[0];
+    console.log('delete ' + setName);
   }
 
 });

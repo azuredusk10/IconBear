@@ -244,10 +244,14 @@ export const AllSetsStackView = GObject.registerClass({
         cssClasses: ['m-2'],
       });
 
-      const setTileButton = new Gtk.Button({
+      const overflowMenuModel = Gio.Menu.new();
+      overflowMenuModel.append('Delete set', 'win.delete_set::' + set.name);
+
+      const setTileButton = new Gtk.MenuButton({
         iconName: "view-more-symbolic",
         halign: 2,
         valign: 3,
+        menuModel: overflowMenuModel,
       });
 
       setTileTextBox.append(setLabel);

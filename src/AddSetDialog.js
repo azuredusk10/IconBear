@@ -55,73 +55,77 @@ export const AddSetDialog = GObject.registerClass({
    * @param {Gio.File} folder - the user-selected folder containing the svg icons to import
    */
   async prepareImport(folder){
+    try {
+      // Open the dialog
+      this._add_set_dialog.present(this);
 
-     // Open the dialog
-    this._add_set_dialog.present(this);
+      // Update the 'folder' property
+      this.folder = folder;
+      this.notify('folder');
 
-    // Update the 'folder' property
-    this.folder = folder;
-    this.notify('folder');
+      // Clear the 'icons' property
+      this.icons = [];
+      this.notify('icons');
 
-    // Clear the 'icons' property
-    this.icons = [];
-    this.notify('icons');
+      // Populate the iconFiles ListStore
+      const iter = await folder.enumerate_children_async('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null);
 
-    // Populate the iconFiles ListStore
-    const iter = await folder.enumerate_children_async('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null);
-    const folderPath = folder.get_path();
-    const folderName = folder.get_basename();
+      const folderPath = folder.get_path();
+      const folderName = folder.get_basename();
 
-    console.log('folder name:', folderName );
-    let iconsCount = 0;
+      console.log('folder name:', folderName );
+      let iconsCount = 0;
 
-    for await (const info of iter) {
+      for await (const info of iter) {
 
-      if (info.get_content_type() === 'image/svg+xml') {
+        if (info.get_content_type() === 'image/svg+xml') {
 
-        const iconFilename = info.get_name();
-        const iconPath = folderPath + '/' + iconFilename;
+          const iconFilename = info.get_name();
+          const iconPath = folderPath + '/' + iconFilename;
 
-        // Determine the width and height of the icon
-        const pixbuf = GdkPixbuf.Pixbuf.new_from_file(iconPath);
-        const width = pixbuf.width;
-        const height = pixbuf.height;
+          // Determine the width and height of the icon
+          const pixbuf = GdkPixbuf.Pixbuf.new_from_file(iconPath);
+          const width = pixbuf.width;
+          const height = pixbuf.height;
 
-        // Load the contents of the SVG file
-        const gFile = Gio.File.new_for_path(iconPath);
-        //console.log(stringContents);
+          // Load the contents of the SVG file
+          const gFile = Gio.File.new_for_path(iconPath);
+          //console.log(stringContents);
 
-        const style = estimateIconStyle(gFile, folderName);
+          const style = estimateIconStyle(gFile, folderName);
 
-        //console.log('style', style);
-        // console.log('name', info.get_name());
+          //console.log('style', style);
+          // console.log('name', info.get_name());
 
 
-        const iconMeta = {
-          fileName: iconFilename,
-          width,
-          height,
-          style,
-        };
+          const iconMeta = {
+            fileName: iconFilename,
+            width,
+            height,
+            style,
+          };
 
-        //console.log(JSON.stringify(iconMeta));
+          //console.log(JSON.stringify(iconMeta));
 
-        // Push this to the icon store
-        this.icons.push(iconMeta);
+          // Push this to the icon store
+          this.icons.push(iconMeta);
 
-        iconsCount++;
+          iconsCount++;
+        }
       }
+
+      console.log('after for loop');
+
+      // Update the dialog header to state how many icons the folder contains
+      this._add_set_dialog.title = `Import ${iconsCount} icons`;
+      this.processing = false;
+      this._import_button.sensitive  = true;
+      this._spinner.visible = false;
+      this._form_wrapper.visible = true;
+
+    } catch(e) {
+      console.log('Error preparing for import: ' + e);
     }
-
-    console.log('after for loop');
-
-    // Update the dialog header to state how many icons the folder contains
-    this._add_set_dialog.title = `Import ${iconsCount} icons`;
-    this.processing = false;
-    this._import_button.sensitive  = true;
-    this._spinner.visible = false;
-    this._form_wrapper.visible = true;
-
 
   }
 

@@ -26,7 +26,18 @@
                 <object class="GtkSingleSelection" id="icons_selection">
                   <property name="model">
                     <object class="GtkFilterListModel" id="icons_filter_model">
-			                <property name="model" bind-source="IcoMainPanelView" bind-property="icons"/>
+			                <property name="model">
+                        <object class="GtkSortListModel">
+                          <property name="model" bind-source="IcoMainPanelView" bind-property="icons"/>
+                          <property name="sorter">
+		                        <object class="GtkStringSorter">
+			                        <property name="expression">
+				                        <lookup name="label" type="IcoIcon"/>
+			                        </property>
+		                        </object>
+	                        </property>
+                        </object>
+			                </property>
                     </object>
                   </property>
                   <property name="autoselect">false</property>

@@ -251,6 +251,7 @@ export const AllSetsStackView = GObject.registerClass({
         iconName: "view-more-symbolic",
         halign: 2,
         valign: 3,
+        cssClasses: ['flat'],
         menuModel: overflowMenuModel,
       });
 
@@ -442,7 +443,7 @@ export const AllSetsStackView = GObject.registerClass({
 
         const setTileButton = new Gtk.Button({
           label: "Install",
-          cssClasses: ['suggested-action'],
+          // cssClasses: ['suggested-action'],
           halign: 2,
           valign: 3,
         });

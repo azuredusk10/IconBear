@@ -12,21 +12,45 @@
         <child>
           <object class="GtkBox" id="all_sets_container">
             <property name="orientation">vertical</property>
-            <property name="orientation">vertical</property>
             <property name="margin-start">16</property>
             <property name="margin-end">16</property>
             <property name="margin-top">16</property>
             <property name="margin-bottom">16</property>
             <child>
-              <object class="GtkLabel">
-                <property name="label">My sets</property>
-                <property name="halign">1</property>
-                <style>
-                  <class name="title-1"/>
-                  <class name="mb-8"/>
-                </style>
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+                <property name="spacing">16</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label">My sets</property>
+                    <property name="halign">1</property>
+                    <property name="valign">1</property>
+                    <property name="hexpand">true</property>
+                    <style>
+                      <class name="title-1"/>
+                      <class name="mb-8"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="halign">2</property>
+                    <property name="valign">1</property>
+                    <property name="action-name">win.add_set</property>
+                    <style>
+                      <class name="suggested-action" />
+                    </style>
+                    <child>
+                      <object class="AdwButtonContent">
+                        <property name="label" translatable="true">Import icons</property>
+                        <property name="icon-name">list-add</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
+
             <child>
               <object class="GtkFrame" id="installed_sets_empty_state">
               <style>
@@ -87,6 +111,7 @@
                           <style>
 
                           </style>
+                          <!--
                           <child>
                             <object class="GtkBox">
                               <property name="orientation">vertical</property>
@@ -112,6 +137,7 @@
                               </child>
                             </object>
                           </child>
+                          -->
                         </object>
                       </property>
                     </object>

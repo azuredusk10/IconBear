@@ -65,25 +65,14 @@ export const AllSetsStackView = GObject.registerClass({
 }, class extends Gtk.Widget {
   constructor(params){
     super(params);
+  }
 
-    // May need to call this once the icon sets have been loaded in correctly via properties
-    this.connect('notify::installedSets', () => {
-      // Filter the icons whenever the parent list store changes and when it's been fully populated.
-
-      if(this.installedSets && this.installedSets[0]){
-
-        // The number of items in the list store property returns 0 until it's been fully populated.
-        // Once populated, filter it and bind the model.
-        if(this.installedSets[0].icons && this.installedSets[0].icons.get_n_items() > 0){
-          console.log('preview icons list store loaded')
-          this.#initializeInstalledSetsFlowbox();
-          this.#initializeDefaultSets();
-        }
-      }
-    });
-
-
-
+  /**
+  * Renders the flowboxes on the page. Called by Window.js once all sets have been loaded.
+  **/
+  loadView(){
+    this.#initializeInstalledSetsFlowbox();
+    this.#initializeDefaultSets();
   }
 
   // Create a new child of the set preview FlowBox
@@ -107,11 +96,11 @@ export const AllSetsStackView = GObject.registerClass({
     this._installed_sets_empty_state.visible = false;
 
     // Clear the contents of the Flowbox
+    this._installed_sets_flowbox.remove_all();
 
     // Bind the model
+    /*
     const newModel = Gio.ListStore.new(Set);
-
-    console.log(this.installedSets[0].icons);
 
     const testSet = new Set();
 
@@ -122,6 +111,14 @@ export const AllSetsStackView = GObject.registerClass({
     testSet.iconsCount = 1000;
 
     newModel.append(testSet)
+
+    // How to iterate over a ListStore:
+    const newModelLength = newModel.get_n_items();
+    let i = 0;
+    while (i < newModelLength){
+      console.log(newModel.get_item(i).name);
+      i++;
+    }
 
     this._installed_sets_flowbox.bind_model(newModel, (set) => {
 
@@ -196,9 +193,7 @@ export const AllSetsStackView = GObject.registerClass({
       return setFlowBoxChild;
 
     });
-
-    /*
-    let i = 0;
+    */
 
     this.installedSets.forEach(set => {
 
@@ -270,17 +265,18 @@ export const AllSetsStackView = GObject.registerClass({
         cssClasses: ['card', 'activatable'],
       });
 
-      // Explicitly set the position of the new FlowBoxChild so that the "Add more sets" CTA tile is always last.
-      this._installed_sets_flowbox.insert(setFlowBoxChild, i);
+      this._installed_sets_flowbox.append(setFlowBoxChild);
 
-      i++;
     });
-    */
+
 
   }
 
   #initializeDefaultSets(){
     this.defaultSets = [];
+
+    // Clear the contents of the flowbox
+    this._default_sets_flowbox.remove_all();
 
     // Load the resource files
     // Open the icon bundle resource Dir

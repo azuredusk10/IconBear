@@ -91,11 +91,13 @@ export const Window = GObject.registerClass({
     this._all_sets_view.connect('set-added', async (emittingObject, folderName) => {
       const setName = await this.#loadSet(folderName);
       this.#createSetStackPage(setName);
+      this._all_sets_view.loadView();
     });
 
      this._add_set_dialog_widget.connect('set-added', async (emittingObject, folderName) => {
       const setName = await this.#loadSet(folderName);
       this.#createSetStackPage(setName);
+      this._all_sets_view.loadView();
     });
   }
 
@@ -152,6 +154,10 @@ export const Window = GObject.registerClass({
 
         }
       }
+
+      // Then load the "My sets" view
+      this._all_sets_view.loadView();
+
     } catch(e) {
       console.log('Error loading sets: ' + e);
       return false;

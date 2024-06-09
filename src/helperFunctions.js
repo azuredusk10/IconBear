@@ -10,6 +10,9 @@ export const estimateIconStyle = (gFile, folderName = '') => {
   const [, contents] = gFile.load_contents(null);
   const stringContents = new TextDecoder().decode(contents);
 
+  // Get the filename and remove .svg to get the icon name.
+  const iconName = gFile.get_basename().replace(/\.[^/.]+$/, "");
+
   // Try guessing the icon's style from the name of its parent folder
   const outlineFolderMatches = folderName.match(/outline/i) || [];
   const filledFolderMatches = folderName.match(/fill|solid/i) || [];
@@ -23,7 +26,40 @@ export const estimateIconStyle = (gFile, folderName = '') => {
     return 3;
   }
 
-  // If the icon style can't be determined by its parent folder name, then try guessing the icon's style from its SVG attributes
+  // Otherwise, check how many colours it has to check if it's duotone or color.
+  const uniqueColors = countUniqueColorsFromString(stringContents);
+
+  if(uniqueColors > 2){
+    // It has multiple colors, it's a color icon
+    return 4;
+
+  } else if(uniqueColors == 2){
+    // It has 2 colors, it's a duotone icon
+    return 3;
+  }
+
+  // Otherwise, check its name for "duotone" at the end.
+  // Some duotone icons use a single fill with multiple opacities, so just detecting the number of fills alone won't identify this type of duotone icon.
+  const duotoneFileMatches = iconName.match(/(duotone)$/i) || [];
+
+  if(duotoneFileMatches.length > 0){
+    return 3;
+  }
+
+  // Otherwise, check its name for "fill", "filled", or "solid" at the end.
+  const filledFileMatches = iconName.match(/(fill|filled|solid)$/i) || [];
+
+  if(filledFileMatches.length > 0){
+    return 2;
+  }
+
+
+  // If all else fails, assume it's an outline icon.
+  return 1;
+
+
+  /*
+  // Otherwise, try guessing the icon's style from its SVG attributes
   // Detect if a "stroke" attribute is present, but not if it's followed by "none"
   const strokeMatches = stringContents.match(/\bstroke=(?!"none")/g) || [];
   // console.log('stroke matches', strokeMatches.length);
@@ -54,8 +90,9 @@ export const estimateIconStyle = (gFile, folderName = '') => {
 
   }
 
-
   return 0;
+  */
+
 }
 
 const countUniqueColorsFromString = (str) => {

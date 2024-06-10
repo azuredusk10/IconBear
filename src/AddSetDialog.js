@@ -57,15 +57,15 @@ export const AddSetDialog = GObject.registerClass({
   onSelectFolder(){
 
     // Initialise folder scanning
-    this._stack.set_visible_child_name('processing');
+    //this._stack.set_visible_child_name('processing');
 
     // When complete, move onto import settings StackPage
-    /*
+
     this._header_bar.showTitle = true;
     this._add_set_dialog.title = "Import X icons";
     this._stack.set_visible_child_name('step2');
     this._back_button.visible = true;
-    */
+
   }
 
   onBackClicked(){

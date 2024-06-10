@@ -17,11 +17,18 @@
               <property name="show-title">false</property>
               <child type="start">
                 <object class="GtkButton" id="back_button">
-                  <property name="label">Back</property>
+                  <property name="icon-name">go-previous</property>
+                  <accessibility>
+                    <property name="label">Back</property>
+                  </accessibility>
                   <property name="visible">false</property>
                   <signal name="clicked" handler="onBackClicked"/>
+                  <style>
+                    <class name="flat" />
+                  </style>
                 </object>
               </child>
+              <!--
               <child type="end">
                 <object class="GtkButton" id="import_button">
                   <property name="label">Import</property>
@@ -33,6 +40,7 @@
                   </style>
                 </object>
               </child>
+              -->
             </object>
           </child>
           <child>
@@ -134,32 +142,49 @@
                       <property name="name">step2</property>
                       <property name="title">Import settings</property>
                       <property name="child">
-                        <object class="GtkListBox" id="form_wrapper">
-                          <property name="selection-mode">0</property>
-                          <style>
-                            <class name="boxed-list"/>
-                          </style>
+                        <object class="GtkBox">
+                          <property name="orientation">vertical</property>
                           <child>
-                            <object class="AdwComboRow">
-                              <property name="title" translatable="true">Set</property>
-                              <property name="subtitle" translatable="true"></property>
-                              <property name="model">
-                                <object class="GtkStringList" id="list">
-                                  <items>
-                                    <item>New set</item>
-                                    <item>Carbon</item>
-                                    <item>Phosphorus</item>
-                                    <item>Bootstrap Icons</item>
-                                    <item>Feather</item>
-                                  </items>
+                            <object class="GtkListBox" id="form_wrapper">
+                              <property name="selection-mode">0</property>
+                              <property name="valign">3</property>
+                              <style>
+                                <class name="boxed-list"/>
+                              </style>
+                              <child>
+                                <object class="AdwComboRow">
+                                  <property name="title" translatable="true">Set</property>
+                                  <property name="subtitle" translatable="true"></property>
+                                  <property name="model">
+                                    <object class="GtkStringList" id="list">
+                                      <items>
+                                        <item>New set</item>
+                                        <item>Carbon</item>
+                                        <item>Phosphorus</item>
+                                        <item>Bootstrap Icons</item>
+                                        <item>Feather</item>
+                                      </items>
+                                    </object>
+                                  </property>
                                 </object>
-                              </property>
+                              </child>
+                              <!-- TODO: Only show this entry row if "New set" (the first option) is selected -->
+                              <child>
+                                <object class="AdwEntryRow" id="new_set_name_entry">
+                                  <property name="title" translatable="true">New set name</property>
+                                </object>
+                              </child>
                             </object>
                           </child>
-                          <!-- TODO: Only show this entry row if "New set" (the first option) is selected -->
                           <child>
-                            <object class="AdwEntryRow" id="new_set_name_entry">
-                              <property name="title" translatable="true">New set name</property>
+                            <object class="GtkButton" id="import_button">
+                              <property name="label" translatable="true">Import</property>
+                              <property name="halign">3</property>
+                              <style>
+                                <class name="pill" />
+                                <class name="suggested-action" />
+                                <class name="mt-8" />
+                              </style>
                             </object>
                           </child>
                         </object>

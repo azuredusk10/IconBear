@@ -15,8 +15,14 @@ Gio._promisify(Gio.File.prototype, 'create_async');
 export const AddSetDialog = GObject.registerClass({
   GTypeName: 'IcoAddSetDialog',
   Template: 'resource:///design/chris_wood/IconBear/ui/AddSetDialog.ui',
-  InternalChildren: ['add_set_dialog', 'new_set_name_entry', 'import_button', 'spinner', 'form_wrapper', 'completed_wrapper', 'stack', 'back_button', 'header_bar'],
+  InternalChildren: ['add_set_dialog', 'new_set_name_entry', 'import_button', 'spinner', 'form_wrapper', 'completed_wrapper', 'stack', 'back_button', 'header_bar', 'destination_set'],
   Properties: {
+    sets: GObject.ParamSpec.jsobject(
+      'sets',
+      'Sets',
+      'All icon sets',
+      GObject.ParamFlags.READWRITE
+	  ),
     folder: GObject.ParamSpec.object(
       'folder',
       'Folder',
@@ -48,6 +54,11 @@ export const AddSetDialog = GObject.registerClass({
   constructor(params){
     super(params);
 
+    // Listen for changes to destination_set AdwComboRow
+    this._destination_set.connect('notify::selected', () => this.onDestinationSetSelected());
+
+    // Update the values of the "Set" ComboRow whenever the sets property changes
+    this.connect('notify::sets', () => this.initializeDestinationSetComboRow());
   }
 
   openDialog(){
@@ -235,6 +246,37 @@ export const AddSetDialog = GObject.registerClass({
 
   onCancelClicked() {
     this._add_set_dialog.close();
+  }
+
+  onDestinationSetSelected(){
+    const selectedPosition = this._destination_set.selected;
+    const selectedItem = this._destination_set.selected_item.get_string();
+
+    // If "New set" has been selected, show the "New set name" entry
+    if(selectedPosition === 0){
+      this._new_set_name_entry.visible = true;
+    } else {
+      this._new_set_name_entry.visible = false;
+    }
+  }
+
+  /**
+  * Populates the "Set" combo box with a "New set" option and the names of user's installed sets.
+  **/
+  initializeDestinationSetComboRow() {
+    const model = Gio.ListStore.new(Gtk.StringObject);
+
+    const newOption = Gtk.StringObject.new('New set');
+    model.append(newOption);
+
+    if(!this.sets) return;
+
+    this.sets.forEach(set => {
+      const setOption = Gtk.StringObject.new(set.name);
+      model.append(setOption);
+    });
+
+    this._destination_set.model = model;
   }
 
 });

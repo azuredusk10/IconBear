@@ -72,6 +72,7 @@
                       </child>
                       <child>
                         <object class="IcoAddSetDialog" id="add_set_dialog_widget">
+                            <property name="sets" bind-source="IcoWindow" bind-property="sets" bind-flags="sync-create"></property>
                         </object>
                       </child>
                     </object>

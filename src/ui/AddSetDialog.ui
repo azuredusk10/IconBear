@@ -28,19 +28,6 @@
                   </style>
                 </object>
               </child>
-              <!--
-              <child type="end">
-                <object class="GtkButton" id="import_button">
-                  <property name="label">Import</property>
-                  <property name="sensitive">false</property>
-                  <property name="visible">false</property>
-                  <signal name="clicked" handler="importSet" />
-                  <style>
-                    <class name="suggested-action"/>
-                  </style>
-                </object>
-              </child>
-              -->
             </object>
           </child>
           <child>
@@ -152,20 +139,9 @@
                                 <class name="boxed-list"/>
                               </style>
                               <child>
-                                <object class="AdwComboRow">
+                                <object class="AdwComboRow" id="destination_set">
                                   <property name="title" translatable="true">Set</property>
                                   <property name="subtitle" translatable="true"></property>
-                                  <property name="model">
-                                    <object class="GtkStringList" id="list">
-                                      <items>
-                                        <item>New set</item>
-                                        <item>Carbon</item>
-                                        <item>Phosphorus</item>
-                                        <item>Bootstrap Icons</item>
-                                        <item>Feather</item>
-                                      </items>
-                                    </object>
-                                  </property>
                                 </object>
                               </child>
                               <!-- TODO: Only show this entry row if "New set" (the first option) is selected -->

@@ -15,7 +15,7 @@ Gio._promisify(Gio.File.prototype, 'query_info_async');
 export const Window = GObject.registerClass({
 	GTypeName: 'IcoWindow',
 	Template: 'resource:///design/chris_wood/IconBear/ui/Window.ui',
-	InternalChildren: ['search_entry', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button', 'main_toolbar_view', 'main_header_bar', 'add_set_dialog_widget', 'all_sets_view'],
+	InternalChildren: ['search_entry', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button', 'main_toolbar_view', 'main_header_bar', 'add_set_dialog_widget', 'all_sets_view', 'search_controls_wrapper', 'import_button'],
 	Properties: {
 	  sets: GObject.ParamSpec.jsobject(
       'sets',
@@ -290,6 +290,9 @@ export const Window = GObject.registerClass({
     // Bind the visible stack page to a setting
     settings.bind('visible-page-name', this._main_stack, 'visible-child-name', Gio.SettingsBindFlags.DEFAULT)
 
+    // Set the header bar for the current stack view
+    this.onStackPageChange(this._main_stack);
+
   }
 
   /**
@@ -413,27 +416,23 @@ export const Window = GObject.registerClass({
 	  const visiblePageName = stack.visibleChildName;
 	  if(visiblePageName === 'all_sets'){
 
-	    // Visually hide the header bar
+	    // Show the header items relevant for the My Sets view
       this.sidebarButtonVisible = false;
       this._main_toolbar_view.topBarStyle = 0;
-      this._main_toolbar_view.extendContentToTopEdge = true;
-      this._main_header_bar.showTitle = false;
+      this._search_controls_wrapper.visible = false;
+      this._import_button.visible = true;
 
-      // TODO: Make this translateable
-      this.searchPlaceholderText = 'Search sets';
+      // this.searchPlaceholderText = 'Search sets';
 
 	  } else {
 
-	    // Show the header bar
+	    // Show the header items relevant for the single set view
 	    this.sidebarButtonVisible = true;
 	    this._main_toolbar_view.topBarStyle = 1;
-	    this._main_toolbar_view.extendContentToTopEdge = false;
-	    this._main_header_bar.showTitle = true;
+	    this._search_controls_wrapper.visible = true;
+	    this._import_button.visible = false;
 
 	    this.searchPlaceholderText = 'Search icons in this set';
-
-	    const visiblePage = stack.get_visible_child();
-	    //visiblePage.loadAllIcons();
 	  }
 
 	}

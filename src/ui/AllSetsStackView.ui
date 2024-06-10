@@ -32,22 +32,6 @@
                     </style>
                   </object>
                 </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="halign">2</property>
-                    <property name="valign">1</property>
-                    <property name="action-name">win.add_set</property>
-                    <style>
-                      <class name="suggested-action" />
-                    </style>
-                    <child>
-                      <object class="AdwButtonContent">
-                        <property name="label" translatable="true">Import icons</property>
-                        <property name="icon-name">list-add</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
               </object>
             </child>
 

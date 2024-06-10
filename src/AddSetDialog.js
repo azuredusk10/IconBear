@@ -68,6 +68,9 @@ export const AddSetDialog = GObject.registerClass({
 
   openDialog(){
     this._add_set_dialog.present(this);
+
+    this._header_bar.showStartTitleButtons = true;
+    this._header_bar.showEndTitleButtons = true;
   }
 
   onSelectFolder(){
@@ -103,12 +106,22 @@ export const AddSetDialog = GObject.registerClass({
       }
     }
 
-    // Make the entries insensitive, hide the button, and show the progress bar
+    // Change the UI to the "importing" state
+    // Make the entries insensitive
     this._new_set_name_entry.sensitive = false;
     this._destination_set.sensitive = false;
+
+    // Hide the buttons
     this._import_button.visible = false;
+    this._back_button.visible = false;
+
+    // Show the progress bar
     this._progress_bar.visible = true;
     this._progress_bar.fraction = 0;
+
+    // Hide the "Close" button
+    this._header_bar.showStartTitleButtons = false;
+    this._header_bar.showEndTitleButtons = false;
 
   }
 

@@ -15,7 +15,7 @@ Gio._promisify(Gio.File.prototype, 'create_async');
 export const AddSetDialog = GObject.registerClass({
   GTypeName: 'IcoAddSetDialog',
   Template: 'resource:///design/chris_wood/IconBear/ui/AddSetDialog.ui',
-  InternalChildren: ['add_set_dialog', 'new_set_name_entry', 'new_set_name_error', 'import_button', 'spinner', 'form_wrapper', 'completed_wrapper', 'stack', 'back_button', 'header_bar', 'destination_set'],
+  InternalChildren: ['add_set_dialog', 'new_set_name_entry', 'new_set_name_error', 'import_button', 'spinner', 'form_wrapper', 'completed_wrapper', 'stack', 'back_button', 'header_bar', 'destination_set', 'progress_bar'],
   Properties: {
     sets: GObject.ParamSpec.jsobject(
       'sets',
@@ -76,11 +76,15 @@ export const AddSetDialog = GObject.registerClass({
     //this._stack.set_visible_child_name('processing');
 
     // When complete, move onto import settings StackPage
+    this._stack.set_visible_child_name('step2');
 
     this._header_bar.showTitle = true;
     this._add_set_dialog.title = "Import X icons";
-    this._stack.set_visible_child_name('step2');
     this._back_button.visible = true;
+    this._new_set_name_entry.sensitive = true;
+    this._destination_set.sensitive = true;
+    this._import_button.visible = true;
+    this._progress_bar.visible = false;
 
   }
 
@@ -95,8 +99,17 @@ export const AddSetDialog = GObject.registerClass({
     if(this._destination_set.selected === 0) {
       if(this._new_set_name_entry.textLength < 1) {
         this._new_set_name_error.visible = true;
+        return;
       }
     }
+
+    // Make the entries insensitive, hide the button, and show the progress bar
+    this._new_set_name_entry.sensitive = false;
+    this._destination_set.sensitive = false;
+    this._import_button.visible = false;
+    this._progress_bar.visible = true;
+    this._progress_bar.fraction = 0;
+
   }
 
 

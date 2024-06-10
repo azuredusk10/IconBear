@@ -347,6 +347,7 @@ export const Window = GObject.registerClass({
 
   openImportDialog(){
     this._add_set_dialog_widget.openDialog();
+    this._add_set_dialog_widget._stack.set_visible_child_name('step1');
   }
 
   #importSet(folder = null) {

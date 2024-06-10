@@ -15,7 +15,7 @@ Gio._promisify(Gio.File.prototype, 'create_async');
 export const AddSetDialog = GObject.registerClass({
   GTypeName: 'IcoAddSetDialog',
   Template: 'resource:///design/chris_wood/IconBear/ui/AddSetDialog.ui',
-  InternalChildren: ['add_set_dialog', 'new_set_name_entry', 'import_button', 'spinner', 'form_wrapper', 'completed_wrapper'],
+  InternalChildren: ['add_set_dialog', 'new_set_name_entry', 'import_button', 'spinner', 'form_wrapper', 'completed_wrapper', 'stack', 'back_button', 'header_bar'],
   Properties: {
     folder: GObject.ParamSpec.object(
       'folder',
@@ -52,6 +52,26 @@ export const AddSetDialog = GObject.registerClass({
 
   openDialog(){
     this._add_set_dialog.present(this);
+  }
+
+  onSelectFolder(){
+
+    // Initialise folder scanning
+    this._stack.set_visible_child_name('processing');
+
+    // When complete, move onto import settings StackPage
+    /*
+    this._header_bar.showTitle = true;
+    this._add_set_dialog.title = "Import X icons";
+    this._stack.set_visible_child_name('step2');
+    this._back_button.visible = true;
+    */
+  }
+
+  onBackClicked(){
+    this._stack.set_visible_child_name('step1');
+    this._header_bar.showTitle = false;
+    this._back_button.visible = false;
   }
 
 

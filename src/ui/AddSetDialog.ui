@@ -11,15 +11,15 @@
       <child>
         <object class="AdwToolbarView">
           <child type="top">
-            <object class="AdwHeaderBar">
+            <object class="AdwHeaderBar" id="header_bar">
               <property name="show-start-title-buttons">true</property>
               <property name="show-end-title-buttons">true</property>
               <property name="show-title">false</property>
               <child type="start">
-                <object class="GtkButton" id="cancel_button">
-                  <property name="label">Cancel</property>
+                <object class="GtkButton" id="back_button">
+                  <property name="label">Back</property>
                   <property name="visible">false</property>
-                  <signal name="clicked" handler="onCancelClicked"/>
+                  <signal name="clicked" handler="onBackClicked"/>
                 </object>
               </child>
               <child type="end">
@@ -85,6 +85,7 @@
                             <object class="GtkButton">
                               <property name="label" translatable="true">Select folder</property>
                               <property name="halign">3</property>
+                              <signal name="clicked" handler="onSelectFolder" />
                               <style>
                                 <class name="pill"/>
                                 <class name="suggested-action"/>
@@ -98,16 +99,26 @@
                   <child>
                     <object class="GtkStackPage">
                       <property name="name">processing</property>
-                      <property name="title">Processing...</property>
+                      <property name="title">Processing</property>
                       <property name="child">
                         <object class="GtkBox">
-                          <style>
-                            <class name="mx-8"/>
-                            <class name="my-16"/>
-                          </style>
+                          <property name="orientation">vertical</property>
+                          <property name="valign">3</property>
                           <child>
                             <object class="GtkSpinner" id="spinner">
+                              <property name="halign">3</property>
+                              <property name="hexpand">true</property>
                               <property name="spinning">true</property>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="GtkLabel">
+                              <property name="label" translatable="true">Processing...</property>
+                              <property name="halign">3</property>
+                              <style>
+                                <class name="my-4"/>
+                                <class name="title-3"/>
+                              </style>
                             </object>
                           </child>
                         </object>

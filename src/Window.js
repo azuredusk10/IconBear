@@ -126,7 +126,8 @@ export const Window = GObject.registerClass({
 	#initializeActions(){
     // Add icons
     const openAction = new Gio.SimpleAction({name: 'add_set'});
-    openAction.connect('activate', () => this.#importSet());
+    // openAction.connect('activate', () => this.#importSet());
+    openAction.connect('activate', () => this.openImportDialog());
     this.add_action(openAction);
 
     // Delete an icon set
@@ -342,6 +343,10 @@ export const Window = GObject.registerClass({
 
       // Add the stack page
       this._main_stack.add_titled(stackPageChild, set.name, set.name);
+  }
+
+  openImportDialog(){
+    this._add_set_dialog_widget.openDialog();
   }
 
   #importSet(folder = null) {

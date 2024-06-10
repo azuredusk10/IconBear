@@ -50,6 +50,10 @@ export const AddSetDialog = GObject.registerClass({
 
   }
 
+  openDialog(){
+    this._add_set_dialog.present(this);
+  }
+
 
   /* Load a directory of icons for import. Called by Window.js to activate this widget.
    * @param {Gio.File} folder - the user-selected folder containing the svg icons to import

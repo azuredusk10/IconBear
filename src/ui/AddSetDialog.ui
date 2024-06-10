@@ -7,7 +7,189 @@
 			</object>
 		</property>
     <object class="AdwDialog" id="add_set_dialog">
-      <property name="title" translatable="true">Processing...</property>
+      <property name="title" translatable="true">Import icons</property>
+      <child type="top">
+        <object class="AdwHeaderBar">
+          <property name="show-start-title-buttons">true</property>
+          <property name="show-end-title-buttons">true</property>
+          <child type="start">
+            <object class="GtkButton" id="cancel_button">
+              <property name="label">Cancel</property>
+              <signal name="clicked" handler="onCancelClicked"/>
+            </object>
+          </child>
+          <child type="end">
+            <object class="GtkButton" id="import_button">
+              <property name="label">Import</property>
+              <property name="sensitive">false</property>
+              <property name="visible">false</property>
+              <signal name="clicked" handler="importSet" />
+              <style>
+                <class name="suggested-action"/>
+              </style>
+            </object>
+          </child>
+        </object>
+      </child>
+      <child>
+        <object class="AdwClamp">
+          <property name="maximum-size">600</property>
+          <property name="child">
+            <object class="GtkStack" id="stack">
+              <child>
+                <object class="GtkStackPage">
+                  <property name="name">step1</property>
+                  <property name="title">Select a folder</property>
+                  <property name="child">
+                    <object class="GtkBox">
+                      <property name="orientation">vertical</property>
+                      <child>
+                        <object class="GtkImage">
+                          <property name="icon-name">folder-symbolic</property>
+                          <style>
+                            <class name="mb-2"/>
+                          </style>
+                        </object>
+                      </child>
+                      <child>
+                        <object class="GtkLabel">
+                          <property name="label" translatable="true">Select a folder that has SVG icons inside it.</property>
+                          <style>
+                            <class name="mb-1"/>
+                          </style>
+                        </object>
+                      </child>
+                      <child>
+                        <object class="GtkLabel">
+                          <property name="label" translatable="true">IconBear will scan this folder and any sub-folders it contains for icons to import.</property>
+                          <style>
+                            <class name="mb-1"/>
+                          </style>
+                        </object>
+                      </child>
+                      <child>
+                        <object class="GtkButton">
+                          <property name="label" translatable="true">Select folder to import</property>
+                          <style>
+                            <class name="pill"/>
+                            <class name="suggested-action"/>
+                          </style>
+                        </object>
+                      </child>
+                    </object>
+                  </property>
+                </object>
+              </child>
+              <child>
+                <object class="GtkStackPage">
+                  <property name="name">processing</property>
+                  <property name="title">Processing...</property>
+                  <property name="child">
+                    <object class="GtkBox">
+                      <style>
+                        <class name="mx-8"/>
+                        <class name="my-16"/>
+                      </style>
+                      <child>
+                        <object class="GtkSpinner" id="spinner">
+                          <property name="spinning">true</property>
+                        </object>
+                      </child>
+                    </object>
+                  </property>
+                </object>
+              </child>
+              <child>
+                <object class="GtkStackPage">
+                  <property name="name">step2</property>
+                  <property name="title">Import settings</property>
+                  <property name="child">
+                    <object class="GtkListBox" id="form_wrapper">
+                      <property name="selection-mode">0</property>
+                      <style>
+                        <class name="boxed-list"/>
+                      </style>
+                      <child>
+                        <object class="AdwComboRow">
+                          <property name="title" translatable="true">Set</property>
+                          <property name="subtitle" translatable="true"></property>
+                          <property name="model">
+                            <object class="GtkStringList" id="list">
+                              <items>
+                                <item>New set</item>
+                                <item>Carbon</item>
+                                <item>Phosphorus</item>
+                                <item>Bootstrap Icons</item>
+                                <item>Feather</item>
+                              </items>
+                            </object>
+                          </property>
+                        </object>
+                      </child>
+                      <!-- TODO: Only show this entry row if "New set" (the first option) is selected -->
+                      <child>
+                        <object class="AdwEntryRow" id="new_set_name_entry">
+                          <property name="title" translatable="true">New set name</property>
+                        </object>
+                      </child>
+                    </object>
+                  </property>
+                </object>
+              </child>
+              <child>
+                <object class="GtkStackPage">
+                  <property name="name">success</property>
+                  <property name="title">Success</property>
+                  <property name="child">
+                    <object class="GtkBox" id="completed_wrapper">
+                      <property name="orientation">vertical</property>
+                      <child>
+                        <object class="GtkImage">
+                          <property name="icon-name">emblem-default-symbolic</property>
+                          <style>
+                            <class name="mb-2"/>
+                          </style>
+                        </object>
+                      </child>
+                      <child>
+                        <object class="GtkLabel">
+                          <property name="label" translatable="true">Icon set imported</property>
+                        </object>
+                      </child>
+                    </object>
+                  </property>
+                </object>
+              </child>
+              <child>
+                <object class="GtkStackPage">
+                  <property name="name">failure</property>
+                  <property name="title">Failure</property>
+                  <property name="child">
+                    <object class="GtkBox">
+                      <property name="orientation">vertical</property>
+                      <child>
+                        <object class="GtkImage">
+                          <property name="icon-name">computer-fail-symbolic</property>
+                          <style>
+                            <class name="mb-2"/>
+                          </style>
+                        </object>
+                      </child>
+                      <child>
+                        <object class="GtkLabel">
+                          <property name="label" translatable="true">Failed to import icon set</property>
+                        </object>
+                      </child>
+                    </object>
+                  </property>
+                </object>
+              </child>
+            </object>
+          </property>
+        </object>
+      </child>
+
+      <!--
       <child>
         <object class="AdwToolbarView">
           <child type="top">
@@ -70,8 +252,9 @@
                             </object>
                           </property>
                         </object>
-                      </child>
+                      </child> -->
                       <!-- TODO: Only show this entry row if "New set" (the first option) is selected -->
+                      <!--
                       <child>
                         <object class="AdwEntryRow" id="new_set_name_entry">
                           <property name="title" translatable="true">New set name</property>
@@ -103,7 +286,7 @@
             </object>
           </child>
         </object>
-      </child>
+      </child> -->
     </object>
   </template>
 </interface>

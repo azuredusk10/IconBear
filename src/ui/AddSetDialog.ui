@@ -131,6 +131,7 @@
                       <property name="child">
                         <object class="GtkBox">
                           <property name="orientation">vertical</property>
+                          <property name="valign">center</property>
                           <child>
                             <object class="GtkListBox" id="form_wrapper">
                               <property name="selection-mode">0</property>
@@ -144,7 +145,6 @@
                                   <property name="subtitle" translatable="true"></property>
                                 </object>
                               </child>
-                              <!-- TODO: Only show this entry row if "New set" (the first option) is selected -->
                               <child>
                                 <object class="AdwEntryRow" id="new_set_name_entry">
                                   <property name="title" translatable="true">New set name</property>
@@ -153,9 +153,21 @@
                             </object>
                           </child>
                           <child>
+                            <object class="GtkLabel" id="new_set_name_error">
+                              <property name="label" translatable="true">Enter a name for the new set</property>
+                              <property name="visible">false</property>
+                              <property name="halign">start</property>
+                              <style>
+                                <class name="error"/>
+                                <class name="mt-2"/>
+                              </style>
+                            </object>
+                          </child>
+                          <child>
                             <object class="GtkButton" id="import_button">
                               <property name="label" translatable="true">Import</property>
                               <property name="halign">3</property>
+                              <signal name="clicked" handler="onImportSet" />
                               <style>
                                 <class name="pill" />
                                 <class name="suggested-action" />

@@ -15,7 +15,7 @@ Gio._promisify(Gio.File.prototype, 'create_async');
 export const AddSetDialog = GObject.registerClass({
   GTypeName: 'IcoAddSetDialog',
   Template: 'resource:///design/chris_wood/IconBear/ui/AddSetDialog.ui',
-  InternalChildren: ['add_set_dialog', 'new_set_name_entry', 'import_button', 'spinner', 'form_wrapper', 'completed_wrapper', 'stack', 'back_button', 'header_bar', 'destination_set'],
+  InternalChildren: ['add_set_dialog', 'new_set_name_entry', 'new_set_name_error', 'import_button', 'spinner', 'form_wrapper', 'completed_wrapper', 'stack', 'back_button', 'header_bar', 'destination_set'],
   Properties: {
     sets: GObject.ParamSpec.jsobject(
       'sets',
@@ -59,6 +59,11 @@ export const AddSetDialog = GObject.registerClass({
 
     // Update the values of the "Set" ComboRow whenever the sets property changes
     this.connect('notify::sets', () => this.initializeDestinationSetComboRow());
+
+    // Remove the error message when text is entered in the New Set Name field
+    this._new_set_name_entry.connect('notify::text', () => {
+      this._new_set_name_error.visible = false;
+    });
   }
 
   openDialog(){
@@ -83,6 +88,15 @@ export const AddSetDialog = GObject.registerClass({
     this._stack.set_visible_child_name('step1');
     this._header_bar.showTitle = false;
     this._back_button.visible = false;
+  }
+
+  onImportSet() {
+    // Check if the form entries are valid
+    if(this._destination_set.selected === 0) {
+      if(this._new_set_name_entry.textLength < 1) {
+        this._new_set_name_error.visible = true;
+      }
+    }
   }
 
 
@@ -257,6 +271,7 @@ export const AddSetDialog = GObject.registerClass({
       this._new_set_name_entry.visible = true;
     } else {
       this._new_set_name_entry.visible = false;
+      this._new_set_name_error.visible = false;
     }
   }
 

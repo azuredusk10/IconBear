@@ -87,7 +87,7 @@ export const AddSetDialog = GObject.registerClass({
     this._header_bar.showEndTitleButtons = true;
   }
 
-  onSelectFolder(){
+  async onSelectFolder(){
 
     // Prompt the user to select the folder of icons to import
     const fileDialog = new Gtk.FileDialog();
@@ -101,13 +101,18 @@ export const AddSetDialog = GObject.registerClass({
                  console.log(this.getFileName(folder));
 
                  // Initialise folder scanning
-                //this._stack.set_visible_child_name('processing');
+                 this._stack.set_visible_child_name('processing');
+                 try {
+                   await this.prepareImport(folder);
+                 } catch(e){
+                  console.log('Error preparing import: ' + e);
+                  return;
+                 }
 
                 // When complete, move onto import settings StackPage
                 this._stack.set_visible_child_name('step2');
 
                 this._header_bar.showTitle = true;
-                this._add_set_dialog.title = "Import X icons";
                 this._back_button.visible = true;
                 this._new_set_name_entry.sensitive = true;
                 this._destination_set.sensitive = true;
@@ -175,7 +180,7 @@ export const AddSetDialog = GObject.registerClass({
   async prepareImport(folder){
     try {
       // Open the dialog
-      this._add_set_dialog.present(this);
+      // this._add_set_dialog.present(this);
 
       // Update the 'folder' property
       this.folder = folder;
@@ -236,10 +241,6 @@ export const AddSetDialog = GObject.registerClass({
 
       // Update the dialog header to state how many icons the folder contains
       this._add_set_dialog.title = `Import ${iconsCount} icons`;
-      this.processing = false;
-      this._import_button.sensitive  = true;
-      this._spinner.visible = false;
-      this._form_wrapper.visible = true;
 
     } catch(e) {
       console.log('Error preparing for import: ' + e);

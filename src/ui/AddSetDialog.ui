@@ -207,7 +207,80 @@
                           </child>
                           <child>
                             <object class="GtkLabel">
-                              <property name="label" translatable="true">Icon set imported</property>
+                              <property name="label" translatable="true">Successfully imported all 243 icons</property>
+                              <style>
+                                <class name="title-3"/>
+                                <class name="mb-8"/>
+                              </style>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="GtkButton">
+                              <property name="label" translatable="true">Open set</property>
+                              <style>
+                                <class name="pill"/>
+                                <class name="suggested-action"/>
+                                <class name="mb-4"/>
+                              </style>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="GtkButton">
+                              <property name="label" translatable="true">Import more icons</property>
+                              <style>
+                                <class name="pill"/>
+                              </style>
+                            </object>
+                          </child>
+                        </object>
+                      </property>
+                    </object>
+                  </child>
+                  <child>
+                    <object class="GtkStackPage">
+                      <property name="name">partial-success</property>
+                      <property name="title">Partial success</property>
+                      <property name="child">
+                        <object class="GtkBox">
+                          <property name="orientation">vertical</property>
+                          <child>
+                            <object class="GtkImage">
+                              <property name="icon-name">emblem-default-symbolic</property>
+                              <style>
+                                <class name="mb-2"/>
+                              </style>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="GtkLabel">
+                              <property name="label" translatable="true">Imported 200 icons</property>
+                              <style>
+                                <class name="title-3"/>
+                                <class name="mb-4"/>
+                              </style>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="GtkLabel">
+                              <property name="label" translatable="true">43 icons were skipped</property>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="GtkButton">
+                              <property name="label" translatable="true">Open set</property>
+                              <style>
+                                <class name="pill"/>
+                                <class name="suggested-action"/>
+                                <class name="mb-4"/>
+                              </style>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="GtkButton">
+                              <property name="label" translatable="true">Import more icons</property>
+                              <style>
+                                <class name="pill"/>
+                              </style>
                             </object>
                           </child>
                         </object>
@@ -223,6 +296,42 @@
                           <property name="orientation">vertical</property>
                           <child>
                             <object class="GtkImage">
+                              <property name="icon-name">dialog-error</property>
+                              <style>
+                                <class name="mb-2"/>
+                              </style>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="GtkLabel">
+                              <property name="label" translatable="true">No icons were imported</property>
+                              <style>
+                                <class name="title-3"/>
+                                <class name="mb-4"/>
+                              </style>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="GtkButton">
+                              <property name="label" translatable="true">Start again</property>
+                              <style>
+                                <class name="pill"/>
+                              </style>
+                            </object>
+                          </child>
+                        </object>
+                      </property>
+                    </object>
+                  </child>
+                  <child>
+                    <object class="GtkStackPage">
+                      <property name="name">error</property>
+                      <property name="title">Error</property>
+                      <property name="child">
+                        <object class="GtkBox">
+                          <property name="orientation">vertical</property>
+                          <child>
+                            <object class="GtkImage">
                               <property name="icon-name">computer-fail-symbolic</property>
                               <style>
                                 <class name="mb-2"/>
@@ -231,7 +340,29 @@
                           </child>
                           <child>
                             <object class="GtkLabel">
-                              <property name="label" translatable="true">Failed to import icon set</property>
+                              <property name="label" translatable="true">There was an error during import</property>
+                              <style>
+                                <class name="title-3"/>
+                                <class name="mb-4"/>
+                              </style>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="GtkLabel" id="app_error_message">
+                              <property name="label" translatable="true">[Error message]</property>
+                              <property name="wrap">true</property>
+                              <property name="justify">center</property>
+                              <style>
+                                <class name="mb-8"/>
+                              </style>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="GtkButton">
+                              <property name="label" translatable="true">Start again</property>
+                              <style>
+                                <class name="pill"/>
+                              </style>
                             </object>
                           </child>
                         </object>

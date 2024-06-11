@@ -349,8 +349,7 @@ export const Window = GObject.registerClass({
   }
 
   openImportDialog(){
-    this._add_set_dialog_widget.openDialog();
-    this._add_set_dialog_widget._stack.set_visible_child_name('step1');
+    this._add_set_dialog_widget.openDialog(this);
   }
 
   #importSet(folder = null) {
@@ -366,33 +365,7 @@ export const Window = GObject.registerClass({
 
     // Create a new file selection dialog
     // const fileDialog = new Gtk.FileDialog({ default_filter: fileFilter });
-    const fileDialog = new Gtk.FileDialog();
 
-   // Open the dialog and handle user's selection
-   fileDialog.select_folder(this, null, async (self, result) => {
-      try {
-         const folder = self.select_folder_finish(result);
-
-         if (folder) {
-               //console.log(this.getFileName(folder));
-
-               // Pass the GFile object containing the folder to the AddSetDialog widget, which will trigger it to open and process the folder via its setter function
-               this._add_set_dialog_widget.prepareImport(folder);
-
-         }
-      } catch(_) {
-         // user closed the dialog without selecting any file
-      }
-   });
-  }
-
-  getFileName(file) {
-    const info = file.query_info(
-      "standard::name",
-      Gio.FileQueryInfoFlags.NONE,
-      null,
-    );
-    return info.get_name();
   }
 
 	onSearchEntrySearchChanged() {

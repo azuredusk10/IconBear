@@ -43,7 +43,13 @@ export const AddSetDialog = GObject.registerClass({
       'Whether file operations are in progress',
       GObject.ParamFlags.READWRITE,
       true
-    )
+    ),
+    appWindow: GObject.ParamSpec.jsobject(
+      'appWindow',
+      'App Window',
+      'Reference to the parent application window',
+      GObject.ParamFlags.READWRITE
+	  ),
   },
   Signals: {
     'set-added': {
@@ -66,29 +72,66 @@ export const AddSetDialog = GObject.registerClass({
     });
   }
 
-  openDialog(){
+  /**
+  * Opens this dialog a the first step
+  * @param {Window} appWindow - an instance of the parent application window
+  **/
+  openDialog(appWindow){
     this._add_set_dialog.present(this);
+    this._appWindow = appWindow;
 
+    this._stack.set_visible_child_name('step1');
+
+    this._back_button.visible = false;
     this._header_bar.showStartTitleButtons = true;
     this._header_bar.showEndTitleButtons = true;
   }
 
   onSelectFolder(){
 
-    // Initialise folder scanning
-    //this._stack.set_visible_child_name('processing');
+    // Prompt the user to select the folder of icons to import
+    const fileDialog = new Gtk.FileDialog();
 
-    // When complete, move onto import settings StackPage
-    this._stack.set_visible_child_name('step2');
+     // Open the dialog and handle user's selection
+     fileDialog.select_folder(this._appWindow, null, async (self, result) => {
+        try {
+           const folder = self.select_folder_finish(result);
 
-    this._header_bar.showTitle = true;
-    this._add_set_dialog.title = "Import X icons";
-    this._back_button.visible = true;
-    this._new_set_name_entry.sensitive = true;
-    this._destination_set.sensitive = true;
-    this._import_button.visible = true;
-    this._progress_bar.visible = false;
+           if (folder) {
+                 console.log(this.getFileName(folder));
 
+                 // Initialise folder scanning
+                //this._stack.set_visible_child_name('processing');
+
+                // When complete, move onto import settings StackPage
+                this._stack.set_visible_child_name('step2');
+
+                this._header_bar.showTitle = true;
+                this._add_set_dialog.title = "Import X icons";
+                this._back_button.visible = true;
+                this._new_set_name_entry.sensitive = true;
+                this._destination_set.sensitive = true;
+                this._import_button.visible = true;
+                this._progress_bar.visible = false;
+
+           }
+        } catch(_) {
+           // user closed the dialog without selecting any file
+            console.log(_);
+           return;
+        }
+
+    });
+
+  }
+
+  getFileName(file) {
+    const info = file.query_info(
+      "standard::name",
+      Gio.FileQueryInfoFlags.NONE,
+      null,
+    );
+    return info.get_name();
   }
 
   onBackClicked(){

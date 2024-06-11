@@ -200,6 +200,7 @@
                           <child>
                             <object class="GtkImage">
                               <property name="icon-name">emblem-default-symbolic</property>
+                              <property name="icon-size">large</property>
                               <style>
                                 <class name="mb-2"/>
                               </style>
@@ -217,6 +218,7 @@
                           <child>
                             <object class="GtkButton">
                               <property name="label" translatable="true">Open set</property>
+                              <property name="halign">center</property>
                               <style>
                                 <class name="pill"/>
                                 <class name="suggested-action"/>
@@ -227,6 +229,7 @@
                           <child>
                             <object class="GtkButton">
                               <property name="label" translatable="true">Import more icons</property>
+                              <property name="halign">center</property>
                               <style>
                                 <class name="pill"/>
                               </style>
@@ -246,6 +249,7 @@
                           <child>
                             <object class="GtkImage">
                               <property name="icon-name">emblem-default-symbolic</property>
+                              <property name="icon-size">large</property>
                               <style>
                                 <class name="mb-2"/>
                               </style>
@@ -268,6 +272,7 @@
                           <child>
                             <object class="GtkButton">
                               <property name="label" translatable="true">Open set</property>
+                              <property name="halign">center</property>
                               <style>
                                 <class name="pill"/>
                                 <class name="suggested-action"/>
@@ -278,6 +283,7 @@
                           <child>
                             <object class="GtkButton">
                               <property name="label" translatable="true">Import more icons</property>
+                              <property name="halign">center</property>
                               <style>
                                 <class name="pill"/>
                               </style>
@@ -297,6 +303,7 @@
                           <child>
                             <object class="GtkImage">
                               <property name="icon-name">dialog-error</property>
+                              <property name="icon-size">large</property>
                               <style>
                                 <class name="mb-2"/>
                               </style>
@@ -314,6 +321,7 @@
                           <child>
                             <object class="GtkButton">
                               <property name="label" translatable="true">Start again</property>
+                              <property name="halign">center</property>
                               <style>
                                 <class name="pill"/>
                               </style>
@@ -333,6 +341,7 @@
                           <child>
                             <object class="GtkImage">
                               <property name="icon-name">computer-fail-symbolic</property>
+                              <property name="icon-size">large</property>
                               <style>
                                 <class name="mb-2"/>
                               </style>
@@ -360,6 +369,7 @@
                           <child>
                             <object class="GtkButton">
                               <property name="label" translatable="true">Start again</property>
+                              <property name="halign">center</property>
                               <style>
                                 <class name="pill"/>
                               </style>

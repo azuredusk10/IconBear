@@ -15,7 +15,7 @@ Gio._promisify(Gio.File.prototype, 'create_async');
 export const AddSetDialog = GObject.registerClass({
   GTypeName: 'IcoAddSetDialog',
   Template: 'resource:///design/chris_wood/IconBear/ui/AddSetDialog.ui',
-  InternalChildren: ['add_set_dialog', 'new_set_name_entry', 'new_set_name_error', 'import_button', 'spinner', 'form_wrapper', 'completed_wrapper', 'stack', 'back_button', 'header_bar', 'destination_set', 'progress_bar'],
+  InternalChildren: ['add_set_dialog', 'new_set_name_entry', 'new_set_name_error', 'import_button', 'spinner', 'form_wrapper', 'completed_wrapper', 'stack', 'back_button', 'header_bar', 'destination_set', 'progress_bar', 'app_error_message'],
   Properties: {
     sets: GObject.ParamSpec.jsobject(
       'sets',
@@ -91,6 +91,7 @@ export const AddSetDialog = GObject.registerClass({
 
     // Prompt the user to select the folder of icons to import
     const fileDialog = new Gtk.FileDialog();
+    let iconsCount = 0;
 
      // Open the dialog and handle user's selection
      fileDialog.select_folder(this._appWindow, null, async (self, result) => {
@@ -103,15 +104,23 @@ export const AddSetDialog = GObject.registerClass({
                  // Initialise folder scanning
                  this._stack.set_visible_child_name('processing');
                  try {
-                   await this.prepareImport(folder);
+                   iconsCount = await this.prepareImport(folder);
                  } catch(e){
                   console.log('Error preparing import: ' + e);
                   return;
                  }
 
+                 console.log(iconsCount);
+
+                 if (iconsCount === 0){
+                  // Throw an error
+                  this.onThrowError('No SVG icons were found. Make sure you selected the right folder');
+                  return;
+                 }
+
                 // When complete, move onto import settings StackPage
                 this._stack.set_visible_child_name('step2');
-
+                this._add_set_dialog.title = `Import ${iconsCount} icons`;
                 this._header_bar.showTitle = true;
                 this._back_button.visible = true;
                 this._new_set_name_entry.sensitive = true;
@@ -143,6 +152,15 @@ export const AddSetDialog = GObject.registerClass({
     this._stack.set_visible_child_name('step1');
     this._header_bar.showTitle = false;
     this._back_button.visible = false;
+  }
+
+  /**
+  * Displays the error state
+  * @param {string} message - the error message to display to the user
+  **/
+  onThrowError(message){
+    this._stack.set_visible_child_name('error');
+    this._app_error_message.label = message;
   }
 
   onImportSet() {
@@ -237,10 +255,7 @@ export const AddSetDialog = GObject.registerClass({
         }
       }
 
-      console.log('after for loop');
-
-      // Update the dialog header to state how many icons the folder contains
-      this._add_set_dialog.title = `Import ${iconsCount} icons`;
+      return iconsCount;
 
     } catch(e) {
       console.log('Error preparing for import: ' + e);

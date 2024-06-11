@@ -128,6 +128,35 @@ export const AddSetDialog = GObject.registerClass({
                 this._import_button.visible = true;
                 this._progress_bar.visible = false;
 
+                // Replace hyphens in the folder name with spaces and then capitalise each word.
+                const folderNameHyphensRemoved = this.getFileName(folder).replace(/-/g, ' ');
+                const words = folderNameHyphensRemoved.split(' ');
+                const capitalizedWords = words.map(word => word[0].toUpperCase() + word.slice(1).toLowerCase());
+                const suggestedSetName = capitalizedWords.join(' ');
+
+
+                const existingSet = this.sets.find((object) => {
+                  return object.name === suggestedSetName;
+                });
+
+                if(existingSet) {
+                  // If a set with this name exists, auto-select it from the "Set" ComboRow.
+                  const model = this._destination_set.model;
+                  let i=0;
+                  while(model.get_item(i)){
+                    if(model.get_item(i).get_string().toLowerCase() === suggestedSetName.toLowerCase()){
+                      this._destination_set.set_selected(i);
+                    }
+                    i++;
+                  }
+
+                } else {
+                  // If a set with this name doesn't exist, autofill the "New Set Name" field with this value.
+                  this._new_set_name_entry.text = capitalizedWords.join(' ');
+                }
+
+
+
            }
         } catch(_) {
            // user closed the dialog without selecting any file

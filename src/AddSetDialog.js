@@ -302,6 +302,9 @@ export const AddSetDialog = GObject.registerClass({
     try {
       // Show the "Completed" state
       this._stack.set_visible_child_name('success');
+      this._header_bar.showTitle = false;
+      this._header_bar.showStartTitleButtons = true;
+      this._header_bar.showEndTitleButtons = true;
       this._success_message.label = `Successfully imported all ${this.icons.length} icons`;
 
       // Tell Window.js that a new set was added
@@ -394,6 +397,8 @@ export const AddSetDialog = GObject.registerClass({
 
   onStartAgain(){
     this.onBackClicked();
+    this._back_button.visible = false;
+    this._new_set_name_entry.text = '';
   }
 
   onDestinationSetSelected(){

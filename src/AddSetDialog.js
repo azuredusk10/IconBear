@@ -106,7 +106,7 @@ export const AddSetDialog = GObject.registerClass({
                  try {
                    iconsCount = await this.prepareImport(folder);
                  } catch(e){
-                  console.log('Error preparing import: ' + e);
+                  this.throwError('Error preparing import: ' + e);
                   return;
                  }
 
@@ -114,7 +114,7 @@ export const AddSetDialog = GObject.registerClass({
 
                  if (iconsCount === 0){
                   // Throw an error
-                  this.onThrowError('No SVG icons were found. Make sure you selected the right folder');
+                  this.throwError('No SVG icons were found. Make sure you selected the right folder');
                   return;
                  }
 
@@ -187,7 +187,7 @@ export const AddSetDialog = GObject.registerClass({
   * Displays the error state
   * @param {string} message - the error message to display to the user
   **/
-  onThrowError(message){
+  throwError(message){
     this._stack.set_visible_child_name('error');
     this._app_error_message.label = message;
   }
@@ -217,6 +217,8 @@ export const AddSetDialog = GObject.registerClass({
     // Hide the "Close" button
     this._header_bar.showStartTitleButtons = false;
     this._header_bar.showEndTitleButtons = false;
+
+    // Begin the import process
 
   }
 
@@ -287,7 +289,7 @@ export const AddSetDialog = GObject.registerClass({
       return iconsCount;
 
     } catch(e) {
-      console.log('Error preparing for import: ' + e);
+      this.throwError('Error preparing for import: ' + e);
     }
 
   }
@@ -341,7 +343,7 @@ export const AddSetDialog = GObject.registerClass({
       const metaBytesWritten = await metaOutputStream.write_bytes_async(metaBytes,
       GLib.PRIORITY_DEFAULT, null, null);
     } catch(e) {
-      console.log('Error writing meta file: ' + e)
+      this.throwError('Error writing meta file: ' + e);
       return false;
     }
 
@@ -357,7 +359,7 @@ export const AddSetDialog = GObject.registerClass({
         console.log(`copied icon from ${this.folder.get_path()}/${icon.fileName} to ${targetPath}/${icon.fileName}`);
       }
     } catch(e) {
-      console.log('Error copying icon files: ' + e);
+      this.throwError('Error copying icon files: ' + e);
     }
 
 
@@ -374,6 +376,10 @@ export const AddSetDialog = GObject.registerClass({
 
   onCancelClicked() {
     this._add_set_dialog.close();
+  }
+
+  onStartAgain(){
+    this.onBackClicked();
   }
 
   onDestinationSetSelected(){

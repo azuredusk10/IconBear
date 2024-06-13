@@ -284,6 +284,7 @@
                             <object class="GtkButton">
                               <property name="label" translatable="true">Import more icons</property>
                               <property name="halign">center</property>
+                              <signal name="clicked" handler="onStartAgain"/>
                               <style>
                                 <class name="pill"/>
                               </style>
@@ -322,6 +323,7 @@
                             <object class="GtkButton">
                               <property name="label" translatable="true">Start again</property>
                               <property name="halign">center</property>
+                              <signal name="clicked" handler="onStartAgain"/>
                               <style>
                                 <class name="pill"/>
                               </style>
@@ -370,6 +372,7 @@
                             <object class="GtkButton">
                               <property name="label" translatable="true">Start again</property>
                               <property name="halign">center</property>
+                              <signal name="clicked" handler="onStartAgain"/>
                               <style>
                                 <class name="pill"/>
                               </style>

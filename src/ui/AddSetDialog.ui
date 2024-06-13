@@ -216,8 +216,8 @@
                             </object>
                           </child>
                           <child>
-                            <object class="GtkLabel">
-                              <property name="label" translatable="true">Successfully imported all 243 icons</property>
+                            <object class="GtkLabel" id="success_message">
+                              <property name="label">[Success message]</property>
                               <style>
                                 <class name="title-3"/>
                                 <class name="mb-8"/>

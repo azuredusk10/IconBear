@@ -16,7 +16,7 @@ Gio._promisify(Gio.File.prototype, 'copy_async');
 export const AddSetDialog = GObject.registerClass({
   GTypeName: 'IcoAddSetDialog',
   Template: 'resource:///design/chris_wood/IconBear/ui/AddSetDialog.ui',
-  InternalChildren: ['add_set_dialog', 'new_set_name_entry', 'new_set_name_error', 'import_button', 'spinner', 'form_wrapper', 'completed_wrapper', 'stack', 'back_button', 'header_bar', 'destination_set', 'import_spinner', 'app_error_message'],
+  InternalChildren: ['add_set_dialog', 'new_set_name_entry', 'new_set_name_error', 'import_button', 'spinner', 'form_wrapper', 'completed_wrapper', 'stack', 'back_button', 'header_bar', 'destination_set', 'import_spinner', 'app_error_message', 'success_message'],
   Properties: {
     sets: GObject.ParamSpec.jsobject(
       'sets',
@@ -281,9 +281,6 @@ export const AddSetDialog = GObject.registerClass({
     // Copy the icon files to the targetDir/icons
     try {
 
-      let i = 0;
-      const totalIcons = this.icons.length;
-
       for (const icon of this.icons) {
 
         // console.log('beginning copy of ' + this.folder.get_path() + '/' + icon.fileName + ' to ' + targetPath + '/icons/' + icon.fileName);
@@ -305,6 +302,7 @@ export const AddSetDialog = GObject.registerClass({
     try {
       // Show the "Completed" state
       this._stack.set_visible_child_name('success');
+      this._success_message.label = `Successfully imported all ${this.icons.length} icons`;
 
       // Tell Window.js that a new set was added
       this.emit('set-added', newSetId);

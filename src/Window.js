@@ -89,15 +89,23 @@ export const Window = GObject.registerClass({
     this.#initializeWindow();
 
     this._all_sets_view.connect('set-added', async (emittingObject, folderName) => {
-      const setName = await this.#loadSet(folderName);
-      this.#createSetStackPage(setName);
-      this._all_sets_view.loadView();
+      try {
+        const setName = await this.#loadSet(folderName);
+        this.#createSetStackPage(setName);
+        this._all_sets_view.loadView();
+      } catch(e) {
+        console.log('Error handling set-added signal: ' + e);
+      }
     });
 
      this._add_set_dialog_widget.connect('set-added', async (emittingObject, folderName) => {
-      const setName = await this.#loadSet(folderName);
-      this.#createSetStackPage(setName);
-      this._all_sets_view.loadView();
+      try {
+        const setName = await this.#loadSet(folderName);
+        this.#createSetStackPage(setName);
+        this._all_sets_view.loadView();
+      } catch(e){
+        console.log('Error handling set-added signal: ' + e);
+      }
     });
   }
 

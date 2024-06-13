@@ -176,14 +176,23 @@
                             </object>
                           </child>
                           <child>
-                            <object class="GtkProgressBar" id="progress_bar">
+                            <object class="GtkBox" id="import_spinner">
+                              <property name="halign">3</property>
+                              <property name="hexpand">true</property>
                               <property name="visible">false</property>
-                              <property name="fraction">0</property>
-                              <property name="halign">center</property>
                               <style>
-                                <class name="mt-16" />
-                                <class name="mb-6" />
+                                <class name="mt-8"/>
+                                <class name="mb-4"/>
                               </style>
+                              <child>
+                                <object class="GtkSpinner">
+                                  <property name="halign">3</property>
+                                  <property name="hexpand">true</property>
+                                  <property name="spinning">true</property>
+                                  <property name="width-request">30</property>
+                                  <property name="height-request">30</property>
+                                </object>
+                              </child>
                             </object>
                           </child>
                         </object>
@@ -219,6 +228,7 @@
                             <object class="GtkButton">
                               <property name="label" translatable="true">Open set</property>
                               <property name="halign">center</property>
+                              <signal name="clicked" handler="onOpenSet"/>
                               <style>
                                 <class name="pill"/>
                                 <class name="suggested-action"/>
@@ -230,6 +240,7 @@
                             <object class="GtkButton">
                               <property name="label" translatable="true">Import more icons</property>
                               <property name="halign">center</property>
+                              <signal name="clicked" handler="onStartAgain"/>
                               <style>
                                 <class name="pill"/>
                               </style>

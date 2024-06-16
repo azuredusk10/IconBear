@@ -11,7 +11,13 @@ template $IcoWindow: Adw.ApplicationWindow {
   default-width: 640;
   default-height: 480;
 
-  Adw.Breakpoint {}
+  Adw.Breakpoint {
+    condition ("max-width: 400sp")
+    setters {
+      split_view.collapsed: true;
+      button.visible: true;
+    }
+  }
 
   DropTarget {
     actions: copy;
@@ -36,6 +42,7 @@ template $IcoWindow: Adw.ApplicationWindow {
             icon-name: 'open-menu-symbolic';
             tooltip-text: _('Main Menu');
             primary: true;
+            menu-model: primary_menu;
           }
         }
 
@@ -128,6 +135,28 @@ template $IcoWindow: Adw.ApplicationWindow {
       };
     };
   };
+}
+
+menu primary_menu {
+  item {
+    label: _("_Add icon set");
+    action: "app.add-icon-set";
+  }
+
+  item {
+    label: _("_Preferences");
+    action: "app.preferences";
+  }
+
+  item {
+    label: _("_Keyboard Shortcuts");
+    action: "win.show-help-overlay";
+  }
+
+  item {
+    label: _("_About icon-bear");
+    action: "app.about";
+  }
 }
 
 Popover icon_filters_popover {

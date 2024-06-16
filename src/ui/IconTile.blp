@@ -43,8 +43,21 @@ template $IcoIconTile: Widget {
     }
 
     PopoverMenu icon_tile_popover_menu {
+      menu-model: icon_tile_menu;
       has-arrow: false;
       halign: start;
     }
+  }
+}
+
+menu icon_tile_menu {
+  item {
+    label: _("Copy as SVG");
+    action: "win.copy-icon";
+    target: "{'mimeType':'image/svg+xml','data':'image-data-goes-here'}";
+  }
+
+  item {
+    label: _("Copy as PNG");
   }
 }

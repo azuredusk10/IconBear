@@ -26,6 +26,13 @@ template $IcoMainPanelView: Widget {
         model: FilterListModel icons_filter_model {
           model: SortListModel {
             model: bind-property IcoMainPanelView.icons no-sync-create;
+            // <property name="sorter">
+            //   <object class="GtkStringSorter">
+            //     <property name="expression">
+            //       <lookup name="label" type="IcoIcon"/>
+            //     </property>
+            //   </object>
+            // </property>
           };
         };
 

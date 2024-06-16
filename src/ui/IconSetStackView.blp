@@ -7,27 +7,27 @@ template $IcoIconSetStackView: Widget {
   };
 
   Adw.OverlaySplitView {
-    show-sidebar: bind-property IcoIconSetStackView.sidebarVisible;
+    show-sidebar: bind template.sidebarVisible;
     sidebar-position: end;
     vexpand: true;
 
     content: Adw.ToastOverlay toast_overlay {
       $IcoMainPanelView main_panel {
         icon-activated => $onIconActivated();
-        icons: bind-property IcoIconSetStackView.icons;
-        setName: bind-property IcoIconSetStackView.setName;
-        iconsCount: bind-property IcoIconSetStackView.iconsCount;
-        searchEntryText: bind-property IcoIconSetStackView.searchEntryText;
+        icons: bind template.icons;
+        setName: bind template.setName;
+        iconsCount: bind template.iconsCount;
+        searchEntryText: bind template.searchEntryText;
       }
     };
 
     sidebar: $IcoDetailsPanel details_panel {
-      icon: bind-property IcoIconSetStackView.activeIcon;
-      setName: bind-property IcoIconSetStackView.setName;
-      setIconsCount: bind-property IcoIconSetStackView.iconsCount;
-      setLicense: bind-property IcoIconSetStackView.setLicense;
-      setAuthor: bind-property IcoIconSetStackView.setAuthor;
-      setWebsite: bind-property IcoIconSetStackView.setWebsite;
+      icon: bind template.activeIcon;
+      setName: bind template.setName;
+      setIconsCount: bind template.iconsCount;
+      setLicense: bind template.setLicense;
+      setAuthor: bind template.setAuthor;
+      setWebsite: bind template.setWebsite;
     };
   }
 

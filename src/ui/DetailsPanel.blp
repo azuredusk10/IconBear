@@ -7,7 +7,7 @@ template $IcoDetailsPanel: Widget {
   };
 
   Box {
-    visible: bind-property IcoDetailsPanel.iconIsSelected no-sync-create inverted;
+    visible: bind template.iconIsSelected no-sync-create inverted;
     orientation: vertical;
     vexpand: true;
 
@@ -35,7 +35,7 @@ template $IcoDetailsPanel: Widget {
         }
 
         Label {
-          label: bind-property IcoDetailsPanel.setName;
+          label: bind template.setName;
           halign: start;
 
           styles [
@@ -45,7 +45,7 @@ template $IcoDetailsPanel: Widget {
         }
 
         Label {
-          label: bind-property IcoDetailsPanel.setAuthor;
+          label: bind template.setAuthor;
           halign: start;
 
           styles [
@@ -54,7 +54,7 @@ template $IcoDetailsPanel: Widget {
         }
 
         Label {
-          label: bind-property IcoDetailsPanel.setLicense;
+          label: bind template.setLicense;
           halign: start;
 
           styles [
@@ -73,7 +73,7 @@ template $IcoDetailsPanel: Widget {
         LinkButton {
           halign: start;
           label: _('Visit website');
-          uri: bind-property IcoDetailsPanel.setWebsite;
+          uri: bind template.setWebsite;
 
           styles [
             "p-0",
@@ -84,7 +84,7 @@ template $IcoDetailsPanel: Widget {
   }
 
   Adw.ToolbarView {
-    visible: bind-property IcoDetailsPanel.iconIsSelected no-sync-create;
+    visible: bind template.iconIsSelected no-sync-create;
 
     content: ScrolledWindow {
       vexpand: true;
@@ -124,7 +124,7 @@ template $IcoDetailsPanel: Widget {
 
           Adw.ActionRow {
             title: _('Name');
-            subtitle: bind-property IcoDetailsPanel.iconLabel;
+            subtitle: bind template.iconLabel;
             subtitle-selectable: true;
 
             styles [
@@ -143,7 +143,7 @@ template $IcoDetailsPanel: Widget {
 
           Adw.ActionRow {
             title: _('Style');
-            subtitle: bind-property IcoDetailsPanel.iconStyle;
+            subtitle: bind template.iconStyle;
 
             styles [
               "property",

@@ -25,7 +25,7 @@ template $IcoMainPanelView: Widget {
       model: SingleSelection icons_selection {
         model: FilterListModel icons_filter_model {
           model: SortListModel {
-            model: bind-property IcoMainPanelView.icons no-sync-create;
+            model: bind template.icons no-sync-create;
             // <property name="sorter">
             //   <object class="GtkStringSorter">
             //     <property name="expression">

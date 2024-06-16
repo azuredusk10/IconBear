@@ -13,6 +13,7 @@ template $IcoWindow: Adw.ApplicationWindow {
 
   Adw.Breakpoint {
     condition ("max-width: 400sp")
+
     setters {
       split_view.collapsed: true;
       button.visible: true;
@@ -90,12 +91,12 @@ template $IcoWindow: Adw.ApplicationWindow {
               SearchEntry search_entry {
                 search-delay: 100;
                 hexpand: true;
-                placeholder-text: bind-property IcoWindow.searchPlaceholderText;
+                placeholder-text: bind template.searchPlaceholderText;
                 search-changed => $onSearchEntrySearchChanged();
               }
 
               MenuButton {
-                visible: bind-property IcoWindow.sidebarButtonVisible;
+                visible: bind template.sidebarButtonVisible;
                 icon-name: 'ico-funnel-outline-symbolic';
                 always-show-arrow: true;
                 tooltip-text: _('Filters');
@@ -106,10 +107,10 @@ template $IcoWindow: Adw.ApplicationWindow {
 
           [end]
           ToggleButton show_details_sidebar_button {
-            active: bind-property IcoWindow.sidebarVisible;
+            active: bind template.sidebarVisible;
             icon-name: 'sidebar-show-right-symbolic';
             tooltip-text: _('Toggle Icon Detail Sidebar');
-            visible: bind-property IcoWindow.sidebarButtonVisible;
+            visible: bind template.sidebarButtonVisible;
             toggled => $onDetailsSidebarToggled();
           }
         }
@@ -122,10 +123,10 @@ template $IcoWindow: Adw.ApplicationWindow {
             name: 'all_sets';
 
             child: $IcoAllSetsStackView all_sets_view {
-              searchEntryText: bind-property search_entry.text;
-              installedSets: bind-property IcoWindow.sets;
-              maxPreviewIcons: bind-property IcoWindow.maxPreviewIcons;
-              iconPreviewSize: bind-property IcoWindow.iconPreviewSize;
+              searchEntryText: bind search_entry.text;
+              installedSets: bind template.sets;
+              maxPreviewIcons: bind template.maxPreviewIcons;
+              iconPreviewSize: bind template.iconPreviewSize;
               set-activated => $onSetActivated();
             };
           }

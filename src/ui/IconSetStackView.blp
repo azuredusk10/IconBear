@@ -1,0 +1,40 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $IcoIconSetStackView: Widget {
+  layout-manager: BoxLayout {
+    orientation: vertical;
+  };
+
+  Adw.OverlaySplitView {
+    show-sidebar: bind template.sidebarVisible;
+    sidebar-position: end;
+    vexpand: true;
+
+    content: Adw.ToastOverlay toast_overlay {
+      $IcoMainPanelView main_panel {
+        icon-activated => $onIconActivated();
+        icons: bind template.icons;
+        setName: bind template.setName;
+        iconsCount: bind template.iconsCount;
+        searchEntryText: bind template.searchEntryText;
+      }
+    };
+
+    sidebar: $IcoDetailsPanel details_panel {
+      icon: bind template.activeIcon;
+      setName: bind template.setName;
+      setIconsCount: bind template.iconsCount;
+      setLicense: bind template.setLicense;
+      setAuthor: bind template.setAuthor;
+      setWebsite: bind template.setWebsite;
+    };
+  }
+
+  ShortcutController {
+    Shortcut {
+      trigger: '<Control>c';
+      action: 'action(set-view.copy)';
+    }
+  }
+}

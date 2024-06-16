@@ -1,0 +1,134 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $IcoAllSetsStackView: Widget {
+  layout-manager: BoxLayout {
+    orientation: vertical;
+  };
+
+  ScrolledWindow {
+    vexpand: true;
+
+    Box all_sets_container {
+      orientation: vertical;
+      margin-start: 16;
+      margin-end: 16;
+      margin-top: 16;
+      margin-bottom: 16;
+
+      Box {
+        orientation: horizontal;
+        spacing: 16;
+
+        Label {
+          label: 'My sets';
+          halign: start;
+          valign: start;
+          hexpand: true;
+
+          styles [
+            "title-1",
+            "mb-8",
+          ]
+        }
+
+        Button {
+          halign: end;
+          valign: start;
+          action-name: 'win.add_set';
+
+          styles [
+            "suggested-action",
+          ]
+
+          Adw.ButtonContent {
+            label: _('Import icons');
+            icon-name: 'list-add';
+          }
+        }
+      }
+
+      Frame installed_sets_empty_state {
+        styles [
+          "px-8",
+          "py-24",
+          "dropTargetFrame",
+        ]
+
+        child: Box {
+          orientation: vertical;
+          halign: center;
+          valign: center;
+
+          styles [
+          ]
+
+          Label {
+            label: _('Drag a folder of icons here to import them as a new set');
+
+            styles [
+              "heading-2",
+              "mb-8",
+            ]
+          }
+
+          Button {
+            label: _('Select a folder to import');
+            halign: center;
+            action-name: 'win.add_set';
+
+            styles [
+              "pill",
+            ]
+          }
+        };
+      }
+
+      FlowBox installed_sets_flowbox {
+        orientation: horizontal;
+        row-spacing: 16;
+        column-spacing: 16;
+        homogeneous: true;
+        max-children-per-line: 1;
+        min-children-per-line: 1;
+        selection-mode: single;
+        vexpand: false;
+
+        FlowBoxChild {
+          visible: true;
+          name: 'Import icons from a folder';
+
+          child: Box {
+            hexpand: true;
+            vexpand: true;
+
+            styles [
+            ]
+          };
+        }
+      }
+
+      Label {
+        label: 'Get more sets';
+        halign: start;
+
+        styles [
+          "title-2",
+          "mb-6",
+          "mt-16",
+        ]
+      }
+
+      FlowBox default_sets_flowbox {
+        orientation: horizontal;
+        row-spacing: 16;
+        column-spacing: 16;
+        homogeneous: true;
+        max-children-per-line: 1;
+        min-children-per-line: 1;
+        selection-mode: none;
+        vexpand: false;
+      }
+    }
+  }
+}

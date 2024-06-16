@@ -1,0 +1,44 @@
+using Gtk 4.0;
+
+template $IcoMainPanelView: Widget {
+  layout-manager: BoxLayout {
+    orientation: vertical;
+  };
+
+  ScrolledWindow {
+    hscrollbar-policy: never;
+    vexpand: true;
+
+    GridView icons_grid_view {
+      orientation: vertical;
+      max-columns: 12;
+      margin-start: 12;
+      margin-end: 12;
+      margin-top: 12;
+      margin-bottom: 12;
+      overflow: visible;
+
+      styles [
+        "iconsGridView",
+      ]
+
+      model: SingleSelection icons_selection {
+        model: FilterListModel icons_filter_model {
+          model: SortListModel {
+            model: bind template.icons no-sync-create;
+            // <property name="sorter">
+            //   <object class="GtkStringSorter">
+            //     <property name="expression">
+            //       <lookup name="label" type="IcoIcon"/>
+            //     </property>
+            //   </object>
+            // </property>
+          };
+        };
+
+        autoselect: false;
+        selection-changed => $onIconActivated();
+      };
+    }
+  }
+}

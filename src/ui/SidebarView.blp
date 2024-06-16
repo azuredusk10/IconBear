@@ -1,0 +1,20 @@
+using Gtk 4.0;
+
+template $IcoSidebarView: Widget {
+  layout-manager: BoxLayout {
+    orientation: vertical;
+  };
+
+  ScrolledWindow {
+    vexpand: true;
+
+    StackSidebar main_stack_sidebar {
+      vexpand: true;
+      valign: fill;
+
+      styles [
+        "mainStackSidebar",
+      ]
+    }
+  }
+}

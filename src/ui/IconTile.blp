@@ -1,0 +1,63 @@
+using Gtk 4.0;
+
+template $IcoIconTile: Widget {
+  layout-manager: BoxLayout {
+    orientation: vertical;
+  };
+
+  Box icon_box {
+    spacing: 4;
+    orientation: vertical;
+
+    styles [
+      "card",
+      "card--icon",
+      "activatable",
+    ]
+
+    Label icon_label {
+      label: bind IcoIconTile.label;
+      max-width-chars: 10;
+      width-chars: 10;
+      ellipsize: end;
+      width-request: 60;
+      hexpand: false;
+      margin-start: 4;
+      margin-end: 4;
+
+      styles [
+        "caption",
+        "opacity-7",
+        "icon-grid__label",
+      ]
+    }
+
+    GestureClick {
+      pressed => $onRightClick();
+      button: 3;
+    }
+
+    GestureClick {
+      button: 1;
+      pressed => $onLeftClick();
+    }
+
+    PopoverMenu icon_tile_popover_menu {
+      menu-model: icon_tile_menu;
+      has-arrow: false;
+      halign: start;
+    }
+  }
+}
+
+menu icon_tile_menu {
+  item {
+    label: _("Copy as SVG");
+    action: "win.copy-icon";
+    target: "{'mimeType':'image/svg+xml','data':'image-data-goes-here'}";
+  }
+
+  item {
+    label: _("Copy as PNG");
+  }
+}

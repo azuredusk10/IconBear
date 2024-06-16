@@ -1,0 +1,83 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $IcoAddSetDialog: Adw.Dialog {
+  title: _('Processing...');
+
+  Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {
+      show-start-title-buttons: false;
+      show-end-title-buttons: false;
+
+      [start]
+      Button cancel_button {
+        label: 'Cancel';
+        clicked => $onCancelClicked();
+      }
+
+      [end]
+      Button import_button {
+        label: 'Import';
+        sensitive: false;
+        clicked => $importSet();
+
+        styles [
+          "suggested-action",
+        ]
+      }
+    }
+
+    Adw.Clamp {
+      maximum-size: 600;
+
+      child: Box {
+        orientation: vertical;
+
+        styles [
+          "mx-8",
+          "my-16",
+        ]
+
+        Spinner spinner {
+          spinning: true;
+        }
+
+        ListBox form_wrapper {
+          visible: false;
+          selection-mode: none;
+
+          styles [
+            "boxed-list",
+          ]
+
+          Adw.ComboRow {
+            title: _('Set');
+            subtitle: _('');
+          }
+
+          Adw.EntryRow new_set_name_entry {
+            title: _('New set name');
+          }
+        }
+
+        Box completed_wrapper {
+          visible: false;
+          orientation: vertical;
+
+          Image {
+            icon-name: 'emblem-default-symbolic';
+
+            styles [
+              "mb-2",
+            ]
+          }
+
+          Label {
+            label: _('Icon set imported');
+          }
+        }
+      };
+    }
+  }
+}

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <interface>
-  <template class="IcoAddSetDialog">
+  <template class="IcoAddSetDialog" parent="GtkWidget">
     <property name="layout-manager">
 			<object class="GtkBoxLayout">
 				<property name="orientation">vertical</property>
@@ -58,8 +58,8 @@
                         <object class="AdwComboRow">
                           <property name="title" translatable="true">Set</property>
                           <property name="subtitle" translatable="true"></property>
-                          <property name="model">
-                            <object class="GtkStringList" id="list">
+                          <!-- <property name="model"> -->
+                            <!-- <object class="GtkStringList" id="list">
                               <items>
                                 <item>New set</item>
                                 <item>Carbon</item>
@@ -67,8 +67,8 @@
                                 <item>Bootstrap Icons</item>
                                 <item>Feather</item>
                               </items>
-                            </object>
-                          </property>
+                            </object> -->
+                          <!-- </property> -->
                         </object>
                       </child>
                       <!-- TODO: Only show this entry row if "New set" (the first option) is selected -->

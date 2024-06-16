@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <interface>
-  <template class="IcoMainPanelView">
+  <template class="IcoMainPanelView" parent="GtkWidget">
     <property name="layout-manager">
 			<object class="GtkBoxLayout">
 				<property name="orientation">vertical</property>
@@ -29,13 +29,13 @@
 			                <property name="model">
                         <object class="GtkSortListModel">
                           <property name="model" bind-source="IcoMainPanelView" bind-property="icons"/>
-                          <property name="sorter">
+                          <!-- <property name="sorter">
 		                        <object class="GtkStringSorter">
 			                        <property name="expression">
 				                        <lookup name="label" type="IcoIcon"/>
 			                        </property>
 		                        </object>
-	                        </property>
+	                        </property> -->
                         </object>
 			                </property>
                     </object>

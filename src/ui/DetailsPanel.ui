@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <interface>
-  <template class="IcoDetailsPanel">
+  <template class="IcoDetailsPanel" parent="GtkWidget">
     <property name="layout-manager">
 			<object class="GtkBoxLayout">
 				<property name="orientation">vertical</property>
@@ -352,7 +352,7 @@
       </object>
     </child>
 
-    <menu id="icon_details_copy_menu">
+    <!-- <menu id="icon_details_copy_menu">
       <section>
         <item>
           <attribute name="label">Copy as PNG</attribute>
@@ -371,7 +371,7 @@
           <attribute name="label">Export as JPG</attribute>
         </item>
       </section>
-    </menu>
+    </menu> -->
 
     <object class="GtkPopover" id="details_style_popover">
       <property name="has-arrow">true</property>

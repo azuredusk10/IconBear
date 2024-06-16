@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <interface>
-  <template class="IcoIconTile">
+  <template class="IcoIconTile" parent="GtkWidget">
     <property name="layout-manager">
 			<object class="GtkBoxLayout">
 				<property name="orientation">vertical</property>
@@ -46,14 +46,14 @@
         </child>
         <child>
           <object class="GtkPopoverMenu" id="icon_tile_popover_menu">
-            <property name="menu-model">icon_tile_menu</property>
+            <!-- <property name="menu-model">icon_tile_menu</property> -->
             <property name="has-arrow">false</property>
             <property name="halign">1</property>
           </object>
         </child>
       </object>
     </child>
-    <menu id="icon_tile_menu">
+    <!-- <menu id="icon_tile_menu">
       <item>
         <attribute name="label" translatable="true">Copy as SVG</attribute>
         <attribute name="action">win.copy-icon</attribute>
@@ -62,7 +62,7 @@
       <item>
         <attribute name="label" translatable="true">Copy as PNG</attribute>
       </item>
-    </menu>
+    </menu> -->
   </template>
 </interface>
         

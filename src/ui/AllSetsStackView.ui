@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <interface>
-  <template class="IcoAllSetsStackView">
+  <template class="IcoAllSetsStackView" parent="GtkWidget">
     <property name="layout-manager">
 			<object class="GtkBoxLayout">
 				<property name="orientation">vertical</property>
@@ -95,7 +95,7 @@
                 <property name="row-spacing">16</property>
                 <property name="column-spacing">16</property>
                 <property name="homogeneous">true</property>
-                <property name="max-children-per-line">-1</property>
+                <property name="max-children-per-line">1</property>
                 <property name="min-children-per-line">1</property>
                 <property name="selection-mode">single</property>
                 <property name="vexpand">0</property>
@@ -162,7 +162,7 @@
                 <property name="row-spacing">16</property>
                 <property name="column-spacing">16</property>
                 <property name="homogeneous">true</property>
-                <property name="max-children-per-line">-1</property>
+                <property name="max-children-per-line">1</property>
                 <property name="min-children-per-line">1</property>
                 <property name="selection-mode">none</property>
                 <property name="vexpand">0</property>

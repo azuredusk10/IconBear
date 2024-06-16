@@ -1,0 +1,40 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $IcoIconSetStackView: Widget {
+  layout-manager: BoxLayout {
+    orientation: vertical;
+  };
+
+  Adw.OverlaySplitView {
+    show-sidebar: bind-property IcoIconSetStackView.sidebarVisible;
+    sidebar-position: end;
+    vexpand: true;
+
+    content: Adw.ToastOverlay toast_overlay {
+      $IcoMainPanelView main_panel {
+        icon-activated => $onIconActivated();
+        icons: bind-property IcoIconSetStackView.icons;
+        setName: bind-property IcoIconSetStackView.setName;
+        iconsCount: bind-property IcoIconSetStackView.iconsCount;
+        searchEntryText: bind-property IcoIconSetStackView.searchEntryText;
+      }
+    };
+
+    sidebar: $IcoDetailsPanel details_panel {
+      icon: bind-property IcoIconSetStackView.activeIcon;
+      setName: bind-property IcoIconSetStackView.setName;
+      setIconsCount: bind-property IcoIconSetStackView.iconsCount;
+      setLicense: bind-property IcoIconSetStackView.setLicense;
+      setAuthor: bind-property IcoIconSetStackView.setAuthor;
+      setWebsite: bind-property IcoIconSetStackView.setWebsite;
+    };
+  }
+
+  ShortcutController {
+    Shortcut {
+      trigger: '<Control>c';
+      action: 'action(set-view.copy)';
+    }
+  }
+}

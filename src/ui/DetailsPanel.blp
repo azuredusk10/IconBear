@@ -1,0 +1,245 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $IcoDetailsPanel: Widget {
+  layout-manager: BoxLayout {
+    orientation: vertical;
+  };
+
+  Box {
+    visible: bind-property IcoDetailsPanel.iconIsSelected no-sync-create inverted;
+    orientation: vertical;
+    vexpand: true;
+
+    ScrolledWindow {
+      vexpand: true;
+      min-content-width: 250;
+      max-content-width: 300;
+
+      Box {
+        orientation: vertical;
+        margin-start: 16;
+        margin-end: 16;
+        margin-top: 16;
+        margin-bottom: 16;
+
+        Frame {
+          width-request: 172;
+          height-request: 172;
+          margin-bottom: 24;
+
+          Label {
+            label: _('Select an icon');
+            opacity: 0.7;
+          }
+        }
+
+        Label {
+          label: bind-property IcoDetailsPanel.setName;
+          halign: start;
+
+          styles [
+            "title-3",
+            "mb-1",
+          ]
+        }
+
+        Label {
+          label: bind-property IcoDetailsPanel.setAuthor;
+          halign: start;
+
+          styles [
+            "mb-1",
+          ]
+        }
+
+        Label {
+          label: bind-property IcoDetailsPanel.setLicense;
+          halign: start;
+
+          styles [
+            "mb-4",
+          ]
+        }
+
+        Label icons_count {
+          halign: start;
+
+          styles [
+            "mb-4",
+          ]
+        }
+
+        LinkButton {
+          halign: start;
+          label: _('Visit website');
+          uri: bind-property IcoDetailsPanel.setWebsite;
+
+          styles [
+            "p-0",
+          ]
+        }
+      }
+    }
+  }
+
+  Adw.ToolbarView {
+    visible: bind-property IcoDetailsPanel.iconIsSelected no-sync-create;
+
+    content: ScrolledWindow {
+      vexpand: true;
+      min-content-width: 250;
+      max-content-width: 300;
+
+      Box {
+        orientation: vertical;
+        margin-start: 16;
+        margin-end: 16;
+        margin-top: 16;
+        margin-bottom: 16;
+
+        Frame {
+          width-request: 172;
+          height-request: 172;
+          margin-bottom: 24;
+
+          DrawingArea preview_image {
+            margin-top: 24;
+            margin-bottom: 24;
+            margin-start: 24;
+            margin-end: 24;
+
+            styles [
+              "icon-grid__image",
+            ]
+          }
+        }
+
+        ListBox {
+          selection-mode: none;
+
+          styles [
+            "boxed-list",
+          ]
+
+          Adw.ActionRow {
+            title: _('Name');
+            subtitle: bind-property IcoDetailsPanel.iconLabel;
+            subtitle-selectable: true;
+
+            styles [
+              "property",
+            ]
+          }
+        }
+
+        ListBox {
+          selection-mode: none;
+          margin-top: 16;
+
+          styles [
+            "boxed-list",
+          ]
+
+          Adw.ActionRow {
+            title: _('Style');
+            subtitle: bind-property IcoDetailsPanel.iconStyle;
+
+            styles [
+              "property",
+            ]
+          }
+
+          Adw.ActionRow icon_size_row {
+            title: _('Original size (px)');
+            subtitle-selectable: true;
+
+            styles [
+              "property",
+            ]
+          }
+        }
+      }
+    };
+
+    [bottom]
+    Box {
+      orientation: vertical;
+
+      styles [
+        "toolbar",
+      ]
+
+      Box {
+        orientation: vertical;
+        spacing: 8;
+
+        styles [
+          "m-4",
+        ]
+
+        Button {
+          action-name: 'set-view.copy';
+
+          child: Adw.ButtonContent {
+            label: _('Copy as SVG');
+            icon-name: 'edit-copy-symbolic';
+          };
+
+          styles [
+            "suggested-action",
+          ]
+        }
+      }
+    }
+  }
+
+  Popover details_style_popover {
+    has-arrow: true;
+    name: 'details_style_popover';
+
+    child: Adw.Clamp {
+      hexpand: true;
+      maximum-size: 150;
+
+      Box {
+        orientation: vertical;
+
+        Label {
+          label: _('Style');
+          halign: start;
+
+          styles [
+            "mb-4",
+            "heading",
+          ]
+        }
+
+        CheckButton radio_style_not_set {
+          label: _('Not set');
+        }
+
+        CheckButton radio_style_outline {
+          label: _('Outline');
+          active: true;
+          group: radio_style_not_set;
+        }
+
+        CheckButton radio_style_fill {
+          label: _('Fill');
+          group: radio_style_not_set;
+        }
+
+        CheckButton radio_style_duotone {
+          label: _('Duotone');
+          group: radio_style_not_set;
+        }
+
+        CheckButton radio_style_color {
+          label: _('Color');
+          group: radio_style_not_set;
+        }
+      }
+    };
+  }
+}

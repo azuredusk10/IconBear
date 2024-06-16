@@ -1,0 +1,228 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $IcoWindow: Adw.ApplicationWindow {
+  styles [
+    "devel",
+  ]
+
+  width-request: 360;
+  height-request: 200;
+  default-width: 640;
+  default-height: 480;
+
+  Adw.Breakpoint {}
+
+  DropTarget {
+    actions: copy;
+    formats: 'GFile';
+    drop => $onDrop();
+  }
+
+  content: Adw.NavigationSplitView split_view {
+    max-sidebar-width: 240;
+
+    sidebar: Adw.NavigationPage {
+      title: _('Sets');
+      tag: 'sidebar';
+
+      child: Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar {
+          show-title: true;
+
+          [end]
+          MenuButton {
+            icon-name: 'open-menu-symbolic';
+            tooltip-text: _('Main Menu');
+            primary: true;
+          }
+        }
+
+        content: Box {
+          Box {
+            orientation: vertical;
+            hexpand: true;
+
+            Button button {
+              visible: false;
+              halign: center;
+              can-shrink: true;
+              label: _('Open Content');
+              action-name: 'navigation.push';
+              action-target: '\'content\'';
+
+              styles [
+                "pill",
+              ]
+            }
+
+            $IcoSidebarView sidebar_panel {
+              vexpand: 'true';
+            }
+
+            $IcoAddSetDialog add_set_dialog_widget {}
+          }
+        };
+      };
+    };
+
+    content: Adw.NavigationPage container {
+      title: _('Icon grid');
+      tag: 'icon_grid';
+
+      child: Adw.ToolbarView main_toolbar_view {
+        [top]
+        Adw.HeaderBar main_header_bar {
+          title-widget: Adw.Clamp {
+            hexpand: true;
+            maximum-size: 350;
+            tightening-threshold: 200;
+
+            Box {
+              spacing: 4;
+
+              SearchEntry search_entry {
+                search-delay: 100;
+                hexpand: true;
+                placeholder-text: bind-property IcoWindow.searchPlaceholderText;
+                search-changed => $onSearchEntrySearchChanged();
+              }
+
+              MenuButton {
+                visible: bind-property IcoWindow.sidebarButtonVisible;
+                icon-name: 'ico-funnel-outline-symbolic';
+                always-show-arrow: true;
+                tooltip-text: _('Filters');
+                popover: icon_filters_popover;
+              }
+            }
+          };
+
+          [end]
+          ToggleButton show_details_sidebar_button {
+            active: bind-property IcoWindow.sidebarVisible;
+            icon-name: 'sidebar-show-right-symbolic';
+            tooltip-text: _('Toggle Icon Detail Sidebar');
+            visible: bind-property IcoWindow.sidebarButtonVisible;
+            toggled => $onDetailsSidebarToggled();
+          }
+        }
+
+        content: Stack main_stack {
+          notify::visible-child-name => $onStackPageChange();
+
+          StackPage {
+            title: 'My sets';
+            name: 'all_sets';
+
+            child: $IcoAllSetsStackView all_sets_view {
+              searchEntryText: bind-property search_entry.text;
+              installedSets: bind-property IcoWindow.sets;
+              maxPreviewIcons: bind-property IcoWindow.maxPreviewIcons;
+              iconPreviewSize: bind-property IcoWindow.iconPreviewSize;
+              set-activated => $onSetActivated();
+            };
+          }
+        };
+      };
+    };
+  };
+}
+
+Popover icon_filters_popover {
+  has-arrow: true;
+  name: 'icon_filters_popover';
+
+  child: Adw.Clamp {
+    hexpand: true;
+    maximum-size: 150;
+
+    Box {
+      orientation: horizontal;
+      spacing: 24;
+
+      styles [
+        "py-2",
+        "px-4",
+      ]
+
+      Box {
+        orientation: vertical;
+
+        Label {
+          label: _('Style');
+          halign: start;
+
+          styles [
+            "mb-4",
+            "heading",
+          ]
+        }
+
+        CheckButton radio_all_styles {
+          active: true;
+          label: _('All styles');
+        }
+
+        CheckButton radio_outline {
+          label: _('Outline');
+          group: radio_all_styles;
+        }
+
+        CheckButton radio_fill {
+          label: _('Fill');
+          group: radio_all_styles;
+        }
+
+        CheckButton radio_duotone {
+          label: _('Duotone');
+          group: radio_all_styles;
+        }
+
+        CheckButton radio_color {
+          label: _('Color');
+          group: radio_all_styles;
+        }
+      }
+
+      Separator {
+        orientation: vertical;
+      }
+
+      Box {
+        orientation: vertical;
+
+        Label {
+          label: _('Size');
+          halign: start;
+
+          styles [
+            "heading",
+            "mb-4",
+          ]
+        }
+
+        CheckButton radio_all_sizes {
+          active: true;
+          label: _('All sizes');
+        }
+
+        CheckButton radio_test_size_1 {
+          label: _('16x16');
+          group: radio_all_sizes;
+        }
+
+        CheckButton radio_test_size_2 {
+          label: _('24x24');
+          group: radio_all_sizes;
+        }
+
+        CheckButton radio_test_size_3 {
+          label: _('32x32');
+          group: radio_all_sizes;
+        }
+      }
+    }
+  };
+}

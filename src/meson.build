@@ -1,6 +1,22 @@
 pkgdatadir = get_option('datadir') / meson.project_name()
 gnome = import('gnome')
 
+blueprints = custom_target('blueprints',
+  input: files(
+    'gtk/help-overlay.blp',
+    # 'ui/AddSetDialog.blp',
+    'ui/AllSetsStackView.blp',
+    'ui/DetailsPanel.blp',
+    'ui/IconSetStackView.blp',
+    'ui/IconTile.blp',
+    'ui/MainPanelView.blp',
+    'ui/SidebarView.blp',
+    # 'ui/Window.blp',
+  ),
+  output: '.',
+  command: [find_program('blueprint-compiler'), 'batch-compile', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@'],
+)
+
 src_res = gnome.compile_resources('design.chris_wood.IconBear.src',
   'design.chris_wood.IconBear.src.gresource.xml',
   gresource_bundle: true,
@@ -12,6 +28,7 @@ data_res = gnome.compile_resources('design.chris_wood.IconBear.data',
   'design.chris_wood.IconBear.data.gresource.xml',
   gresource_bundle: true,
   install: true,
+  dependencies: blueprints,
   install_dir: pkgdatadir,
 )
 

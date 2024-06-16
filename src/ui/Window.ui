@@ -12,9 +12,9 @@
     <property name="default-height">480</property>
     <child>
       <object class="AdwBreakpoint">
-        <condition>max-width: 400sp</condition>
-        <setter object="split_view" property="collapsed">true</setter>
-        <setter object="button" property="visible">true</setter>
+        <!-- <condition>max-width: 400sp</condition> -->
+        <!-- <setter object="split_view" property="collapsed">true</setter> -->
+        <!-- <setter object="button" property="visible">true</setter> -->
       </object>
     </child>
     <child>
@@ -41,7 +41,7 @@
                       <property name="icon-name">open-menu-symbolic</property>
                       <property name="tooltip-text" translatable="true">Main Menu</property>
                       <property name="primary">true</property>
-                      <property name="menu-model">primary_menu</property>
+                      <!-- <property name="menu-model">primary_menu</property> -->
                     </object>
                   </child>
                 </object>
@@ -172,7 +172,7 @@
 
     </property>
   </template>
-  <menu id="primary_menu">
+  <!-- <menu id="primary_menu">
     <section>
       <item>
         <attribute name="label" translatable="yes">_Add icon set</attribute>
@@ -191,7 +191,7 @@
         <attribute name="action">app.about</attribute>
       </item>
     </section>
-  </menu>
+  </menu> -->
   <object class="GtkPopover" id="icon_filters_popover">
     <property name="has-arrow">true</property>
     <property name="name">icon_filters_popover</property>

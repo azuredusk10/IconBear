@@ -4,7 +4,7 @@ gnome = import('gnome')
 blueprints = custom_target('blueprints',
   input: files(
     'gtk/help-overlay.blp',
-    # 'ui/AddSetDialog.blp',
+    'ui/AddSetDialog.blp',
     'ui/AllSetsStackView.blp',
     'ui/DetailsPanel.blp',
     'ui/IconSetStackView.blp',

@@ -15,7 +15,7 @@ Gio._promisify(Gio.File.prototype, 'create_async');
 export const AddSetDialog = GObject.registerClass({
   GTypeName: 'IcoAddSetDialog',
   Template: 'resource:///design/chris_wood/IconBear/ui/AddSetDialog.ui',
-  InternalChildren: ['add_set_dialog', 'new_set_name_entry', 'import_button', 'spinner', 'form_wrapper', 'completed_wrapper'],
+  InternalChildren: ['new_set_name_entry', 'import_button', 'spinner', 'form_wrapper', 'completed_wrapper'],
   Properties: {
     folder: GObject.ParamSpec.object(
       'folder',
@@ -44,7 +44,7 @@ export const AddSetDialog = GObject.registerClass({
       param_types: [GObject.TYPE_STRING]
     }
   },
-}, class extends Gtk.Widget {
+}, class extends Adw.Dialog {
   constructor(params){
     super(params);
 
@@ -54,10 +54,10 @@ export const AddSetDialog = GObject.registerClass({
   /* Load a directory of icons for import. Called by Window.js to activate this widget.
    * @param {Gio.File} folder - the user-selected folder containing the svg icons to import
    */
-  async prepareImport(folder){
+  async prepareImport(folder, window){
     try {
       // Open the dialog
-      this._add_set_dialog.present(this);
+      this.present(window);
 
       // Update the 'folder' property
       this.folder = folder;
@@ -117,7 +117,7 @@ export const AddSetDialog = GObject.registerClass({
       console.log('after for loop');
 
       // Update the dialog header to state how many icons the folder contains
-      this._add_set_dialog.title = `Import ${iconsCount} icons`;
+      this.title = `Import ${iconsCount} icons`;
       this.processing = false;
       this._import_button.sensitive  = true;
       this._spinner.visible = false;
@@ -210,7 +210,7 @@ export const AddSetDialog = GObject.registerClass({
   }
 
   onCancelClicked() {
-    this._add_set_dialog.close();
+    this.close();
   }
 
 });

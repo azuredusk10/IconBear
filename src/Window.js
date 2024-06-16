@@ -6,6 +6,7 @@ import GLib from 'gi://GLib';
 
 import { IconSetStackView } from './IconSetStackView.js';
 import { Icon } from './Icon.js';
+import { AddSetDialog } from './AddSetDialog.js';
 
 // Set up async file methods
 Gio._promisify(Gio.File.prototype, 'enumerate_children_async');
@@ -15,7 +16,7 @@ Gio._promisify(Gio.File.prototype, 'query_info_async');
 export const Window = GObject.registerClass({
 	GTypeName: 'IcoWindow',
 	Template: 'resource:///design/chris_wood/IconBear/ui/Window.ui',
-	InternalChildren: ['search_entry', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button', 'main_toolbar_view', 'main_header_bar', 'add_set_dialog_widget', 'all_sets_view'],
+	InternalChildren: ['search_entry', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button', 'main_toolbar_view', 'main_header_bar', 'all_sets_view'],
 	Properties: {
 	  sets: GObject.ParamSpec.jsobject(
       'sets',
@@ -93,6 +94,8 @@ export const Window = GObject.registerClass({
       this.#createSetStackPage(setName);
       this._all_sets_view.loadView();
     });
+
+    this._add_set_dialog_widget = new AddSetDialog();
 
      this._add_set_dialog_widget.connect('set-added', async (emittingObject, folderName) => {
       const setName = await this.#loadSet(folderName);
@@ -368,7 +371,7 @@ export const Window = GObject.registerClass({
                //console.log(this.getFileName(folder));
 
                // Pass the GFile object containing the folder to the AddSetDialog widget, which will trigger it to open and process the folder via its setter function
-               this._add_set_dialog_widget.prepareImport(folder);
+               this._add_set_dialog_widget.prepareImport(folder, this);
 
          }
       } catch(_) {

@@ -12,6 +12,7 @@ import { estimateIconStyle } from './helperFunctions.js';
 Gio._promisify(Gio.File.prototype, 'enumerate_children_async');
 Gio._promisify(Gio.File.prototype, 'create_async');
 Gio._promisify(Gio.File.prototype, 'copy_async');
+Gio._promisify(Gio.File.prototype, 'query_info_async');
 
 export const AddSetDialog = GObject.registerClass({
   GTypeName: 'IcoAddSetDialog',
@@ -288,12 +289,12 @@ export const AddSetDialog = GObject.registerClass({
 
         // console.log('beginning copy of ' + this.folder.get_path() + '/' + icon.fileName + ' to ' + targetPath + '/icons/' + icon.fileName);
 
-        const source = Gio.File.new_for_path(this.folder.get_path() + '/' + icon.fileName);
+        const source = Gio.File.new_for_path(icon.sourcePath);
         const target = Gio.File.new_for_path(targetPath + '/icons/' + icon.fileName);
 
         // console.log('About to copy');
 
-        source.copy_async(target, Gio.FileCopyFlags.NONE, GLib.PRIORITY_DEFAULT, null, null);
+        await source.copy_async(target, Gio.FileCopyFlags.NONE, GLib.PRIORITY_DEFAULT, null, null);
 
         // console.log(`copied icon from ${this.folder.get_path()}/${icon.fileName} to ${targetPath}/${icon.fileName}`);
 
@@ -336,33 +337,25 @@ export const AddSetDialog = GObject.registerClass({
       console.log('about to crawl');
       const svgArray = await this.crawlDirectoryForSVGs(folder);
       console.log('here come the svgs!');
-      console.log(svgArray);
+      // console.log(svgArray);
 
       // Populate the iconFiles ListStore
-      const iter = await folder.enumerate_children_async('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null);
+      let iconsCount = svgArray.length;
 
-      const folderPath = folder.get_path();
-      const folderName = folder.get_basename();
+      for (const iconPath of svgArray) {
 
-      console.log('folder name:', folderName );
-      console.log('folder path:', folder.get_path() );
-      let iconsCount = 0;
-
-      for await (const info of iter) {
+        const gFile = Gio.File.new_for_path(iconPath);
+        const info = await gFile.query_info_async('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null);
 
         if (info.get_content_type() === 'image/svg+xml') {
 
           const iconFilename = info.get_name();
-          const iconPath = folderPath + '/' + iconFilename;
+          const folderName = GLib.path_get_dirname(iconPath);
 
           // Determine the width and height of the icon
           const pixbuf = GdkPixbuf.Pixbuf.new_from_file(iconPath);
           const width = pixbuf.width;
           const height = pixbuf.height;
-
-          // Load the contents of the SVG file
-          const gFile = Gio.File.new_for_path(iconPath);
-          //console.log(stringContents);
 
           const style = estimateIconStyle(gFile, folderName);
 
@@ -372,6 +365,7 @@ export const AddSetDialog = GObject.registerClass({
 
           const iconMeta = {
             fileName: iconFilename,
+            sourcePath: iconPath,
             width,
             height,
             style,
@@ -409,8 +403,6 @@ export const AddSetDialog = GObject.registerClass({
         try {
           const enumerator = await rootDir.enumerate_children_async('standard::name,standard::type',
               Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null);
-
-              ('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null);
 
           for await (const fileInfo of enumerator) {
               console.log('crawl loop running');

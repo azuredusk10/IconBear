@@ -333,7 +333,10 @@ export const AddSetDialog = GObject.registerClass({
       this.icons = [];
       this.notify('icons');
 
-      crawlDirectoryForSVGs(folder);
+      console.log('about to crawl');
+      const svgArray = await this.crawlDirectoryForSVGs(folder);
+      console.log('here come the svgs!');
+      console.log(svgArray);
 
       // Populate the iconFiles ListStore
       const iter = await folder.enumerate_children_async('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null);
@@ -387,6 +390,7 @@ export const AddSetDialog = GObject.registerClass({
 
     } catch(e) {
       this.throwError('Error preparing for import: ' + e);
+      return 0;
     }
 
   }
@@ -396,28 +400,37 @@ export const AddSetDialog = GObject.registerClass({
   * @param {Gio.File} rootDir - the directory to scan
   * @return {[string]} - an array of filepaths to SVG files
   **/
-  crawlDirectoryForSVGs(rootDir) {
+  async crawlDirectoryForSVGs(rootDir) {
+    console.log('crawlDirectoryForSVGs running');
     const svgFiles = [];
 
-    function crawl(rootDir) {
-        const enumerator = dir.enumerate_children('standard::name,standard::type',
-            Gio.FileQueryInfoFlags.NONE, null);
+    async function crawl(rootDir) {
+        console.log('crawl running');
+        try {
+          const enumerator = await rootDir.enumerate_children_async('standard::name,standard::type',
+              Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null);
 
-        let fileInfo;
-        while ((fileInfo = enumerator.next_file(null)) !== null) {
-            const fileName = fileInfo.get_name();
-            const filePath = dir.get_child(fileName).get_path();
+              ('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null);
 
-            if (fileInfo.get_file_type() === Gio.FileType.DIRECTORY) {
-                const subdir = dir.get_child(fileName);
-                crawl(subdir);
-            } else if (fileName.toLowerCase().endsWith('.svg')) {
-                svgFiles.push(filePath);
-            }
-        }
+          for await (const fileInfo of enumerator) {
+              console.log('crawl loop running');
+              const fileName = fileInfo.get_name();
+              const filePath = rootDir.get_child(fileName).get_path();
+
+              if (fileInfo.get_file_type() === Gio.FileType.DIRECTORY) {
+                  const subdir = rootDir.get_child(fileName);
+                  await crawl(subdir);
+              } else if (fileName.toLowerCase().endsWith('.svg')) {
+                  svgFiles.push(filePath);
+              }
+          }
+      } catch(e){
+        this.throwError('Error crawling directory: ' + e);
+        return svgFiles;
+      }
     }
 
-    crawl(rootDir);
+    await crawl(rootDir);
 
     return svgFiles;
 }

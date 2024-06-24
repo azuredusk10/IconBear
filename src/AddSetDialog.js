@@ -191,6 +191,9 @@ export const AddSetDialog = GObject.registerClass({
   throwError(message){
     this._stack.set_visible_child_name('error');
     this._app_error_message.label = message;
+    this._header_bar.showStartTitleButtons = true;
+    this._header_bar.showEndTitleButtons = true;
+
   }
 
   async onImportSet() {
@@ -330,6 +333,8 @@ export const AddSetDialog = GObject.registerClass({
       this.icons = [];
       this.notify('icons');
 
+      crawlDirectoryForSVGs(folder);
+
       // Populate the iconFiles ListStore
       const iter = await folder.enumerate_children_async('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null);
 
@@ -386,6 +391,37 @@ export const AddSetDialog = GObject.registerClass({
 
   }
 
+  /**
+  * Recursively crawl a directory for SVG files
+  * @param {Gio.File} rootDir - the directory to scan
+  * @return {[string]} - an array of filepaths to SVG files
+  **/
+  crawlDirectoryForSVGs(rootDir) {
+    const svgFiles = [];
+
+    function crawl(rootDir) {
+        const enumerator = dir.enumerate_children('standard::name,standard::type',
+            Gio.FileQueryInfoFlags.NONE, null);
+
+        let fileInfo;
+        while ((fileInfo = enumerator.next_file(null)) !== null) {
+            const fileName = fileInfo.get_name();
+            const filePath = dir.get_child(fileName).get_path();
+
+            if (fileInfo.get_file_type() === Gio.FileType.DIRECTORY) {
+                const subdir = dir.get_child(fileName);
+                crawl(subdir);
+            } else if (fileName.toLowerCase().endsWith('.svg')) {
+                svgFiles.push(filePath);
+            }
+        }
+    }
+
+    crawl(rootDir);
+
+    return svgFiles;
+}
+
 
   onCancelClicked() {
     this._add_set_dialog.close();
@@ -434,3 +470,4 @@ export const AddSetDialog = GObject.registerClass({
   }
 
 });
+

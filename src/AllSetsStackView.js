@@ -595,7 +595,7 @@ export const AllSetsStackView = GObject.registerClass({
         const source = Gio.File.new_for_uri('resource://' + resourceDir + '/icons/' + icon.fileName);
         const target = Gio.File.new_for_path(targetPath + '/icons/' + icon.fileName);
 
-        await source.copy_async(target, Gio.FileCopyFlags.NONE, GLib.PRIORITY_DEFAULT, null, null, null);
+        await source.copy_async(target, Gio.FileCopyFlags.NONE, GLib.PRIORITY_DEFAULT, null, null, () => { return true});
 
         console.log(`copied icon from resource://${resourceDir}/icons/${icon.fileName} to ${targetPath}/icons/${icon.fileName}`);
       }

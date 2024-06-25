@@ -120,6 +120,13 @@
                               </style>
                             </object>
                           </child>
+                          <child>
+                            <object class="GtkProgressBar" id="prepare_import_progress">
+                              <property name="visible">false</property>
+                              <property name="margin-start">96</property>
+                              <property name="margin-end">96</property>
+                            </object>
+                          </child>
                         </object>
                       </property>
                     </object>

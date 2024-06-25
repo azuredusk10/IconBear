@@ -17,7 +17,7 @@ Gio._promisify(Gio.File.prototype, 'query_info_async');
 export const AddSetDialog = GObject.registerClass({
   GTypeName: 'IcoAddSetDialog',
   Template: 'resource:///design/chris_wood/IconBear/ui/AddSetDialog.ui',
-  InternalChildren: ['add_set_dialog', 'new_set_name_entry', 'new_set_name_error', 'import_button', 'spinner', 'form_wrapper', 'completed_wrapper', 'stack', 'back_button', 'header_bar', 'destination_set', 'import_spinner', 'app_error_message', 'success_message'],
+  InternalChildren: ['add_set_dialog', 'new_set_name_entry', 'new_set_name_error', 'import_button', 'spinner', 'form_wrapper', 'completed_wrapper', 'stack', 'back_button', 'header_bar', 'destination_set', 'import_spinner', 'app_error_message', 'success_message', 'prepare_import_progress'],
   Properties: {
     sets: GObject.ParamSpec.jsobject(
       'sets',
@@ -326,6 +326,9 @@ export const AddSetDialog = GObject.registerClass({
   async prepareImport(folder){
     try {
 
+      // Hide the progress bar
+      this._prepare_import_progress.visible = false;
+
       // Update the 'folder' property
       this.folder = folder;
       this.notify('folder');
@@ -334,13 +337,11 @@ export const AddSetDialog = GObject.registerClass({
       this.icons = [];
       this.notify('icons');
 
-      console.log('about to crawl');
       const svgArray = await this.crawlDirectoryForSVGs(folder);
-      console.log('here come the svgs!');
-      // console.log(svgArray);
+      this._prepare_import_progress.visible = true;
 
       // Populate the iconFiles ListStore
-      let iconsCount = svgArray.length;
+      let iconsCount = 0;
 
       for (const iconPath of svgArray) {
 
@@ -359,9 +360,6 @@ export const AddSetDialog = GObject.registerClass({
 
           const style = estimateIconStyle(gFile, folderName);
 
-          //console.log('style', style);
-          // console.log('name', info.get_name());
-
 
           const iconMeta = {
             fileName: iconFilename,
@@ -377,6 +375,8 @@ export const AddSetDialog = GObject.registerClass({
           this.icons.push(iconMeta);
 
           iconsCount++;
+
+          this._prepare_import_progress.fraction = iconsCount / svgArray.length;
         }
       }
 
@@ -395,17 +395,14 @@ export const AddSetDialog = GObject.registerClass({
   * @return {[string]} - an array of filepaths to SVG files
   **/
   async crawlDirectoryForSVGs(rootDir) {
-    console.log('crawlDirectoryForSVGs running');
     const svgFiles = [];
 
     async function crawl(rootDir) {
-        console.log('crawl running');
         try {
           const enumerator = await rootDir.enumerate_children_async('standard::name,standard::type',
               Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null);
 
           for await (const fileInfo of enumerator) {
-              console.log('crawl loop running');
               const fileName = fileInfo.get_name();
               const filePath = rootDir.get_child(fileName).get_path();
 

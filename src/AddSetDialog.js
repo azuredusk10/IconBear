@@ -294,7 +294,7 @@ export const AddSetDialog = GObject.registerClass({
 
         // console.log('About to copy');
 
-        await source.copy_async(target, Gio.FileCopyFlags.NONE, GLib.PRIORITY_DEFAULT, null, null);
+        await this.copyFileWithRename(icon.sourcePath, targetPath + '/icons/' + icon.fileName);
 
         // console.log(`copied icon from ${this.folder.get_path()}/${icon.fileName} to ${targetPath}/${icon.fileName}`);
 
@@ -469,6 +469,45 @@ export const AddSetDialog = GObject.registerClass({
     });
 
     this._destination_set.model = model;
+  }
+
+  /** Attempts to copy a file from source to target. If there is already a file with that name in the target, rename the file by adding (X) to the end of the filename, where X is the smallest integer that makes up a unique filename.
+  * @param {string} sourcePath - the path of the source file to copy
+  * @param {string} targetPath - the path to try copying the file to in the first instance
+  **/
+  async copyFileWithRename(sourcePath, targetPath){
+    const sourceFile = Gio.File.new_for_path(sourcePath);
+    let targetFile = Gio.File.new_for_path(targetPath);
+    let i = 0;
+
+    while (true){
+      try {
+          await sourceFile.copy_async(
+            targetFile,
+            Gio.FileCopyFlags.NONE,
+            GLib.PRIORITY_DEFAULT,
+            null,
+            null
+          );
+        break;
+      } catch (error) {
+        if (error.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.EXISTS)) {
+          i++;
+          const fileInfo = await targetFile.query_info_async(
+            'standard::name',
+            Gio.FileQueryInfoFlags.NONE,
+            GLib.PRIORITY_DEFAULT,
+            null
+          );
+          const originalName = fileInfo.get_name();
+          const [baseName, extension] = originalName.split(/\.(?=[^.]+$)/);
+          const newName = `${baseName}(${i})${extension ? '.' + extension : ''}`;
+          targetFile = targetFile.get_parent().get_child(newName);
+        } else {
+            throw error;
+        }
+      }
+    }
   }
 
 });

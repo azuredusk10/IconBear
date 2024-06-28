@@ -16,7 +16,7 @@ Gio._promisify(Gio.File.prototype, 'copy_async');
 export const AllSetsStackView = GObject.registerClass({
   GTypeName: 'IcoAllSetsStackView',
   Template: 'resource:///design/chris_wood/IconBear/ui/AllSetsStackView.ui',
-  InternalChildren: ['default_sets_flowbox', 'installed_sets_flowbox', 'installed_sets_empty_state'],
+  InternalChildren: ['default_sets_flowbox', 'installed_sets_flowbox', 'installed_sets_empty_state', 'processing_spinner'],
   Properties: {
     searchEntryText: GObject.ParamSpec.string(
       'searchEntryText',
@@ -609,6 +609,14 @@ export const AllSetsStackView = GObject.registerClass({
     } catch(e) {
       console.log('Error updating the sets in the app: ' + e);
     }
+  }
+
+  showProcessingState(){
+     this._processing_spinner.spinning = true;
+  }
+
+  hideProcessingState(){
+    this._processing_spinner.spinning = false;
   }
 
 });

@@ -446,7 +446,10 @@ export const Window = GObject.registerClass({
   async #deleteSet(gVariantSetId){
     try {
       const setId = gVariantSetId.get_string()[0];
-      console.log('delete ' + setId);
+      console.log('deleting ' + setId);
+
+      // Show the "Processing" state in the All Sets view
+      this._all_sets_view.showProcessingState();
 
       // Remove this set from this.sets
       this.sets.filter(set => set.id === setId)
@@ -460,13 +463,21 @@ export const Window = GObject.registerClass({
         i++;
       })
 
-      // Find the folder and remove it
+      // Remove the meta file first, so the app no longer recognises it as a set
       const dataDir = GLib.get_user_data_dir();
       const folderPath = GLib.build_filenamev([dataDir, setId]);
-      await this.deleteRecursively(folderPath);
+      const metaFile = Gio.File.new_for_path(GLib.build_filenamev([folderPath, 'meta.json']));
+      await metaFile.delete_async(GLib.PRIORITY_DEFAULT, null);
 
       // Reload the "All sets" view
-      // this._all_sets_view.loadView();
+      this._all_sets_view.loadView();
+
+      // Remove all other files and subdirectories, as well as the set folder itself
+      await this.deleteRecursively(folderPath);
+
+      // Hide the "Processing" state in the All Sets view
+      this._all_sets_view.hideProcessingState();
+
     } catch(e) {
       console.log('Error deleting set: ' + e);
     }

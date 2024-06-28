@@ -20,16 +20,23 @@
               <object class="GtkBox">
                 <property name="orientation">horizontal</property>
                 <property name="spacing">16</property>
+                <style>
+                  <class name="mb-8"/>
+                </style>
                 <child>
                   <object class="GtkLabel">
                     <property name="label">My sets</property>
                     <property name="halign">1</property>
                     <property name="valign">1</property>
-                    <property name="hexpand">true</property>
+                    <property name="hexpand">false</property>
                     <style>
                       <class name="title-1"/>
-                      <class name="mb-8"/>
                     </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSpinner" id="processing_spinner">
+                    <property name="spinning">false</property>
                   </object>
                 </child>
               </object>

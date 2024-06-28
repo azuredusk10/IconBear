@@ -444,6 +444,7 @@ export const Window = GObject.registerClass({
   * @param {GLib.Variant} gVariantSetId - the name of the set to be deleted, stored in a GLib.Variant of type string
   **/
   async #deleteSet(gVariantSetId){
+    // Note: removing the console.log lines causes the app to crash whenever this method is run.
     try {
       const setId = gVariantSetId.get_string()[0];
       console.log('deleting ' + setId);
@@ -467,12 +468,14 @@ export const Window = GObject.registerClass({
       const dataDir = GLib.get_user_data_dir();
       const folderPath = GLib.build_filenamev([dataDir, setId]);
       const metaFile = Gio.File.new_for_path(GLib.build_filenamev([folderPath, 'meta.json']));
+      console.log('deleting meta file');
       await metaFile.delete_async(GLib.PRIORITY_DEFAULT, null);
 
       // Reload the "All sets" view
       this._all_sets_view.loadView();
 
       // Remove all other files and subdirectories, as well as the set folder itself
+      console.log('deleting remaining files and folders');
       await this.deleteRecursively(folderPath);
 
       // Hide the "Processing" state in the All Sets view

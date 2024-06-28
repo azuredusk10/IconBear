@@ -12,6 +12,8 @@ import { estimateIconStyle, drawSvg } from './helperFunctions.js';
 // Set up async file methods
 Gio._promisify(Gio.File.prototype, 'create_async');
 Gio._promisify(Gio.File.prototype, 'copy_async');
+Gio._promisify(Gio.File.prototype, 'make_directory_async');
+Gio._promisify(Gio.File.prototype, 'query_info_async');
 
 export const AllSetsStackView = GObject.registerClass({
   GTypeName: 'IcoAllSetsStackView',
@@ -443,12 +445,11 @@ export const AllSetsStackView = GObject.registerClass({
 
         const setTileButton = new Gtk.Button({
           label: "Install",
-          // cssClasses: ['suggested-action'],
           halign: 2,
           valign: 3,
         });
 
-        setTileButton.connect('clicked', () => this.onDefaultSetInstall(set, resourceDir));
+        setTileButton.connect('clicked', (button) => this.onDefaultSetInstall(set, resourceDir, button));
 
         setTileTextBox.append(setLabel);
         setTileTextBox.append(setIconCount);
@@ -482,24 +483,23 @@ export const AllSetsStackView = GObject.registerClass({
   * Import a default set from GResource to the user's data directory.
   * @param {Set} set - The set object to import
   * @param {string} resourceDir - the resource uri where this set lives
+  * @param {Gtk_Button} button - the button that the user clicked to install the set
   **/
-  async onDefaultSetInstall(set, resourceDir){
-    /*
-			** Generate the icon-specific meta.json data with icon sizes and styles.
-			** * Additionally, if no folder name present, check for the ending of the filename. e.g. ("-fill", "-filled", "-outline", "-duotone", "-color", "-colored")
-			** Copy the meta.json to the user's data directory
-			** Copy the contents of icons folder to the user's data directory.
-		*/
+  async onDefaultSetInstall(set, resourceDir, button){
+
+    // Show the processing state
+    button.label = 'Installing...';
+    button.sensitive = false;
 
 		// Create the set data directory
     const dataDir = GLib.get_user_data_dir();
     const targetPath = dataDir + '/' + set.id;
 
     const targetDir = Gio.File.new_for_path(targetPath);
-    targetDir.make_directory(null);
+    await targetDir.make_directory_async(GLib.PRIORITY_DEFAULT, null);
 
     const targetIconsDir = Gio.File.new_for_path(targetPath + '/icons');
-    targetIconsDir.make_directory(null);
+    await targetIconsDir.make_directory_async(GLib.PRIORITY_DEFAULT, null);
 
     // Set additional properties
     const setMeta = {
@@ -522,13 +522,13 @@ export const AllSetsStackView = GObject.registerClass({
     const iconsArray = [];
 
     // Load all icons
-    iconFilenames.forEach(iconFilename => {
+    iconFilenames.forEach(async iconFilename => {
 
       try {
 
         // Create the Gio.File for this icon resource and get its file info
         const iconFile = Gio.File.new_for_uri('resource://' + iconsDir + iconFilename);
-        const fileInfo = iconFile.query_info('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
+        const fileInfo = await iconFile.query_info_async('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null, () => true);
 
         const label = iconFilename.replace(/\.[^/.]+$/, "");
 
@@ -539,19 +539,6 @@ export const AllSetsStackView = GObject.registerClass({
 
 
         const style = estimateIconStyle(iconFile);
-
-        // Create a new Icon
-        /*
-        const icon = new Icon({
-          label,
-          filepath: iconsDir + iconFilename,
-          type: fileInfo.get_file_type(),
-          gfile: iconFile,
-          width: width,
-          height: height,
-          style: style,
-        });
-        */
 
         // Set up the icon metadata
         const iconMeta = {

@@ -289,12 +289,13 @@ export const AddSetDialog = GObject.registerClass({
 
         // console.log('beginning copy of ' + this.folder.get_path() + '/' + icon.fileName + ' to ' + targetPath + '/icons/' + icon.fileName);
 
-        const source = Gio.File.new_for_path(icon.sourcePath);
-        const target = Gio.File.new_for_path(targetPath + '/icons/' + icon.fileName);
+        // const source = Gio.File.new_for_path(icon.sourcePath);
+        // const target = Gio.File.new_for_path(targetPath + '/icons/' + icon.fileName);
 
         // console.log('About to copy');
 
-        await this.copyFileWithRename(icon.sourcePath, targetPath + '/icons/' + icon.fileName);
+        const newFileName = await this.copyFileWithRename(icon.sourcePath, targetPath + '/icons/' + icon.fileName);
+        console.log(`old name: ${icon.fileName}. New name: ${newFileName}`);
 
         // console.log(`copied icon from ${this.folder.get_path()}/${icon.fileName} to ${targetPath}/${icon.fileName}`);
 
@@ -472,8 +473,9 @@ export const AddSetDialog = GObject.registerClass({
   }
 
   /** Attempts to copy a file from source to target. If there is already a file with that name in the target, rename the file by adding (X) to the end of the filename, where X is the smallest integer that makes up a unique filename.
-  * @param {string} sourcePath - the path of the source file to copy
-  * @param {string} targetPath - the path to try copying the file to in the first instance
+  * @param {String} sourcePath - the path of the source file to copy
+  * @param {String} targetPath - the path to try copying the file to in the first instance
+  * @return {String} - the final name of the copied file
   **/
   async copyFileWithRename(sourcePath, targetPath){
     const sourceFile = Gio.File.new_for_path(sourcePath);
@@ -482,14 +484,14 @@ export const AddSetDialog = GObject.registerClass({
 
     while (true){
       try {
-          await sourceFile.copy_async(
-            targetFile,
-            Gio.FileCopyFlags.NONE,
-            GLib.PRIORITY_DEFAULT,
-            null,
-            null
-          );
-        break;
+        await sourceFile.copy_async(
+          targetFile,
+          Gio.FileCopyFlags.NONE,
+          GLib.PRIORITY_DEFAULT,
+          null,
+          null
+        );
+        return targetFile.get_basename(); // Return the final filename
       } catch (error) {
         if (error.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.EXISTS)) {
           i++;

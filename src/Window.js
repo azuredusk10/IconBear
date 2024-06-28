@@ -10,6 +10,7 @@ import { Icon } from './Icon.js';
 // Set up async file methods
 Gio._promisify(Gio.File.prototype, 'enumerate_children_async');
 Gio._promisify(Gio.File.prototype, 'query_info_async');
+Gio._promisify(Gio.File.prototype, 'delete_async');
 
 
 export const Window = GObject.registerClass({
@@ -197,12 +198,9 @@ export const Window = GObject.registerClass({
     if (metaFile.query_exists(null)) {
         print(`Found "meta.json" file in ${folderPath}`);
 
-        // Remove the trailing slash from the directory
-        const setId = folderPath.slice(0, -1);
-
         // Establish the structure of the set object
         let set = {
-          id: setId,
+          id: folderName,
           author: '',
           name: '',
           license: '',
@@ -443,12 +441,85 @@ export const Window = GObject.registerClass({
 
   /**
   * Deletes a set folder from the user's data directory and removes it from the application
-  * @param {GLib.Variant} gVariantSetName - the name of the set to be deleted, stored in a GLib.Variant of type string
+  * @param {GLib.Variant} gVariantSetId - the name of the set to be deleted, stored in a GLib.Variant of type string
   **/
-  #deleteSet(gVariantSetName){
-    const setName = gVariantSetName.get_string()[0];
-    console.log('delete ' + setName);
+  async #deleteSet(gVariantSetId){
+    try {
+      const setId = gVariantSetId.get_string()[0];
+      console.log('delete ' + setId);
+
+      // Remove this set from this.sets
+      this.sets.filter(set => set.id === setId)
+
+      let i=0;
+      this.sets.forEach(set => {
+        if (set.id === setId){
+           this.sets.splice(i, 1);
+           this.#removeSetStackPage(set.name);
+        }
+        i++;
+      })
+
+      // Find the folder and remove it
+      const dataDir = GLib.get_user_data_dir();
+      const folderPath = GLib.build_filenamev([dataDir, setId]);
+      await this.deleteRecursively(folderPath);
+
+      // Reload the "All sets" view
+      // this._all_sets_view.loadView();
+    } catch(e) {
+      console.log('Error deleting set: ' + e);
+    }
   }
+
+  /**
+  * Remove an IconSetStackView from the main_stack GtkStack
+  * @params {string} pageName - the name of the stack page to remove
+  **/
+  #removeSetStackPage(pageName){
+
+    const stack = this._main_stack;
+
+    const pageToRemove = stack.get_child_by_name(pageName);
+    stack.remove(pageToRemove);
+  }
+
+  /** Recursively delete all files and folders inside a given folder
+  * @param {String} folderPath - path to the root folder to delete
+  **/
+  async deleteRecursively(folderPath) {
+  console.log('deleting recursively: ' + folderPath);
+    try {
+        const file = Gio.File.new_for_path(folderPath);
+        const iter = await file.enumerate_children_async(
+            'standard::name,standard::type',
+            Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
+            GLib.PRIORITY_DEFAULT,
+            null
+        );
+
+        for await (const info of iter) {
+            const childFile = iter.get_child(info);
+            const fileType = info.get_file_type();
+            console.log('child file path: ' + childFile.get_path());
+
+            if (fileType === Gio.FileType.DIRECTORY) {
+                await this.deleteRecursively(childFile.get_path());
+            } else {
+              await childFile.delete_async(GLib.PRIORITY_DEFAULT, null);
+            }
+
+        }
+
+        await file.delete_async(GLib.PRIORITY_DEFAULT, null);
+
+        console.log('deleted all set files');
+
+    } catch (error) {
+        console.log('Error deleting set directory: ' + error);
+    }
+}
+
 
 });
 

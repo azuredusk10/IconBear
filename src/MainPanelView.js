@@ -107,7 +107,15 @@ export const MainPanelView = GObject.registerClass({
       }
     });
 
-    this.connect('notify::styleFilter', () => console.log(this.styleFilter));
+    this.connect('notify::styleFilter', (a, b) => {
+      if(this.icons){
+        if(this.icons.get_n_items() > 0){
+
+          // Filter the model with the new style filter
+          this._icons_filter_model.filter.changed(Gtk.FilterChange.DIFFERENT);
+        }
+      }
+    });
   }
 
   #createListViewFactory(){
@@ -197,7 +205,13 @@ export const MainPanelView = GObject.registerClass({
     this._icons_filter_model.filter = Gtk.CustomFilter.new(item => {
 
       // Check if the icon name contains the search entry text
-      return RegExp(this.searchEntryText, "i").test(item.label)
+      const nameMatches = RegExp(this.searchEntryText, "i").test(item.label);
+
+      // Check if the icon matches the active icon style filter
+      const styleMatches = this.styleFilter === 0 || item.style == this.styleFilter;
+
+      // Return true if both conditions are met
+      return nameMatches && styleMatches;
 
     });
   }

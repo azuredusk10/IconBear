@@ -611,6 +611,13 @@ export const Window = GObject.registerClass({
     const spinAdjustment = Gtk.Adjustment.new(100, 50, 150, 25, 25, 0);
     spinButton.adjustment = spinAdjustment;
 
+    // Always append a % sign to the end of the value
+    spinButton.set_text(`${spinButton.get_value()}%`);
+
+    spinButton.connect('value-changed', () => {
+      spinButton.set_text(`${spinButton.get_value()}%`);
+    });
+
     previewSizeWidget.append(spinButton);
 
     this. _primary_popover_menu.add_child(previewSizeWidget, 'preview_size_widget');

@@ -171,6 +171,16 @@ export const Window = GObject.registerClass({
     openStackPageAction.connect('activate', (action, parameter) => this.openStackPage(parameter));
     this.add_action(openStackPageAction);
 
+    // Clear search term and reset style filter
+     const clearFiltersAction = new Gio.SimpleAction({
+      name: 'clear_filters'
+    });
+    clearFiltersAction.connect('activate', (action) => {
+      this._search_entry.text = '';
+      this.filterByStyle(GLib.Variant.new_int16(0));
+    });
+    this.add_action(clearFiltersAction);
+
   }
 
 

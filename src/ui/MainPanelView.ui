@@ -51,9 +51,30 @@
     <child>
       <object class="GtkScrolledWindow" id="empty_state">
         <property name="visible">false</property>
+        <property name="vexpand">true</property>
         <child>
-          <object class="GtkLabel">
-            <property name="label">No icons found</property>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="true">No icons found</property>
+                <style>
+                  <class name="title-3"/>
+                  <class name="mb-6"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="label" translatable="true">Clear filters</property>
+                <property name="action-name">win.clear_filters</property>
+                  <style>
+                    <class name="pill"/>
+                  </style>
+              </object>
+            </child>
           </object>
         </child>
       </object>

@@ -16,7 +16,7 @@ Gio._promisify(Gio.File.prototype, 'delete_async');
 export const Window = GObject.registerClass({
 	GTypeName: 'IcoWindow',
 	Template: 'resource:///design/chris_wood/IconBear/ui/Window.ui',
-	InternalChildren: ['search_entry', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button', 'main_toolbar_view', 'main_header_bar', 'add_set_dialog_widget', 'all_sets_view', 'search_controls_wrapper', 'import_button', 'radio_all_styles', 'radio_outline','radio_filled','radio_duotone','radio_color'],
+	InternalChildren: ['search_entry', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button', 'main_toolbar_view', 'main_header_bar', 'add_set_dialog_widget', 'all_sets_view', 'search_controls_wrapper', 'import_button', 'radio_all_styles', 'radio_outline','radio_filled','radio_duotone','radio_color', 'filters_button'],
 	Properties: {
 	  sets: GObject.ParamSpec.jsobject(
       'sets',
@@ -574,22 +574,40 @@ export const Window = GObject.registerClass({
     switch(styleId){
       case 0:
         this._radio_all_styles.active = true;
+        this.setFilterButtonState(false);
         break;
       case 1:
         this._radio_outline.active = true;
+        this.setFilterButtonState(true);
         break;
       case 2:
         this._radio_filled.active = true;
+        this.setFilterButtonState(true);
         break;
       case 3:
         this._radio_duotone.active = true;
+        this.setFilterButtonState(true);
         break;
       case 4:
         this._radio_color.active = true;
+        this.setFilterButtonState(true);
         break;
     }
   }
 
+  /** Change the visual state of the filters popover button
+  * @param {Boolean} isActive - whether a filter is currently active or not
+  **/
+  setFilterButtonState(isActive){
+    if(isActive){
+      this._filters_button.iconName = 'ico-funnel-symbolic';
+      this._filters_button.add_css_class('opaque');
+    } else {
+      this._filters_button.iconName = 'ico-funnel-outline-symbolic';
+      this._filters_button.remove_css_class('opaque');
+    }
+
+  }
 
 });
 

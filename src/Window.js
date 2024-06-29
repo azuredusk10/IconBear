@@ -163,6 +163,14 @@ export const Window = GObject.registerClass({
     filterByStyleAction.connect('activate', (action, parameter) => this.filterByStyle(parameter));
     this.add_action(filterByStyleAction);
 
+    // Open to a specific StackPage
+    const openStackPageAction = new Gio.SimpleAction({
+      name: 'open_stack_page',
+      parameterType: new GLib.VariantType('s')
+    });
+    openStackPageAction.connect('activate', (action, parameter) => this.openStackPage(parameter));
+    this.add_action(openStackPageAction);
+
   }
 
 
@@ -607,6 +615,14 @@ export const Window = GObject.registerClass({
       this._filters_button.remove_css_class('opaque');
     }
 
+  }
+
+  /** Navigate to a particular StackPage
+  * @param {String} stackPageName
+  **/
+  openStackPage(stackPageName) {
+    const pageToOpen = this._main_stack.get_child_by_name(stackPageName);
+    this._main_stack.set_visible_child(pageToOpen);
   }
 
 });

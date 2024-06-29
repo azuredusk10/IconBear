@@ -46,6 +46,13 @@ export const AddSetDialog = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       true
     ),
+    newSetName: GObject.ParamSpec.string(
+      'newSetName',
+      'New set name',
+      'The name of the set that the user successfully imported to',
+      GObject.ParamFlags.READWRITE,
+      ''
+    ),
     appWindow: GObject.ParamSpec.jsobject(
       'appWindow',
       'App Window',
@@ -325,6 +332,7 @@ export const AddSetDialog = GObject.registerClass({
       this._header_bar.showStartTitleButtons = true;
       this._header_bar.showEndTitleButtons = true;
       this._success_message.label = `Successfully imported all ${this.icons.length} icons`;
+      this.newSetName = set.name;
 
       // Tell Window.js that a new set was added
       this.emit('set-added', newSetId);
@@ -446,6 +454,7 @@ export const AddSetDialog = GObject.registerClass({
 
   onOpenSet() {
     this._add_set_dialog.close();
+    this._appWindow.openStackPage(this.newSetName);
   }
 
   onStartAgain(){

@@ -252,19 +252,56 @@ export const AddSetDialog = GObject.registerClass({
       targetIconsDir = Gio.File.new_for_path(targetPath + '/icons');
       targetIconsDir.make_directory(null);
 
-      // Prepare the set object which will eventually be saved to meta.json
-      set = {
-        name: newSetName,
-        createdOn: Date.now(),
-        icons: this.icons
-      }
 
     } catch(e) {
       this.throwError('Error creating set folder: ' + e);
     }
 
-    // Add the iconSet
     //console.log(JSON.stringify(set));
+
+
+    // Copy the icon files to the targetDir/icons
+    try {
+
+      for (const icon of this.icons) {
+
+        // console.log('beginning copy of ' + this.folder.get_path() + '/' + icon.fileName + ' to ' + targetPath + '/icons/' + icon.fileName);
+
+        // const source = Gio.File.new_for_path(icon.sourcePath);
+        // const target = Gio.File.new_for_path(targetPath + '/icons/' + icon.fileName);
+
+        // console.log('About to copy');
+        const sourceFileName = icon.fileName;
+        const newFileName = await this.copyFileWithRename(icon.sourcePath, targetPath + '/icons/' + icon.fileName);
+
+        if(sourceFileName !== newFileName){
+          console.log(`Renamed a duplicate icon file name from ${icon.fileName} to ${newFileName}`);
+          // If the file name has been changed during copying, update the icon meta object accordingly.
+          let duplicateIcons = [];
+          duplicateIcons = this.icons.filter((icon) => {
+            if (icon.fileName === sourceFileName){
+              return icon;
+            }
+          });
+
+          // Rename the second instance in this.icons so that the correct name gets written to the meta file
+          duplicateIcons[1].fileName = newFileName;
+
+        }
+
+        // console.log(`copied icon from ${this.folder.get_path()}/${icon.fileName} to ${targetPath}/${icon.fileName}`);
+
+      }
+    } catch(e) {
+      this.throwError('Error copying icon files: ' + e);
+    }
+
+    // Prepare the set object which will eventually be saved to meta.json
+    set = {
+      name: newSetName,
+      createdOn: Date.now(),
+      icons: this.icons
+    }
 
     // Save the "set" object as JSON in a new file called meta.json
     // Create the new file in the set directory
@@ -279,29 +316,6 @@ export const AddSetDialog = GObject.registerClass({
       GLib.PRIORITY_DEFAULT, null, null);
     } catch(e) {
       this.throwError('Error writing meta file: ' + e);
-    }
-
-
-    // Copy the icon files to the targetDir/icons
-    try {
-
-      for (const icon of this.icons) {
-
-        // console.log('beginning copy of ' + this.folder.get_path() + '/' + icon.fileName + ' to ' + targetPath + '/icons/' + icon.fileName);
-
-        // const source = Gio.File.new_for_path(icon.sourcePath);
-        // const target = Gio.File.new_for_path(targetPath + '/icons/' + icon.fileName);
-
-        // console.log('About to copy');
-
-        const newFileName = await this.copyFileWithRename(icon.sourcePath, targetPath + '/icons/' + icon.fileName);
-        console.log(`old name: ${icon.fileName}. New name: ${newFileName}`);
-
-        // console.log(`copied icon from ${this.folder.get_path()}/${icon.fileName} to ${targetPath}/${icon.fileName}`);
-
-      }
-    } catch(e) {
-      this.throwError('Error copying icon files: ' + e);
     }
 
     try {
@@ -479,6 +493,7 @@ export const AddSetDialog = GObject.registerClass({
   **/
   async copyFileWithRename(sourcePath, targetPath){
     const sourceFile = Gio.File.new_for_path(sourcePath);
+    const sourceFileName = sourceFile.get_basename();
     let targetFile = Gio.File.new_for_path(targetPath);
     let i = 0;
 
@@ -501,8 +516,7 @@ export const AddSetDialog = GObject.registerClass({
             GLib.PRIORITY_DEFAULT,
             null
           );
-          const originalName = fileInfo.get_name();
-          const [baseName, extension] = originalName.split(/\.(?=[^.]+$)/);
+          const [baseName, extension] = sourceFileName.split(/\.(?=[^.]+$)/);
           const newName = `${baseName}(${i})${extension ? '.' + extension : ''}`;
           targetFile = targetFile.get_parent().get_child(newName);
         } else {

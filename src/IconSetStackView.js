@@ -85,13 +85,13 @@ export const IconSetStackView = GObject.registerClass({
       0, 4,
       0
     ),
-    iconPreviewSize: GObject.ParamSpec.int(
-      'iconPreviewSize',
-      'Icon Preview Size',
-      'The size to render icon previews at',
+    iconPreviewScale: GObject.ParamSpec.double(
+      'iconPreviewScale',
+      'Icon Preview Scale',
+      'The scale to render icon previews at',
       GObject.ParamFlags.READWRITE,
-      0, 1024,
-      24
+      0, 10,
+      2
     ),
     iconsCount: GObject.ParamSpec.int(
       'iconsCount',

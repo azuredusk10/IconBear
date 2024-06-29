@@ -174,7 +174,7 @@
                             <property name="searchEntryText" bind-source="search_entry" bind-property="text" bind-flags="sync-create"></property>
                             <property name="installedSets" bind-source="IcoWindow" bind-property="sets" bind-flags="sync-create"></property>
                             <property name="maxPreviewIcons" bind-source="IcoWindow" bind-property="maxPreviewIcons" bind-flags="sync-create"></property>
-                            <property name="iconPreviewSize" bind-source="IcoWindow" bind-property="iconPreviewSize" bind-flags="sync-create"></property>
+                            <property name="iconPreviewScale" bind-source="IcoWindow" bind-property="iconPreviewScale" bind-flags="sync-create"></property>
                             <signal name="set-activated" handler="onSetActivated" />
                           </object>
                         </property>

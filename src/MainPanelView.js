@@ -56,14 +56,13 @@ export const MainPanelView = GObject.registerClass({
       0, 100000,
       0
     ),
-    // TODO: replace with iconPreviewSize property
-    iconSize: GObject.ParamSpec.double(
-      'iconSize',
-      'Icon Size',
-      'The size to render icons in the Flowbox at',
+    iconPreviewScale: GObject.ParamSpec.double(
+      'iconPreviewScale',
+      'Icon Preview Scale',
+      'The scale to render icon previews at',
       GObject.ParamFlags.READWRITE,
-      Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER,
-      24
+      0, 10,
+      2
     ),
   },
   Signals: {
@@ -140,9 +139,9 @@ export const MainPanelView = GObject.registerClass({
     // Set up the permanent parts of the ListItem (e.g. constructing widgets and adding them to the ListItem)
     factory.connect('setup', (factory, listItem) => {
 
-      // Box -> (DrawingArea, Label, GestureClick, GestureClick)
+      // Box -> (Box -> (DrawingArea, Label), GestureClick, GestureClick)
       const topLevelBox = new Gtk.Box({
-        spacing: 4,
+        spacing: 8,
         orientation: 1,
         marginStart: 4,
         marginEnd: 4,
@@ -152,11 +151,8 @@ export const MainPanelView = GObject.registerClass({
       });
 
       const drawingArea = new Gtk.DrawingArea({
-        widthRequest: 24,
-        heightRequest: 24,
-        marginTop: 8,
-        marginBottom: 8,
         cssClasses: ['icon-grid__image'],
+        marginTop: 4,
       })
 
       drawingArea.set_draw_func((widget, cr, width, height) => drawSvg(widget, cr, width, height, listItem.item.gfile));
@@ -190,6 +186,10 @@ export const MainPanelView = GObject.registerClass({
       const topLevelBox = listItem.get_child();
       const drawingArea = topLevelBox.get_first_child();
       const label = drawingArea.get_next_sibling();
+
+
+      drawingArea.widthRequest = listItem.item.width * this.iconPreviewScale;
+      drawingArea.heightRequest = listItem.item.height * this.iconPreviewScale;
 
       label.label = listItem.item.label;
 

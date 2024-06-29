@@ -47,13 +47,13 @@ export const AllSetsStackView = GObject.registerClass({
       0, 100,
       12
     ),
-    iconPreviewSize: GObject.ParamSpec.int(
-      'iconPreviewSize',
-      'Icon Preview Size',
-      'The size to render icon previews at',
+    iconPreviewScale: GObject.ParamSpec.double(
+      'iconPreviewScale',
+      'Icon Preview Scale',
+      'The scale to render icon previews at',
       GObject.ParamFlags.READWRITE,
-      0, 1024,
-      24
+      0, 10,
+      2
     ),
   },
   Signals: {
@@ -77,14 +77,24 @@ export const AllSetsStackView = GObject.registerClass({
     this.#initializeDefaultSets();
   }
 
-  // Create a new child of the set preview FlowBox
-  _addPreviewItem(icon, size){
+  /**
+  * Create a new child of the set preview FlowBox
+  * @param {Icon} icon - the icon to create a preview of
+  * @param {Number} scale - the scale to draw the icon at, e.g. 1 or 1.5 or 2.
+  * @return {Gtk.Widget} - the newly created widget that shows a preview of this icon
+  **/
+  _addPreviewItem(icon, scale){
+
+    const widthRequest = icon.width * scale;
+    const heightRequest = icon.height * scale;
 
     const svgWidget = new Gtk.DrawingArea({
-      widthRequest: size,
-      heightRequest: size,
+      widthRequest,
+      heightRequest,
       marginTop: 8,
       marginBottom: 8,
+      marginStart: 4,
+      marginEnd: 4,
       cssClasses: ['icon-grid__image'],
     })
 
@@ -219,7 +229,7 @@ export const AllSetsStackView = GObject.registerClass({
         previewModel.append(icon);
       }
 
-      setTilePreviewFlowBox.bind_model(previewModel, (icon) => this._addPreviewItem(icon, this.iconPreviewSize));
+      setTilePreviewFlowBox.bind_model(previewModel, (icon) => this._addPreviewItem(icon, this.iconPreviewScale));
 
 
       const setLabel = new Gtk.Label({
@@ -416,7 +426,7 @@ export const AllSetsStackView = GObject.registerClass({
           previewModel.append(icon);
         }
 
-        setTilePreviewFlowBox.bind_model(previewModel, (icon) => this._addPreviewItem(icon, this.iconPreviewSize));
+        setTilePreviewFlowBox.bind_model(previewModel, (icon) => this._addPreviewItem(icon, this.iconPreviewScale));
 
 
         const setLabel = new Gtk.Label({

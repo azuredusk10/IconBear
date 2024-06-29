@@ -46,14 +46,6 @@ export const Window = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       true,
     ),
-    iconSize: GObject.ParamSpec.double(
-      'iconSize',
-      'Icon Size',
-      'The size to render icons in the grid at',
-      GObject.ParamFlags.READWRITE,
-      Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER,
-      24
-    ),
     sidebarButtonVisible: GObject.ParamSpec.boolean(
       'sidebarButtonVisible',
       'Sidebar Button Visible',
@@ -84,13 +76,13 @@ export const Window = GObject.registerClass({
       0, 100,
       12
     ),
-    iconPreviewSize: GObject.ParamSpec.int(
-      'iconPreviewSize',
-      'Icon Preview Size',
-      'The size to render icon previews at',
+    iconPreviewScale: GObject.ParamSpec.double(
+      'iconPreviewScale',
+      'Icon Preview Scale',
+      'The scale to render icon previews at',
       GObject.ParamFlags.READWRITE,
-      0, 1024,
-      24
+      0, 10,
+      4
     ),
 	}
 }, class extends Adw.ApplicationWindow {
@@ -384,7 +376,7 @@ export const Window = GObject.registerClass({
       // Bind properties to the composite widget
       this._search_entry.bind_property('text', stackPageChild, 'searchEntryText', GObject.BindingFlags.SYNC_CREATE);
       this.bind_property('sidebarVisible', stackPageChild, 'sidebarVisible', GObject.BindingFlags.SYNC_CREATE);
-      this.bind_property('iconPreviewSize', stackPageChild, 'iconPreviewSize', GObject.BindingFlags.SYNC_CREATE);
+      this.bind_property('iconPreviewScale', stackPageChild, 'iconPreviewScale', GObject.BindingFlags.SYNC_CREATE);
       this.bind_property('styleFilter', stackPageChild, 'styleFilter', GObject.BindingFlags.SYNC_CREATE);
 
       // Add the stack page
@@ -623,7 +615,9 @@ export const Window = GObject.registerClass({
     spinButton.set_text(`${spinButton.get_value()}%`);
 
     spinButton.connect('value-changed', () => {
-      spinButton.set_text(`${spinButton.get_value()}%`);
+      const newValue = spinButton.get_value();
+      this.iconPreviewScale = newValue / 100;
+      spinButton.set_text(`${newValue}%`);
     });
 
     const label = new Gtk.Label({

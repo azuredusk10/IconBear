@@ -21,6 +21,7 @@
                 <property name="iconsCount" bind-source="IcoIconSetStackView" bind-property="iconsCount" bind-flags="sync-create" />
                 <property name="searchEntryText" bind-source="IcoIconSetStackView" bind-property="searchEntryText" bind-flags="sync-create" />
                 <property name="styleFilter" bind-source="IcoIconSetStackView" bind-property="styleFilter" bind-flags="sync-create" />
+                <property name="iconPreviewScale" bind-source="IcoIconSetStackView" bind-property="iconPreviewScale" bind-flags="sync-create" />
               </object>
             </child>
           </object>

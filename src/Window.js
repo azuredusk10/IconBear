@@ -605,9 +605,17 @@ export const Window = GObject.registerClass({
   * Adds custom widgets to the window's popover menu
   **/
   #initializePopoverMenu() {
-    const previewSizeWidget = new Gtk.Box();
+    const previewSizeWidget = new Gtk.Box({
+      orientation: 'horizontal',
+      hexpand: true,
+      halign: 0,
+    });
 
-    const spinButton = new Gtk.SpinButton();
+    const spinButton = new Gtk.SpinButton({
+      halign: 2,
+      hexpand: true,
+      widthChars: 5,
+    });
     const spinAdjustment = Gtk.Adjustment.new(100, 50, 150, 25, 25, 0);
     spinButton.adjustment = spinAdjustment;
 
@@ -618,6 +626,14 @@ export const Window = GObject.registerClass({
       spinButton.set_text(`${spinButton.get_value()}%`);
     });
 
+    const label = new Gtk.Label({
+      label: 'Zoom',
+      halign: 1,
+      valign: 3,
+      marginStart: 12
+    })
+
+    previewSizeWidget.append(label);
     previewSizeWidget.append(spinButton);
 
     this. _primary_popover_menu.add_child(previewSizeWidget, 'preview_size_widget');

@@ -113,6 +113,9 @@ export const MainPanelView = GObject.registerClass({
 
           // Filter the model with the new style filter
           this._icons_filter_model.filter.changed(Gtk.FilterChange.DIFFERENT);
+
+          // If this filter is active, show a different visual state
+
         }
       }
     });

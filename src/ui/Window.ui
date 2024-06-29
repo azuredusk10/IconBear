@@ -109,7 +109,7 @@
                               </object>
                              </child>
                              <child>
-                              <object class="GtkMenuButton">
+                              <object class="GtkMenuButton" id="filters_button">
                                 <property name="visible" bind-source="IcoWindow" bind-property="sidebarButtonVisible" bind-flags="sync-create" />
                                 <property name="icon-name">ico-funnel-outline-symbolic</property>
                                 <!-- <property name="icon-name">ico-funnel-symbolic</property> -->
@@ -255,8 +255,8 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="radio_fill">
-                    <property name="label" translatable="true">Fill</property>
+                  <object class="GtkCheckButton" id="radio_filled">
+                    <property name="label" translatable="true">Filled</property>
                     <property name="group">radio_all_styles</property>
                     <property name="action-name">win.filter_by_style</property>
                     <property name="action-target">2</property>

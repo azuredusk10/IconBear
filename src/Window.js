@@ -16,7 +16,7 @@ Gio._promisify(Gio.File.prototype, 'delete_async');
 export const Window = GObject.registerClass({
 	GTypeName: 'IcoWindow',
 	Template: 'resource:///design/chris_wood/IconBear/ui/Window.ui',
-	InternalChildren: ['search_entry', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button', 'main_toolbar_view', 'main_header_bar', 'add_set_dialog_widget', 'all_sets_view', 'search_controls_wrapper', 'import_button'],
+	InternalChildren: ['search_entry', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button', 'main_toolbar_view', 'main_header_bar', 'add_set_dialog_widget', 'all_sets_view', 'search_controls_wrapper', 'import_button', 'radio_all_styles', 'radio_outline','radio_filled','radio_duotone','radio_color'],
 	Properties: {
 	  sets: GObject.ParamSpec.jsobject(
       'sets',
@@ -551,12 +551,43 @@ export const Window = GObject.registerClass({
     }
   }
 
+  /** Change the icon style filter
+  * @param {Number} style - the style ID to filter for. 0 = all styles. 1 = outline; 2 = filled; 3 = duotone; 4 = color.
+  **/
   filterByStyle(style){
+    // Set the new style filter and notify MainPanelView about the change
     const styleId = style.unpack();
-    console.log(styleId);
+
+    // If there's no change, then return
+    if(styleId === this.styleFilter) return;
 
     this.styleFilter = styleId;
     this.notify('styleFilter');
+
+    // Update the filter to show which item has been selected
+    this._radio_all_styles.active = false;
+    this._radio_outline.active = false;
+    this._radio_filled.active = false;
+    this._radio_duotone.active = false;
+    this._radio_color.active = false;
+
+    switch(styleId){
+      case 0:
+        this._radio_all_styles.active = true;
+        break;
+      case 1:
+        this._radio_outline.active = true;
+        break;
+      case 2:
+        this._radio_filled.active = true;
+        break;
+      case 3:
+        this._radio_duotone.active = true;
+        break;
+      case 4:
+        this._radio_color.active = true;
+        break;
+    }
   }
 
 

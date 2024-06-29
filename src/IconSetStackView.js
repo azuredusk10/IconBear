@@ -7,6 +7,8 @@ import GLib from 'gi://GLib';
 
 import { Icon } from './Icon.js';
 
+Gio._promisify(Gio.File.prototype, 'make_directory_async');
+
 export const IconSetStackView = GObject.registerClass({
   GTypeName: 'IcoIconSetStackView',
   Template: 'resource:///design/chris_wood/IconBear/ui/IconSetStackView.ui',
@@ -183,9 +185,26 @@ export const IconSetStackView = GObject.registerClass({
     this.notify('activeIcon');
 	}
 
-	onIconCopied(emitter, gfile){
+  /**
+  * Copy an icon to the clipboard
+  * @param ??? emitter - not used
+  * @param {Gio.File} gfile - the file reference to copy to the clipboard
+  **/
+	async onIconCopied(emitter, gfile){
 
 	  let toastTitle;
+	  const dataDir = GLib.get_user_data_dir();
+
+	  const tempFolder = Gio.File.new_from_path(GLib.build_pathv(dataDir, 'temp'));
+    if (tempFolder.query_exists(null)){
+      // If the "temp" folder already exists, delete the temporary files inside it
+
+    } else {
+      // Otherwise, create the "temp" folder
+      console.log('creating temp folder');
+      await tempFolder.make_directory_async(GLib.PRIORITY_DEFAULT, null);
+    }
+
 
     // Copy the icon to clipboard
 
@@ -203,7 +222,6 @@ export const IconSetStackView = GObject.registerClass({
 
     // Create the second content provider for a file reference. Supported in Figma.
     // Create a temporary file with the contents of the icon resource file
-    const dataDir = GLib.get_user_data_dir();
     const tempFile = Gio.File.new_for_path(dataDir + '/temp.svg');
     const outputStream = tempFile.replace(null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
     outputStream.write_bytes(bytes, null);

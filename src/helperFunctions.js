@@ -1,4 +1,6 @@
 import Rsvg from 'gi://Rsvg';
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
 
 /**
 * Guess which style an icon is.
@@ -145,3 +147,43 @@ export const drawSvg = (widget, cr, width, height, gfile) => {
     // Render the SVG
     return rsvgHandle.render_document(cr, viewport);
   };
+
+
+  /** Recursively delete all files and folders inside a given folder
+  * @param {String} folderPath - path to the root folder to delete
+  * @param {Boolean} deleteRootFolder - whether to delete the root folder at the end of the operation
+  **/
+ export const deleteRecursively = async (folderPath, deleteRootFolder = false) => {
+  console.log('deleting recursively: ' + folderPath);
+    try {
+        const file = Gio.File.new_for_path(folderPath);
+        const iter = await file.enumerate_children_async(
+            'standard::name,standard::type',
+            Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
+            GLib.PRIORITY_DEFAULT,
+            null
+        );
+
+        for await (const info of iter) {
+            const childFile = iter.get_child(info);
+            const fileType = info.get_file_type();
+            console.log('child file path: ' + childFile.get_path());
+
+            if (fileType === Gio.FileType.DIRECTORY) {
+                await deleteRecursively(childFile.get_path(), true);
+            } else {
+              await childFile.delete_async(GLib.PRIORITY_DEFAULT, null);
+            }
+
+        }
+
+        if(deleteRootFolder){
+          await file.delete_async(GLib.PRIORITY_DEFAULT, null);
+        }
+
+        console.log('deleted all set files');
+
+    } catch (error) {
+        console.log('Error deleting set directory: ' + error);
+    }
+  }

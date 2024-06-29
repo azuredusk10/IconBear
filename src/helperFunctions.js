@@ -187,3 +187,13 @@ export const drawSvg = (widget, cr, width, height, gfile) => {
         console.log('Error deleting set directory: ' + error);
     }
   }
+
+/**
+* Convert a byteArray to a string
+* @param {ByteArray} byteArray
+* @return {String}
+**/
+export const byteArrayToString = (byteArray) => {
+    let decoder = new TextDecoder('utf-8');
+    return decoder.decode(byteArray);
+}

@@ -6,7 +6,7 @@ import Gdk from 'gi://Gdk';
 import GLib from 'gi://GLib';
 
 import { Icon } from './Icon.js';
-import { deleteRecursively } from './helperFunctions.js';
+import { deleteRecursively, byteArrayToString } from './helperFunctions.js';
 
 Gio._promisify(Gio.File.prototype, 'make_directory_async');
 
@@ -221,26 +221,30 @@ export const IconSetStackView = GObject.registerClass({
         const fileSize = fileStream.query_info('standard::*', null).get_size();
         const bytes = fileStream.read_bytes(fileSize, null);
 
-        // Create the image/svg+xml content provider
-        const contentProviderData = Gdk.ContentProvider.new_for_bytes('image/svg+xml', bytes.get_data());
+        // Create the image/svg+xml content provider'
+        const contentProviderSvg = Gdk.ContentProvider.new_for_bytes('image/svg+xml', bytes.get_data());
 
+        // Also create a plain string content provider, for use in coding apps
+        const textValue = new GObject.Value();
+        textValue.init(GObject.TYPE_STRING);
+        textValue.set_string(byteArrayToString(bytes.get_data()));
+        const contentProviderString = Gdk.ContentProvider.new_for_value(textValue);
 
-        // Create the second content provider for a file reference. Supported in Figma.
-        // Create a temporary file with the contents of the icon resource file
+        // Create another content provider for a file reference to a temporary file, for apps that can't handle svg data directly, e.g. Figma.
         const tempFile = Gio.File.new_for_path(GLib.build_filenamev([tempPath, gfile.get_basename()]));
         const outputStream = tempFile.replace(null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
         outputStream.write_bytes(bytes, null);
 
         // Create a new GValue with the temp file as its content
-        const value = new GObject.Value();
-        value.init(Gio.File);
-        value.set_object(tempFile);
+        const fileValue = new GObject.Value();
+        fileValue.init(Gio.File);
+        fileValue.set_object(tempFile);
 
         // Create the file content provider
-        const contentProviderFile = Gdk.ContentProvider.new_for_value(value);
+        const contentProviderFile = Gdk.ContentProvider.new_for_value(fileValue);
 
-        // Create a union of the two content providers, preferring the file provider over the image/svg+xml provider.
-        const contentProviderUnion = Gdk.ContentProvider.new_union([contentProviderFile, contentProviderData]);
+        // Create a union of all content providers, preferring the file provider over the image/svg+xml provider and the string provider.
+        const contentProviderUnion = Gdk.ContentProvider.new_union([contentProviderSvg, contentProviderString, contentProviderFile]);
 
         // console.log(contentProviderUnion.ref_formats().get_mime_types());
 

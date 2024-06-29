@@ -79,7 +79,7 @@ export const DetailsPanel = GObject.registerClass({
       false,
     ),
   },
-  InternalChildren: ['preview_image', 'icons_count', 'icon_size_row'],
+  InternalChildren: ['preview_frame', 'preview_image', 'icons_count', 'icon_size_row', ],
 }, class extends Gtk.Widget {
   constructor(params){
     super(params);
@@ -94,13 +94,20 @@ export const DetailsPanel = GObject.registerClass({
       // Redraw the preview icon
       this._preview_image.set_draw_func((widget, cr, width, height) => drawSvg(widget, cr, width, height, this.icon.gfile));
 
-      // Bind the icon label to the icon object's label'
+      // Bind the icon label to the icon object's label
       this.iconLabel = this.icon.label
 
       // Show the "icon selected" view
       this.iconIsSelected = true;
 
       this._icon_size_row.subtitle = `${this.icon.width} × ${this.icon.height}`;
+
+      // Apply special frame styling in dark mode if the icon is of style 'color'
+      if(this.icon.style == 4){
+        this._preview_frame.add_css_class('preview-frame--color-icon');
+      } else {
+        this._preview_frame.remove_css_class('preview-frame--color-icon');
+      }
 
       // Show the correct word for the style
       switch(this.icon.style){

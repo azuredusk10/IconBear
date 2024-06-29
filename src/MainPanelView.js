@@ -158,6 +158,14 @@ export const MainPanelView = GObject.registerClass({
       const label = drawingArea.get_next_sibling();
 
       label.label = listItem.item.label;
+
+      // Give colored icons a white background in dark mode
+      if(listItem.item.style === 4){
+        console.log('color icon');
+        topLevelBox.add_css_class('card--color-icon');
+      } else {
+        topLevelBox.remove_css_class('card--color-icon');
+      }
     });
 
     // Remove bindings for widgets in the ListItem

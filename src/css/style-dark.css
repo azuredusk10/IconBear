@@ -1,3 +1,18 @@
 .icon-grid__image {
   filter: invert(1);
 }
+.card--color-icon {
+  background-color: #fafafa;
+}
+.card--color-icon .icon-grid__image {
+  filter: none;
+}
+.card--color-icon {
+  color: #1e1e1e;
+}
+.preview-frame--color-icon {
+  background-color: #fafafa;
+}
+.preview-frame--color-icon .icon-grid__image {
+  filter: none;
+}

@@ -119,7 +119,7 @@
                   <property name="margin-top">16</property>
                   <property name="margin-bottom">16</property>
                   <child>
-                    <object class="GtkFrame">
+                    <object class="GtkFrame" id="preview_frame">
                       <property name="width-request">172</property>
                       <property name="height-request">172</property>
                       <property name="margin-bottom">24</property>

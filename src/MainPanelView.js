@@ -33,6 +33,14 @@ export const MainPanelView = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       ''
     ),
+    styleFilter: GObject.ParamSpec.int(
+      'styleFilter',
+      'Style filter',
+      'The icon style to filter the set by',
+      GObject.ParamFlags.READWRITE,
+      0, 4,
+      0
+    ),
     setName: GObject.ParamSpec.string(
       'setName',
       'Set Name',
@@ -98,6 +106,8 @@ export const MainPanelView = GObject.registerClass({
          }
       }
     });
+
+    this.connect('notify::styleFilter', () => console.log(this.styleFilter));
   }
 
   #createListViewFactory(){

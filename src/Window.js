@@ -67,6 +67,14 @@ export const Window = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       'Search sets'
     ),
+    styleFilter: GObject.ParamSpec.int(
+      'styleFilter',
+      'Style filter',
+      'The icon style to filter the set by',
+      GObject.ParamFlags.READWRITE,
+      0, 4,
+      0
+    ),
     maxPreviewIcons: GObject.ParamSpec.int(
       'maxPreviewIcons',
       'Max Preview Icons',
@@ -146,6 +154,14 @@ export const Window = GObject.registerClass({
     });
     deleteSetAction.connect('activate', (action, parameter) => this.#deleteSet(parameter));
     this.add_action(deleteSetAction);
+
+    // Change the 'style' filter
+    const filterByStyleAction = new Gio.SimpleAction({
+      name: 'filter_by_style',
+      parameterType: new GLib.VariantType('i')
+    });
+    filterByStyleAction.connect('activate', (action, parameter) => this.filterByStyle(parameter));
+    this.add_action(filterByStyleAction);
 
   }
 
@@ -349,6 +365,7 @@ export const Window = GObject.registerClass({
       this._search_entry.bind_property('text', stackPageChild, 'searchEntryText', GObject.BindingFlags.SYNC_CREATE);
       this.bind_property('sidebarVisible', stackPageChild, 'sidebarVisible', GObject.BindingFlags.SYNC_CREATE);
       this.bind_property('iconPreviewSize', stackPageChild, 'iconPreviewSize', GObject.BindingFlags.SYNC_CREATE);
+      this.bind_property('styleFilter', stackPageChild, 'styleFilter', GObject.BindingFlags.SYNC_CREATE);
 
       // Add the stack page
       this._main_stack.add_titled(stackPageChild, set.name, set.name);
@@ -532,7 +549,15 @@ export const Window = GObject.registerClass({
     } catch (error) {
         console.log('Error deleting set directory: ' + error);
     }
-}
+  }
+
+  filterByStyle(style){
+    const styleId = style.unpack();
+    console.log(styleId);
+
+    this.styleFilter = styleId;
+    this.notify('styleFilter');
+  }
 
 
 });

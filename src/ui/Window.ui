@@ -242,34 +242,46 @@
                   <object class="GtkCheckButton" id="radio_all_styles">
                     <property name="active">true</property>
                     <property name="label" translatable="true">All styles</property>
+                    <property name="action-name">win.filter_by_style</property>
+                    <property name="action-target">0</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="radio_outline">
                     <property name="label" translatable="true">Outline</property>
                     <property name="group">radio_all_styles</property>
+                    <property name="action-name">win.filter_by_style</property>
+                    <property name="action-target">1</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="radio_fill">
                     <property name="label" translatable="true">Fill</property>
                     <property name="group">radio_all_styles</property>
+                    <property name="action-name">win.filter_by_style</property>
+                    <property name="action-target">2</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="radio_duotone">
                     <property name="label" translatable="true">Duotone</property>
                     <property name="group">radio_all_styles</property>
+                    <property name="action-name">win.filter_by_style</property>
+                    <property name="action-target">3</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="radio_color">
                     <property name="label" translatable="true">Color</property>
                     <property name="group">radio_all_styles</property>
+                    <property name="action-name">win.filter_by_style</property>
+                    <property name="action-target">4</property>
                   </object>
                 </child>
               </object>
             </child>
+            <!-- For a future release: filter by size -->
+            <!--
             <child>
               <object class="GtkSeparator">
                 <property name="orientation">vertical</property>
@@ -313,7 +325,7 @@
                   </object>
                 </child>
               </object>
-            </child>
+            </child> -->
           </object>
         </child>
       </object>

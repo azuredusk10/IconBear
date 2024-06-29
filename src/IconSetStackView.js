@@ -74,6 +74,14 @@ export const IconSetStackView = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       GObject.Object
     ),
+    styleFilter: GObject.ParamSpec.int(
+      'styleFilter',
+      'Style filter',
+      'The icon style to filter the set by',
+      GObject.ParamFlags.READWRITE,
+      0, 4,
+      0
+    ),
     iconPreviewSize: GObject.ParamSpec.int(
       'iconPreviewSize',
       'Icon Preview Size',

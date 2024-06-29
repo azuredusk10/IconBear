@@ -227,7 +227,7 @@ export const IconSetStackView = GObject.registerClass({
 
         // Create the second content provider for a file reference. Supported in Figma.
         // Create a temporary file with the contents of the icon resource file
-        const tempFile = Gio.File.new_for_path(dataDir + '/temp.svg');
+        const tempFile = Gio.File.new_for_path(GLib.build_filenamev([tempPath, gfile.get_basename()]));
         const outputStream = tempFile.replace(null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
         outputStream.write_bytes(bytes, null);
 

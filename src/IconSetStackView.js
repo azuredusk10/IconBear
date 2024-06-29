@@ -221,8 +221,9 @@ export const IconSetStackView = GObject.registerClass({
         const fileSize = fileStream.query_info('standard::*', null).get_size();
         const bytes = fileStream.read_bytes(fileSize, null);
 
-        // Create the image/svg+xml content provider'
-        const contentProviderSvg = Gdk.ContentProvider.new_for_bytes('image/svg+xml', bytes.get_data());
+        // Create the image/svg+xml content provider
+        // There was no benefit to this over the plain text ContentProvider, so I have removed it for now.
+        // const contentProviderSvg = Gdk.ContentProvider.new_for_bytes('image/svg+xml', bytes.get_data());
 
         // Also create a plain string content provider, for use in coding apps
         const textValue = new GObject.Value();
@@ -244,9 +245,11 @@ export const IconSetStackView = GObject.registerClass({
         const contentProviderFile = Gdk.ContentProvider.new_for_value(fileValue);
 
         // Create a union of all content providers, preferring the file provider over the image/svg+xml provider and the string provider.
-        const contentProviderUnion = Gdk.ContentProvider.new_union([contentProviderSvg, contentProviderString, contentProviderFile]);
-
+        //const contentProviderUnion = Gdk.ContentProvider.new_union([contentProviderString, contentProviderFile]);
         // console.log(contentProviderUnion.ref_formats().get_mime_types());
+
+        // Unfortunately, all apps seemed to prefer the file reference over the plain string in the above union, meaning that you could not copy the SVG and paste it into a code editor - it would paste in the path to the temporary file - so I have dropped the file content provider. This means that icon code can be copied and pasted into code as well as into design tools, but that copying and pasting into the file manager will not work.
+        const contentProviderUnion = Gdk.ContentProvider.new_union([contentProviderString]);
 
         // Copy the icon to the clipboard
         const clipboard = this.get_clipboard();

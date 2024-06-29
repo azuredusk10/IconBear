@@ -41,7 +41,7 @@
                       <property name="icon-name">open-menu-symbolic</property>
                       <property name="tooltip-text" translatable="true">Main Menu</property>
                       <property name="primary">true</property>
-                      <property name="menu-model">primary_menu</property>
+                      <property name="popover">primary_popover_menu</property>
                     </object>
                   </child>
                 </object>
@@ -190,12 +190,23 @@
 
     </property>
   </template>
+  <object class="GtkPopoverMenu" id="primary_popover_menu">
+    <property name="name">primary_popover_menu</property>
+    <property name="menu-model">primary_menu</property>
+  </object>
   <menu id="primary_menu">
     <section>
       <item>
-        <attribute name="label" translatable="yes">_Add icon set</attribute>
-        <attribute name="action">app.add-icon-set</attribute>
+        <attribute name="label" translatable="yes">_Import icons</attribute>
+        <attribute name="action">win.add_set</attribute>
       </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="custom">preview_size_widget</attribute>
+      </item>
+    </section>
+    <section>
       <item>
         <attribute name="label" translatable="yes">_Preferences</attribute>
         <attribute name="action">app.preferences</attribute>

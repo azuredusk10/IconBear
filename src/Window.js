@@ -17,7 +17,7 @@ Gio._promisify(Gio.File.prototype, 'delete_async');
 export const Window = GObject.registerClass({
 	GTypeName: 'IcoWindow',
 	Template: 'resource:///design/chris_wood/IconBear/ui/Window.ui',
-	InternalChildren: ['search_entry', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button', 'main_toolbar_view', 'main_header_bar', 'add_set_dialog_widget', 'all_sets_view', 'search_controls_wrapper', 'import_button', 'radio_all_styles', 'radio_outline','radio_filled','radio_duotone','radio_color', 'filters_button'],
+	InternalChildren: ['search_entry', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button', 'main_toolbar_view', 'main_header_bar', 'add_set_dialog_widget', 'all_sets_view', 'search_controls_wrapper', 'import_button', 'radio_all_styles', 'radio_outline','radio_filled','radio_duotone','radio_color', 'filters_button', 'primary_popover_menu'],
 	Properties: {
 	  sets: GObject.ParamSpec.jsobject(
       'sets',
@@ -97,6 +97,7 @@ export const Window = GObject.registerClass({
   constructor(params={}){
     super(params);
     this.#initializeWindow();
+    this.#initializePopoverMenu();
 
     this._all_sets_view.connect('set-added', async (emittingObject, folderName) => {
       try {
@@ -598,6 +599,21 @@ export const Window = GObject.registerClass({
   openStackPage(stackPageName) {
     const pageToOpen = this._main_stack.get_child_by_name(stackPageName);
     this._main_stack.set_visible_child(pageToOpen);
+  }
+
+  /**
+  * Adds custom widgets to the window's popover menu
+  **/
+  #initializePopoverMenu() {
+    const previewSizeWidget = new Gtk.Box();
+
+    const spinButton = new Gtk.SpinButton();
+    const spinAdjustment = Gtk.Adjustment.new(100, 50, 150, 25, 25, 0);
+    spinButton.adjustment = spinAdjustment;
+
+    previewSizeWidget.append(spinButton);
+
+    this. _primary_popover_menu.add_child(previewSizeWidget, 'preview_size_widget');
   }
 
 });

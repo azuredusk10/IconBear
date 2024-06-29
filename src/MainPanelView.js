@@ -10,7 +10,7 @@ import { drawSvg } from './drawSvg.js';
 export const MainPanelView = GObject.registerClass({
   GTypeName: 'IcoMainPanelView',
   Template: 'resource:///design/chris_wood/IconBear/ui/MainPanelView.ui',
-  InternalChildren: ['icons_grid_view', 'icons_selection', 'icons_filter_model'],
+  InternalChildren: ['icons_grid_view', 'icons_selection', 'icons_filter_model', 'icons_grid_view_wrapper', 'empty_state'],
   Properties: {
     icons: GObject.ParamSpec.object(
       'icons',
@@ -119,6 +119,19 @@ export const MainPanelView = GObject.registerClass({
         }
       }
     });
+
+    // Show or hide the empty state
+    this._icons_filter_model.filter.connect('changed', (filter, change) => {
+      const itemsVisible = this._icons_filter_model.n_items;
+
+      if(itemsVisible > 0){
+        this._empty_state.visible = false;
+        this._icons_grid_view_wrapper.visible = true;
+      } else {
+        this._empty_state.visible = true;
+        this._icons_grid_view_wrapper.visible = false;
+      }
+    })
   }
 
   #createListViewFactory(){

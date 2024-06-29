@@ -6,6 +6,7 @@ import Gdk from 'gi://Gdk';
 import GLib from 'gi://GLib';
 
 import { Icon } from './Icon.js';
+import { deleteRecursively } from './helperFunctions.js';
 
 Gio._promisify(Gio.File.prototype, 'make_directory_async');
 
@@ -192,68 +193,75 @@ export const IconSetStackView = GObject.registerClass({
   **/
 	async onIconCopied(emitter, gfile){
 
-	  let toastTitle;
-	  const dataDir = GLib.get_user_data_dir();
+	  try {
 
-	  const tempFolder = Gio.File.new_from_path(GLib.build_pathv(dataDir, 'temp'));
-    if (tempFolder.query_exists(null)){
-      // If the "temp" folder already exists, delete the temporary files inside it
+	      let toastTitle;
+	      const dataDir = GLib.get_user_data_dir();
 
-    } else {
-      // Otherwise, create the "temp" folder
-      console.log('creating temp folder');
-      await tempFolder.make_directory_async(GLib.PRIORITY_DEFAULT, null);
+	      const tempPath = GLib.build_filenamev([dataDir, 'temp']);
+	      const tempFolder = Gio.File.new_for_path(tempPath);
+        if (tempFolder.query_exists(null)){
+          // If the "temp" folder already exists, delete the temporary files inside it
+          console.log('clearing contents of temp folder');
+          deleteRecursively(tempPath, false);
+        } else {
+          // Otherwise, create the "temp" folder
+          console.log('creating temp folder');
+          await tempFolder.make_directory_async(GLib.PRIORITY_DEFAULT, null);
+        }
+
+
+        // Copy the icon to clipboard
+
+        // Create the first content provider for image/svg+xml data. Supported in Inkscape.
+        // Open the resource for reading
+        const fileStream = gfile.read(null);
+
+        // Read the entire file content into bytes
+        const fileSize = fileStream.query_info('standard::*', null).get_size();
+        const bytes = fileStream.read_bytes(fileSize, null);
+
+        // Create the image/svg+xml content provider
+        const contentProviderData = Gdk.ContentProvider.new_for_bytes('image/svg+xml', bytes.get_data());
+
+
+        // Create the second content provider for a file reference. Supported in Figma.
+        // Create a temporary file with the contents of the icon resource file
+        const tempFile = Gio.File.new_for_path(dataDir + '/temp.svg');
+        const outputStream = tempFile.replace(null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
+        outputStream.write_bytes(bytes, null);
+
+        // Create a new GValue with the temp file as its content
+        const value = new GObject.Value();
+        value.init(Gio.File);
+        value.set_object(tempFile);
+
+        // Create the file content provider
+        const contentProviderFile = Gdk.ContentProvider.new_for_value(value);
+
+        // Create a union of the two content providers, preferring the file provider over the image/svg+xml provider.
+        const contentProviderUnion = Gdk.ContentProvider.new_union([contentProviderFile, contentProviderData]);
+
+        // console.log(contentProviderUnion.ref_formats().get_mime_types());
+
+        // Copy the icon to the clipboard
+        const clipboard = this.get_clipboard();
+        if(clipboard.set_content(contentProviderUnion)){
+          toastTitle = "SVG copied to clipboard";
+        } else {
+          toastTitle = "Couldn't copy the SVG to clipboard";
+        }
+
+        // Show toast
+        const toast = new Adw.Toast({
+          title: toastTitle,
+          timeout: 3,
+        });
+
+        this._toast_overlay.add_toast(toast);
+    } catch(e){
+      console.log('Error copying to clipboard: ' + e);
     }
-
-
-    // Copy the icon to clipboard
-
-    // Create the first content provider for image/svg+xml data. Supported in Inkscape.
-    // Open the resource for reading
-    const fileStream = gfile.read(null);
-
-    // Read the entire file content into bytes
-    const fileSize = fileStream.query_info('standard::*', null).get_size();
-    const bytes = fileStream.read_bytes(fileSize, null);
-
-    // Create the image/svg+xml content provider
-    const contentProviderData = Gdk.ContentProvider.new_for_bytes('image/svg+xml', bytes.get_data());
-
-
-    // Create the second content provider for a file reference. Supported in Figma.
-    // Create a temporary file with the contents of the icon resource file
-    const tempFile = Gio.File.new_for_path(dataDir + '/temp.svg');
-    const outputStream = tempFile.replace(null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
-    outputStream.write_bytes(bytes, null);
-
-    // Create a new GValue with the temp file as its content
-    const value = new GObject.Value();
-    value.init(Gio.File);
-    value.set_object(tempFile);
-
-    // Create the file content provider
-    const contentProviderFile = Gdk.ContentProvider.new_for_value(value);
-
-    // Create a union of the two content providers, preferring the file provider over the image/svg+xml provider.
-    const contentProviderUnion = Gdk.ContentProvider.new_union([contentProviderFile, contentProviderData]);
-
-    // console.log(contentProviderUnion.ref_formats().get_mime_types());
-
-    // Copy the icon to the clipboard
-    const clipboard = this.get_clipboard();
-    if(clipboard.set_content(contentProviderUnion)){
-      toastTitle = "SVG copied to clipboard";
-    } else {
-      toastTitle = "Couldn't copy the SVG to clipboard";
-    }
-
-    // Show toast
-    const toast = new Adw.Toast({
-      title: toastTitle,
-      timeout: 3,
-    });
-
-    this._toast_overlay.add_toast(toast);
 	}
 
 

@@ -181,7 +181,7 @@ export const drawSvg = (widget, cr, width, height, gfile) => {
           await file.delete_async(GLib.PRIORITY_DEFAULT, null);
         }
 
-        console.log('deleted all set files');
+        console.log('recursive delete completed');
 
     } catch (error) {
         console.log('Error deleting set directory: ' + error);

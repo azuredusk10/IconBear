@@ -190,9 +190,8 @@ export const MainPanelView = GObject.registerClass({
       const label = drawingArea.get_next_sibling();
 
       // Bind the width and height of the drawing area to the iconPreviewScale
-      this.bind_property_full('iconPreviewScale', drawingArea, 'height-request', GObject.BindingFlags.SYNC_CREATE, (binding, fromValue) => [true, fromValue * listItem.item.height], null);
-
-      this.bind_property_full('iconPreviewScale', drawingArea, 'width-request', GObject.BindingFlags.SYNC_CREATE, (binding, fromValue) => [true, fromValue * listItem.item.width], null);
+      listItem.heightBinding = this.bind_property_full('iconPreviewScale', drawingArea, 'height-request', GObject.BindingFlags.SYNC_CREATE, (binding, fromValue) => [true, fromValue * listItem.item.height], null);
+      listItem.widthBinding = this.bind_property_full('iconPreviewScale', drawingArea, 'width-request', GObject.BindingFlags.SYNC_CREATE, (binding, fromValue) => [true, fromValue * listItem.item.width], null);
 
       label.label = listItem.item.label;
 
@@ -207,7 +206,14 @@ export const MainPanelView = GObject.registerClass({
 
     // Remove bindings for widgets in the ListItem
     factory.connect('unbind', (factory, listItem) => {
-
+      if (listItem.heightBinding) {
+        listItem.heightBinding.unbind();
+        listItem.heightBinding = null;
+      }
+      if (listItem.widthBinding) {
+        listItem.widthBinding.unbind();
+        listItem.widthBinding = null;
+      }
     });
 
     factory.connect('teardown', (factory, listItem) => {

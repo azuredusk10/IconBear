@@ -61,7 +61,7 @@ export const MainPanelView = GObject.registerClass({
       'Icon Preview Scale',
       'The scale to render icon previews at',
       GObject.ParamFlags.READWRITE,
-      0, 10,
+      0, 20,
       2
     ),
   },
@@ -132,10 +132,6 @@ export const MainPanelView = GObject.registerClass({
       }
     });
 
-    this.connect('notify::iconPreviewScale', () => {
-      console.log('icon preview scale changed');
-      // this.#createListViewFactory();
-    });
   }
 
 

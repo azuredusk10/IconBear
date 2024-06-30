@@ -81,7 +81,7 @@ export const Window = GObject.registerClass({
       'Icon Preview Scale',
       'The scale to render icon previews at',
       GObject.ParamFlags.READWRITE,
-      0, 10,
+      0, 20,
       2
     ),
 	}
@@ -610,7 +610,7 @@ export const Window = GObject.registerClass({
       widthChars: 5,
     });
     const defaultAdjustmentValue = this.iconPreviewScale * 100;
-    const spinAdjustment = Gtk.Adjustment.new(defaultAdjustmentValue, 50, 400, 25, 25, 0);
+    const spinAdjustment = Gtk.Adjustment.new(defaultAdjustmentValue, 50, 2000, 25, 25, 0);
     spinButton.adjustment = spinAdjustment;
 
     // Always append a % sign to the end of the value

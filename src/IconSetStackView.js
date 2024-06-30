@@ -90,7 +90,7 @@ export const IconSetStackView = GObject.registerClass({
       'Icon Preview Scale',
       'The scale to render icon previews at',
       GObject.ParamFlags.READWRITE,
-      0, 10,
+      0, 20,
       2
     ),
     iconsCount: GObject.ParamSpec.int(

@@ -211,30 +211,29 @@ export const IconSetStackView = GObject.registerClass({
         }
 
 
-        // Copy the icon to clipboard
-
-        // Create the first content provider for image/svg+xml data. Supported in Inkscape.
         // Open the resource for reading
-        const fileStream = gfile.read(null);
+        const [, fileContents] = gfile.load_contents(null);
+        const stringContents = new TextDecoder().decode(fileContents);
 
-        // Read the entire file content into bytes
-        const fileSize = fileStream.query_info('standard::*', null).get_size();
-        const bytes = fileStream.read_bytes(fileSize, null);
+        /* 1: Create the plain text content provider */
 
-        // Create the image/svg+xml content provider
-        // There was no benefit to this over the plain text ContentProvider, so I have removed it for now.
-        // const contentProviderSvg = Gdk.ContentProvider.new_for_bytes('image/svg+xml', bytes.get_data());
-
-        // Also create a plain string content provider, for use in coding apps
+        // Create a GValue of type string, containing the file's contents
         const textValue = new GObject.Value();
         textValue.init(GObject.TYPE_STRING);
-        textValue.set_string(byteArrayToString(bytes.get_data()));
+        textValue.set_string(stringContents);
+
+        // Create the string content provider
         const contentProviderString = Gdk.ContentProvider.new_for_value(textValue);
 
-        // Create another content provider for a file reference to a temporary file, for apps that can't handle svg data directly, e.g. Figma.
+
+        /* 2: Create the file content provider */
+
+        // Convert any em/rem units in the file to pixels. This ensures the size is correctly set in design software. Otherwise, icons are pasted at 12px.
+        const strippedEmRemUnits = stringContents.replaceAll(/1em|1rem/gi, '16px').replaceAll(/2em|2rem/gi, '32px').replaceAll(/3em|3rem/gi, '48px').replaceAll(/4em|4rem/gi, '64px');
+
+        // Create a temporary file with the new contents
         const tempFile = Gio.File.new_for_path(GLib.build_filenamev([tempPath, gfile.get_basename()]));
-        const outputStream = tempFile.replace(null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
-        outputStream.write_bytes(bytes, null);
+        tempFile.replace_contents(strippedEmRemUnits, null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
 
         // Create a new GValue with the temp file as its content
         const fileValue = new GObject.Value();
@@ -245,11 +244,11 @@ export const IconSetStackView = GObject.registerClass({
         const contentProviderFile = Gdk.ContentProvider.new_for_value(fileValue);
 
         // Create a union of all content providers, preferring the file provider over the image/svg+xml provider and the string provider.
-        //const contentProviderUnion = Gdk.ContentProvider.new_union([contentProviderString, contentProviderFile]);
+        const contentProviderUnion = Gdk.ContentProvider.new_union([contentProviderFile, contentProviderString]);
         // console.log(contentProviderUnion.ref_formats().get_mime_types());
 
-        // Unfortunately, all apps seemed to prefer the file reference over the plain string in the above union, meaning that you could not copy the SVG and paste it into a code editor - it would paste in the path to the temporary file - so I have dropped the file content provider. This means that icon code can be copied and pasted into code as well as into design tools, but that copying and pasting into the file manager will not work.
-        const contentProviderUnion = Gdk.ContentProvider.new_union([contentProviderString]);
+        // Unfortunately, all apps seemed to prefer the file reference over the plain string in the above union, meaning that you could not copy the SVG and paste it into a code editor - it will paste in the path to the temporary file. Dropping the file content provider using the below line will mean that icon code can be copied and pasted into code as well as into design tools, but that original em/rem units will be lost, LibreOffice won't accept the icon file, and copying and pasting into the file manager will not work.
+        // const contentProviderUnion = Gdk.ContentProvider.new_union([contentProviderSvg]);
 
         // Copy the icon to the clipboard
         const clipboard = this.get_clipboard();

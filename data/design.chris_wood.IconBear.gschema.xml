@@ -11,7 +11,7 @@
 	    <default>"all_sets"</default>
 	  </key>
 	  <key name="icon-preview-scale" type="d">
-	    <default>2</default>
+	    <default>1.5</default>
 	  </key>
 	</schema>
 </schemalist>

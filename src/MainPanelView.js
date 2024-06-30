@@ -130,8 +130,14 @@ export const MainPanelView = GObject.registerClass({
         this._empty_state.visible = true;
         this._icons_grid_view_wrapper.visible = false;
       }
-    })
+    });
+
+    this.connect('notify::iconPreviewScale', () => {
+      console.log('icon preview scale changed');
+      // this.#createListViewFactory();
+    });
   }
+
 
   #createListViewFactory(){
     const factory = new Gtk.SignalListItemFactory();
@@ -187,9 +193,10 @@ export const MainPanelView = GObject.registerClass({
       const drawingArea = topLevelBox.get_first_child();
       const label = drawingArea.get_next_sibling();
 
+      // Bind the width and height of the drawing area to the iconPreviewScale
+      this.bind_property_full('iconPreviewScale', drawingArea, 'height-request', GObject.BindingFlags.SYNC_CREATE, (binding, fromValue) => [true, fromValue * listItem.item.height], null);
 
-      drawingArea.widthRequest = listItem.item.width * this.iconPreviewScale;
-      drawingArea.heightRequest = listItem.item.height * this.iconPreviewScale;
+      this.bind_property_full('iconPreviewScale', drawingArea, 'width-request', GObject.BindingFlags.SYNC_CREATE, (binding, fromValue) => [true, fromValue * listItem.item.width], null);
 
       label.label = listItem.item.label;
 

@@ -10,5 +10,8 @@
 	  <key name="visible-page-name" type="s">
 	    <default>"all_sets"</default>
 	  </key>
+	  <key name="icon-preview-scale" type="d">
+	    <default>2</default>
+	  </key>
 	</schema>
 </schemalist>

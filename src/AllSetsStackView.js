@@ -85,18 +85,18 @@ export const AllSetsStackView = GObject.registerClass({
   **/
   _addPreviewItem(icon, scale){
 
-    const widthRequest = icon.width * scale;
-    const heightRequest = icon.height * scale;
-
     const svgWidget = new Gtk.DrawingArea({
-      widthRequest,
-      heightRequest,
       marginTop: 8,
       marginBottom: 8,
       marginStart: 4,
       marginEnd: 4,
       cssClasses: ['icon-grid__image'],
     })
+
+    // Bind the width and height of the drawing area to the iconPreviewScale
+      this.bind_property_full('iconPreviewScale', svgWidget, 'height-request', GObject.BindingFlags.SYNC_CREATE, (binding, fromValue) => [true, fromValue * icon.height], null);
+
+      this.bind_property_full('iconPreviewScale', svgWidget, 'width-request', GObject.BindingFlags.SYNC_CREATE, (binding, fromValue) => [true, fromValue * icon.width], null);
 
     svgWidget.set_draw_func((widget, cr, width, height) => drawSvg(widget, cr, width, height, icon.gfile));
 

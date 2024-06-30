@@ -82,7 +82,7 @@ export const Window = GObject.registerClass({
       'The scale to render icon previews at',
       GObject.ParamFlags.READWRITE,
       0, 10,
-      4
+      2
     ),
 	}
 }, class extends Adw.ApplicationWindow {
@@ -132,6 +132,7 @@ export const Window = GObject.registerClass({
 	#bindToSettings(){
 	  settings.bind('window-width', this, 'default-width', Gio.SettingsBindFlags.DEFAULT);
 	  settings.bind('window-height', this, 'default-height', Gio.SettingsBindFlags.DEFAULT);
+	  settings.bind('icon-preview-scale', this, 'iconPreviewScale', Gio.SettingsBindFlags.DEFAULT);
 	}
 
 	#initializeActions(){
@@ -608,17 +609,19 @@ export const Window = GObject.registerClass({
       hexpand: true,
       widthChars: 5,
     });
-    const spinAdjustment = Gtk.Adjustment.new(100, 50, 150, 25, 25, 0);
+    const defaultAdjustmentValue = this.iconPreviewScale * 100;
+    const spinAdjustment = Gtk.Adjustment.new(defaultAdjustmentValue, 50, 400, 25, 25, 0);
     spinButton.adjustment = spinAdjustment;
 
     // Always append a % sign to the end of the value
-    spinButton.set_text(`${spinButton.get_value()}%`);
-
-    spinButton.connect('value-changed', () => {
+    spinButton.connect('output', () => {
       const newValue = spinButton.get_value();
-      this.iconPreviewScale = newValue / 100;
       spinButton.set_text(`${newValue}%`);
+
+      return true;
     });
+
+    spinButton.connect('value-changed', () => this.iconPreviewScale = spinButton.get_value() / 100);
 
     const label = new Gtk.Label({
       label: 'Zoom',

@@ -90,6 +90,8 @@ export const AllSetsStackView = GObject.registerClass({
       marginStart: 4,
       marginEnd: 4,
       cssClasses: ['icon-grid__image'],
+      halign: 3,
+      valign: 3
     })
 
     // Bind the width and height of the drawing area to the iconPreviewScale
@@ -219,6 +221,8 @@ export const AllSetsStackView = GObject.registerClass({
         sensitive: false,
         minChildrenPerLine: 3,
         maxChildrenPerLine: 6,
+        vexpand: true,
+        hexpand: true,
       });
 
       const previewModel = Gio.ListStore.new(Icon);
@@ -358,6 +362,7 @@ export const AllSetsStackView = GObject.registerClass({
           const fileInfo = iconFile.query_info('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
 
           const label = iconFilename.replace(/\.[^/.]+$/, "");
+          const [width, height] = getIconFileDimensions(iconFile, true);
 
           // Create a new Icon
           const icon = new Icon({
@@ -365,8 +370,8 @@ export const AllSetsStackView = GObject.registerClass({
             filepath: iconsDir + iconFilename,
             type: fileInfo.get_file_type(),
             gfile: iconFile,
-            width: 12,
-            height: 12,
+            width,
+            height,
             style: 1,
           });
 
@@ -416,6 +421,8 @@ export const AllSetsStackView = GObject.registerClass({
           sensitive: false,
           minChildrenPerLine: 3,
           maxChildrenPerLine: 6,
+          vexpand: true,
+          hexpand: true,
         });
 
         const previewModel = Gio.ListStore.new(Icon);

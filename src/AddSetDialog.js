@@ -6,7 +6,7 @@ import GLib from 'gi://GLib';
 import GdkPixbuf from 'gi://GdkPixbuf';
 
 import { Icon } from './Icon.js';
-import { estimateIconStyle } from './helperFunctions.js';
+import { estimateIconStyle, getIconFileDimensions } from './helperFunctions.js';
 
 // Set up async file methods
 Gio._promisify(Gio.File.prototype, 'enumerate_children_async');
@@ -376,10 +376,9 @@ export const AddSetDialog = GObject.registerClass({
           const iconFilename = info.get_name();
           const folderName = GLib.path_get_dirname(iconPath);
 
-          // Determine the width and height of the icon
-          const pixbuf = GdkPixbuf.Pixbuf.new_from_file(iconPath);
-          const width = pixbuf.width;
-          const height = pixbuf.height;
+          console.log('getting icon file dimensions');
+          const [width, height] = getIconFileDimensions(gFile, false);
+          console.log('completed dimensions');
 
           const style = estimateIconStyle(gFile, folderName);
 

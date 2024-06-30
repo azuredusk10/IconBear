@@ -1,6 +1,7 @@
 import Rsvg from 'gi://Rsvg';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
+import GdkPixbuf from 'gi://GdkPixbuf';
 
 /**
 * Guess which style an icon is.
@@ -196,4 +197,48 @@ export const drawSvg = (widget, cr, width, height, gfile) => {
 export const byteArrayToString = (byteArray) => {
     let decoder = new TextDecoder('utf-8');
     return decoder.decode(byteArray);
+}
+
+/**
+* Work out the dimensions of an SVG file
+* @param {Gio.File} iconFile - the SVG icon file reference to use
+* @param {Boolean} isGResource - whether the file is stored as a GResource (true) or is a regular file on the user's system (false)
+* @return {[width<Number>, height<Number>]} - the width and height of the SVG
+**/
+export const getIconFileDimensions = (iconFile, isGResource = false) => {
+
+  let width = 16;
+  let height = 16;
+  let pixbuf;
+
+  const [, fileContents] = iconFile.load_contents(null);
+  const stringContents = new TextDecoder().decode(fileContents);
+
+  // If the icon file contains em or rem units, roughly estimate its size in pixels
+  if(stringContents.match(/em|rem/i)){
+    if(stringContents.match(/1em|1rem/i)){
+      width, height = 16;
+    } else if(stringContents.match(/2em|2rem/i)){
+      width, height = 32;
+    } else if(stringContents.match(/3em|3rem/i)){
+      width, height = 48;
+    } else if(stringContents.match(/4em|4rem/i)){
+      width, height = 64;
+    }
+  } else {
+
+    // Otherwise, create a Pixbuf to determine the exact width and height of the icon
+    if(isGResource){
+      // Removes the resource:// at the start of the path so that the URI is in Pixbuf's desired format
+      pixbuf = GdkPixbuf.Pixbuf.new_from_resource(iconFile.get_uri().replace('resource://', ''));
+    } else {
+      pixbuf = GdkPixbuf.Pixbuf.new_from_file(iconFile.get_path());
+    }
+
+    width = pixbuf.width;
+    height = pixbuf.height;
+
+  }
+
+  return [width, height];
 }

@@ -2,12 +2,11 @@ import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
-import GdkPixbuf from 'gi://GdkPixbuf';
 
 // import { Icon, Set } from './classes.js';
 import { Set } from './classes.js';
 import { Icon } from './Icon.js';
-import { estimateIconStyle, drawSvg } from './helperFunctions.js';
+import { getIconFileDimensions, estimateIconStyle, drawSvg } from './helperFunctions.js';
 
 // Set up async file methods
 Gio._promisify(Gio.File.prototype, 'create_async');
@@ -538,15 +537,12 @@ export const AllSetsStackView = GObject.registerClass({
 
         // Create the Gio.File for this icon resource and get its file info
         const iconFile = Gio.File.new_for_uri('resource://' + iconsDir + iconFilename);
+        console.log('resource://' + iconsDir + iconFilename);
         const fileInfo = await iconFile.query_info_async('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null, () => true);
 
         const label = iconFilename.replace(/\.[^/.]+$/, "");
 
-        // Determine the width and height of the icon
-        const pixbuf = GdkPixbuf.Pixbuf.new_from_resource(iconsDir + iconFilename);
-        const width = pixbuf.width;
-        const height = pixbuf.height;
-
+        const [width, height] = getIconFileDimensions(iconFile, true);
 
         const style = estimateIconStyle(iconFile);
 

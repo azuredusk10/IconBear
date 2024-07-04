@@ -29,6 +29,41 @@
             </child>
           </object>
         </child>
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="title" translatable="yes" context="shortcut window">Filter by style</property>
+            <child>
+		          <object class="GtkShortcutsShortcut">
+			          <property name="title">Clear style filter</property>
+			          <property name="action-name">win.clear_filters</property>
+		          </object>
+	          </child>
+            <child>
+		          <object class="GtkShortcutsShortcut">
+			          <property name="title" translatable="yes" context="shortcut window">Only show outline icons</property>
+			          <property name="action-name">win.filter_by_style(1)</property>
+		          </object>
+	          </child>
+            <child>
+		          <object class="GtkShortcutsShortcut">
+			          <property name="title" translatable="yes" context="shortcut window">Only show filled icons</property>
+			          <property name="action-name">win.filter_by_style(2)</property>
+		          </object>
+	          </child>
+            <child>
+		          <object class="GtkShortcutsShortcut">
+			          <property name="title" translatable="yes" context="shortcut window">Only show duotone icons</property>
+			          <property name="action-name">win.filter_by_style(3)</property>
+		          </object>
+	          </child>
+            <child>
+		          <object class="GtkShortcutsShortcut">
+			          <property name="title" translatable="yes" context="shortcut window">Only show color icons</property>
+			          <property name="action-name">win.filter_by_style(4)</property>
+		          </object>
+	          </child>
+          </object>
+        </child>
       </object>
     </child>
   </object>

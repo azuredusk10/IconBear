@@ -50,6 +50,11 @@ export const Application = GObject.registerClass({
 	#initializeAccelerators(){
 	  this.set_accels_for_action('window.close', ['<Control>w']);
 	  this.set_accels_for_action('win.add_set', [ '<Ctrl>o' ]);
+	  this.set_accels_for_action('win.clear_filters', [ '<Ctrl>1' ]);
+	  this.set_accels_for_action('win.filter_by_style(1)', [ '<Ctrl>2' ]);
+	  this.set_accels_for_action('win.filter_by_style(2)', [ '<Ctrl>3' ]);
+	  this.set_accels_for_action('win.filter_by_style(3)', [ '<Ctrl>4' ]);
+	  this.set_accels_for_action('win.filter_by_style(4)', [ '<Ctrl>5' ]);
 	}
 
 });

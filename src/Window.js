@@ -1,3 +1,4 @@
+import { gettext as _ } from "gettext";
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 import Adw from 'gi://Adw';
@@ -175,6 +176,13 @@ export const Window = GObject.registerClass({
       this.filterByStyle(GLib.Variant.new_int16(0));
     });
     this.add_action(clearFiltersAction);
+
+    // Open the "About" dialog
+    const openAboutDialog = new Gio.SimpleAction({
+      name: 'open_about_dialog'
+    });
+    openAboutDialog.connect('activate', (action) => this.openAboutDialog());
+    this.add_action(openAboutDialog);
 
   }
 
@@ -634,6 +642,33 @@ export const Window = GObject.registerClass({
     previewSizeWidget.append(spinButton);
 
     this. _primary_popover_menu.add_child(previewSizeWidget, 'preview_size_widget');
+  }
+
+  openAboutDialog() {
+    const dialog = new Adw.AboutDialog({
+      application_icon: "application-x-executable",
+      application_name: "Icon Bear",
+      developer_name: "Chris Wood",
+      version: "0.1.0",
+      website: "https://www.chris-wood.design/icon-bear-app",
+      issue_url: "https://github.com/azuredusk10/IconBear/issues",
+      copyright: "© 2024 Chris Wood",
+      license_type: Gtk.License.GPL_3_0_ONLY,
+      translator_credits: _("translator-credits"),
+    });
+
+    dialog.add_legal_section(
+      _("Icons"),
+      null,
+      Gtk.License.CUSTOM,
+      _(
+        "This application uses icons from <a href='https://example.org'>somewhere</a>.",
+      ),
+    );
+
+    dialog.add_acknowledgement_section(_("Special thanks to"), [_("My cat")]);
+
+    dialog.present(this);
   }
 
 });

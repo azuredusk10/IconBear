@@ -15,5 +15,6 @@
     <file>drawSvg.js</file>
     <file>helperFunctions.js</file>
     <file>classes.js</file>
+    <file>PreferencesDialog.js</file>
   </gresource>
 </gresources>

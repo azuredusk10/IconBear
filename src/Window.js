@@ -5,6 +5,8 @@ import Adw from 'gi://Adw';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
+import { PreferencesDialog } from './PreferencesDialog.js';
+
 import { IconSetStackView } from './IconSetStackView.js';
 import { Icon } from './Icon.js';
 import { deleteRecursively } from './helperFunctions.js'
@@ -183,6 +185,13 @@ export const Window = GObject.registerClass({
     });
     openAboutDialog.connect('activate', (action) => this.openAboutDialog());
     this.add_action(openAboutDialog);
+
+    // Open the "Preferences" dialog
+    const openPreferencesDialog = new Gio.SimpleAction({
+      name: 'open_preferences_dialog'
+    });
+    openPreferencesDialog.connect('activate', (action) => this.openPreferencesDialog());
+    this.add_action(openPreferencesDialog);
 
   }
 
@@ -669,6 +678,14 @@ export const Window = GObject.registerClass({
     dialog.add_acknowledgement_section(_("Special thanks to"), [_("My cat")]);
 
     dialog.present(this);
+  }
+
+  openPreferencesDialog(){
+    const preferencesDialog = new Adw.Dialog();
+    const dialogChild = new PreferencesDialog;
+
+    preferencesDialog.set_child(dialogChild);
+    preferencesDialog.present(this);
   }
 
 });

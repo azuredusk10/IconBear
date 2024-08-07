@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<interface>
+  <template class="IcoPreferencesDialog">
+    <property name="layout-manager">
+			<object class="GtkBoxLayout">
+				<property name="orientation">vertical</property>
+			</object>
+		</property>
+    <child>
+      <object class="AdwClamp">
+        <property name="maximum-size">400</property>
+        <style>
+          <class name="mx-8"/>
+          <class name="mt-8"/>
+          <class name="mb-16"/>
+        </style>
+        <property name="child">
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Hello</property>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+  </template>
+</interface>

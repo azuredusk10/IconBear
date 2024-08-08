@@ -35,7 +35,7 @@
                   <class name="boxed-list"/>
                 </style>
                 <child>
-                  <object class="AdwComboRow" id="preferred_copy_method_input">
+                  <object class="AdwComboRow" id="preferred_copy_method_row">
                     <property name="title" translatable="true">Preferred copy method</property>
                     <property name="subtitle" translatable="true">Copy a temporary file to the clipboard (best for design software). This converts em/rem units to pixels and preserves the file name.</property>
                     <property name="subtitle" translatable="true">Copy the file contents to the clipboard (best for coding). Preserves the original code and lets you paste it directly into a code editor, but some apps won't recognise this as an image.</property>

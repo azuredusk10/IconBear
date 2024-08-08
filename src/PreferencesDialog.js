@@ -8,7 +8,7 @@ import GLib from 'gi://GLib';
 export const PreferencesDialog = GObject.registerClass({
   GTypeName: 'IcoPreferencesDialog',
   Template: 'resource:///design/chris_wood/IconBear/ui/PreferencesDialog.ui',
-  InternalChildren: ['preferred_copy_method_input'],
+  InternalChildren: ['preferred_copy_method_row'],
   Properties: {
    preferredCopyMethod: GObject.ParamSpec.int(
       'preferredCopyMethod',
@@ -24,6 +24,7 @@ export const PreferencesDialog = GObject.registerClass({
     super(params);
     this.bindToSettings();
     this.bindProperties();
+    this.bindPreferredCopyMethodSubtitle();
   }
 
   bindToSettings() {
@@ -31,6 +32,18 @@ export const PreferencesDialog = GObject.registerClass({
   }
 
   bindProperties() {
-    this.bind_property('preferredCopyMethod', this._preferred_copy_method_input, 'selected', GObject.BindingFlags.BIDIRECTIONAL);
+    this.bind_property('preferredCopyMethod', this._preferred_copy_method_row, 'selected', GObject.BindingFlags.BIDIRECTIONAL);
+  }
+
+  bindPreferredCopyMethodSubtitle() {
+    const subtitles = [
+      `Copies a temporary file to the clipboard (best for design software). This converts em/rem units to pixels and preserves the file name.`,
+      `Copies the file contents to the clipboard (best for coding). Preserves the original code and lets you paste it directly into a code editor, but some apps won't recognise this as an image.`
+    ];
+
+    this._preferred_copy_method_row.connect('notify::selected', () => {
+      const selectedIndex = this._preferred_copy_method_row.selected;
+      this._preferred_copy_method_row.subtitle = subtitles[selectedIndex];
+    });
   }
 });

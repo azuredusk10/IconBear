@@ -336,7 +336,7 @@
                     <property name="action-name">set-view.copy</property>
                     <property name="child">
                       <object class="AdwButtonContent">
-                        <property name="label" translatable="true">Copy as SVG</property>
+                        <property name="label" translatable="true">Copy SVG file</property>
                         <property name="icon-name">edit-copy-symbolic</property>
                       </object>
                     </property>

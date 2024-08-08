@@ -191,9 +191,13 @@ export const IconSetStackView = GObject.registerClass({
   * @param ??? emitter - not used
   * @param {Gio.File} gfile - the file reference to copy to the clipboard
   **/
-	async onIconCopied(emitter, gfile){
+	async onIconCopied(emitter, gfile, method = null){
 
 	  try {
+
+	      if(!method){
+	        method = settings.get_int('preferred-copy-method');
+	      }
 
 	      let toastTitle;
 	      const dataDir = GLib.get_user_data_dir();
@@ -243,17 +247,25 @@ export const IconSetStackView = GObject.registerClass({
         // Create the file content provider
         const contentProviderFile = Gdk.ContentProvider.new_for_value(fileValue);
 
-        // Create a union of all content providers, preferring the file provider over the image/svg+xml provider and the string provider.
-        const contentProviderUnion = Gdk.ContentProvider.new_union([contentProviderFile, contentProviderString]);
-        // console.log(contentProviderUnion.ref_formats().get_mime_types());
+        // Set the appropriate content provider based on the user's chosen method
+        let contentProviderUnion;
+        let toastSuccessMessage;
 
-        // Unfortunately, all apps seemed to prefer the file reference over the plain string in the above union, meaning that you could not copy the SVG and paste it into a code editor - it will paste in the path to the temporary file. Dropping the file content provider using the below line will mean that icon code can be copied and pasted into code as well as into design tools, but that original em/rem units will be lost, LibreOffice won't accept the icon file, and copying and pasting into the file manager will not work.
-        // const contentProviderUnion = Gdk.ContentProvider.new_union([contentProviderSvg]);
+        if(method === 0){
+          // Use the file content provider ("Copy SVG file")
+          contentProviderUnion = Gdk.ContentProvider.new_union([contentProviderFile]);
+          toastSuccessMessage = 'SVG file copied to clipboard';
+
+        } else if (method === 1){
+          // Use the plain text content provider ("Copy SVG code")
+          contentProviderUnion = Gdk.ContentProvider.new_union([contentProviderString]);
+          toastSuccessMessage = 'SVG code copied to clipboard';
+        }
 
         // Copy the icon to the clipboard
         const clipboard = this.get_clipboard();
         if(clipboard.set_content(contentProviderUnion)){
-          toastTitle = "SVG copied to clipboard";
+          toastTitle = toastSuccessMessage;
         } else {
           toastTitle = "Couldn't copy the SVG to clipboard";
         }

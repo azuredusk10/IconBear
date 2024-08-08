@@ -13,5 +13,8 @@
 	  <key name="icon-preview-scale" type="d">
 	    <default>1.5</default>
 	  </key>
+	  <key name="preferred-copy-method" type="i">
+	    <default>0</default>
+	  </key>
 	</schema>
 </schemalist>

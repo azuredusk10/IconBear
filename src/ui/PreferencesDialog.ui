@@ -8,7 +8,7 @@
 		</property>
     <child>
       <object class="AdwClamp">
-        <property name="maximum-size">400</property>
+        <property name="maximum-size">800</property>
         <style>
           <class name="mx-8"/>
           <class name="mt-8"/>
@@ -19,7 +19,37 @@
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkLabel">
-                <property name="label">Hello</property>
+                <property name="label">Copying</property>
+                <property name="halign">start</property>
+                <style>
+                  <class name="heading"/>
+                  <class name="mb-2"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkListBox">
+                <property name="selection-mode">0</property>
+                <property name="valign">3</property>
+                <style>
+                  <class name="boxed-list"/>
+                </style>
+                <child>
+                  <object class="AdwComboRow" id="preferred_copy_method_input">
+                    <property name="title" translatable="true">Preferred copy method</property>
+                    <property name="subtitle" translatable="true">Copy a temporary file to the clipboard (best for design software). This converts em/rem units to pixels and preserves the file name.</property>
+                    <property name="subtitle" translatable="true">Copy the file contents to the clipboard (best for coding). Preserves the original code and lets you paste it directly into a code editor, but some apps won't recognise this as an image.</property>
+                    <property name="selected" bind-source="IcoPreferencesDialog" bind-property="preferredCopyMethod" bind-flags="sync-create"/>
+                    <property name="model">
+                      <object class="GtkStringList">
+                        <items>
+                          <item>Copy SVG file</item>
+                          <item>Copy SVG code</item>
+                        </items>
+                      </object>
+                    </property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>

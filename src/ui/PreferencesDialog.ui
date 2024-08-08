@@ -7,53 +7,52 @@
 			</object>
 		</property>
     <child>
-      <object class="AdwClamp">
-        <property name="maximum-size">800</property>
-        <style>
-          <class name="mx-8"/>
-          <class name="mt-8"/>
-          <class name="mb-16"/>
-        </style>
-        <property name="child">
-          <object class="GtkBox">
-            <property name="orientation">vertical</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="label">Copying</property>
-                <property name="halign">start</property>
-                <style>
-                  <class name="heading"/>
-                  <class name="mb-2"/>
-                </style>
-              </object>
-            </child>
-            <child>
-              <object class="GtkListBox">
-                <property name="selection-mode">0</property>
-                <property name="valign">3</property>
-                <style>
-                  <class name="boxed-list"/>
-                </style>
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar" id="header_bar">
+            <property name="show-start-title-buttons">true</property>
+            <property name="show-end-title-buttons">true</property>
+            <property name="show-title">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwClamp">
+            <property name="maximum-size">600</property>
+            <style>
+              <class name="mx-8"/>
+              <class name="mt-8"/>
+              <class name="mb-16"/>
+            </style>
+            <property name="child">
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="AdwComboRow" id="preferred_copy_method_row">
-                    <property name="title" translatable="true">Preferred copy method</property>
-                    <property name="subtitle" translatable="true">Copy a temporary file to the clipboard (best for design software). This converts em/rem units to pixels and preserves the file name.</property>
-                    <property name="subtitle" translatable="true">Copy the file contents to the clipboard (best for coding). Preserves the original code and lets you paste it directly into a code editor, but some apps won't recognise this as an image.</property>
-                    <property name="selected" bind-source="IcoPreferencesDialog" bind-property="preferredCopyMethod" bind-flags="sync-create"/>
-                    <property name="model">
-                      <object class="GtkStringList">
-                        <items>
-                          <item>Copy SVG file</item>
-                          <item>Copy SVG code</item>
-                        </items>
+                  <object class="GtkListBox">
+                    <property name="selection-mode">0</property>
+                    <property name="valign">3</property>
+                    <style>
+                      <class name="boxed-list"/>
+                    </style>
+                    <child>
+                      <object class="AdwComboRow" id="preferred_copy_method_row">
+                        <property name="title" translatable="true">Preferred copy method</property>
+                        <property name="selected" bind-source="IcoPreferencesDialog" bind-property="preferredCopyMethod" bind-flags="sync-create"/>
+                        <property name="model">
+                          <object class="GtkStringList">
+                            <items>
+                              <item>Copy SVG file</item>
+                              <item>Copy SVG code</item>
+                            </items>
+                          </object>
+                        </property>
                       </object>
-                    </property>
+                    </child>
                   </object>
                 </child>
               </object>
-            </child>
+            </property>
           </object>
-        </property>
+        </child>
       </object>
     </child>
   </template>

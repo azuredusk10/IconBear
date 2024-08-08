@@ -22,9 +22,9 @@ export const PreferencesDialog = GObject.registerClass({
 }, class extends Gtk.Widget {
   constructor(params){
     super(params);
+    this.bindPreferredCopyMethodSubtitle();
     this.bindToSettings();
     this.bindProperties();
-    this.bindPreferredCopyMethodSubtitle();
   }
 
   bindToSettings() {
@@ -41,7 +41,7 @@ export const PreferencesDialog = GObject.registerClass({
       `Copies the file contents to the clipboard (best for coding). Preserves the original code and lets you paste it directly into a code editor, but some apps won't recognise this as an image.`
     ];
 
-    this._preferred_copy_method_row.connect('notify::selected', () => {
+    this.connect('notify::preferredCopyMethod', () => {
       const selectedIndex = this._preferred_copy_method_row.selected;
       this._preferred_copy_method_row.subtitle = subtitles[selectedIndex];
     });

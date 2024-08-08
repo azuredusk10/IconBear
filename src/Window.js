@@ -681,7 +681,7 @@ export const Window = GObject.registerClass({
   }
 
   openPreferencesDialog(){
-    const preferencesDialog = new Adw.Dialog();
+    const preferencesDialog = new Adw.Dialog({ title: 'Settings' });
     const dialogChild = new PreferencesDialog;
 
     preferencesDialog.set_child(dialogChild);

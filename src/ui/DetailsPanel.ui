@@ -298,41 +298,21 @@
                 <style>
                   <class name="m-4"/>
                 </style>
-                <!--
                 <child>
-                  <object class="AdwSplitButton">
-                    <property name="menu-model">icon_details_export_menu</property>
-                    <style>
-                      <class name="flat"/>
-                    </style>
-                    <child>
-                      <object class="AdwButtonContent">
-                        <property name="label" translatable="true">Export as SVG</property>
-                        <property name="icon-name">document-save-symbolic</property>
+                  <object class="AdwSplitButton" id="copy_button">
+                    <property name="action-name">set-view.copy</property>
+                    <property name="action-target">-1</property>
+                    <property name="child">
+                      <object class="AdwButtonContent" id="copy_button_content">
+                        <property name="label" translatable="true">Copy SVG file</property>
+                        <property name="icon-name">edit-copy-symbolic</property>
                       </object>
-                    </child>
-                  </object>
-                </child>
-                -->
-                <!--
-                <child>
-                  <object class="AdwSplitButton">
-                    <property name="menu-model">icon_details_copy_menu</property>
-                    <signal name="clicked" handler="onCopyButtonClicked" />
+                    </property>
                     <style>
                       <class name="suggested-action"/>
                     </style>
-                    <child>
-                      <object class="AdwButtonContent">
-                        <property name="label" translatable="true">Copy as SVG</property>
-                        <property name="icon-name">edit-copy-symbolic</property>
-                      </object>
-                    </child>
                   </object>
-                </child>
-                -->
-                <child>
-                  <object class="GtkButton">
+                  <!-- <object class="GtkButton">
                     <property name="action-name">set-view.copy</property>
                     <property name="child">
                       <object class="AdwButtonContent">
@@ -343,7 +323,7 @@
                     <style>
                       <class name="suggested-action"/>
                     </style>
-                  </object>
+                  </object> -->
                 </child>
               </object>
             </child>
@@ -351,27 +331,6 @@
         </child>
       </object>
     </child>
-
-    <menu id="icon_details_copy_menu">
-      <section>
-        <item>
-          <attribute name="label">Copy as PNG</attribute>
-        </item>
-        <item>
-          <attribute name="label">Copy as JPG</attribute>
-        </item>
-      </section>
-    </menu>
-    <menu id="icon_details_export_menu">
-      <section>
-        <item>
-          <attribute name="label">Export as PNG</attribute>
-        </item>
-        <item>
-          <attribute name="label">Export as JPG</attribute>
-        </item>
-      </section>
-    </menu>
 
     <object class="GtkPopover" id="details_style_popover">
       <property name="has-arrow">true</property>

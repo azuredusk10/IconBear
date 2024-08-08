@@ -119,9 +119,10 @@ export const IconSetStackView = GObject.registerClass({
 
     const copyAction = new Gio.SimpleAction({
 		  name: 'copy',
+      parameter_type: new GLib.VariantType('i'),
     });
     copyAction.connect('activate', (_action, _params) => {
-      this.onIconCopied(_action, this.activeIcon.gfile)
+      this.onIconCopied(_action, this.activeIcon.gfile, _params.unpack())
     });
     actionGroup.insert(copyAction);
 
@@ -191,11 +192,11 @@ export const IconSetStackView = GObject.registerClass({
   * @param ??? emitter - not used
   * @param {Gio.File} gfile - the file reference to copy to the clipboard
   **/
-	async onIconCopied(emitter, gfile, method = null){
+	async onIconCopied(emitter, gfile, method = -1){
 
 	  try {
 
-	      if(!method){
+	      if(method < 0){
 	        method = settings.get_int('preferred-copy-method');
 	      }
 

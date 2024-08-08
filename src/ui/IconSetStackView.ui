@@ -43,7 +43,7 @@
 		    <child>
 			    <object class="GtkShortcut">
 				    <property name="trigger">&lt;Control&gt;c</property>
-				    <property name="action">action(set-view.copy)</property>
+				    <property name="action">action(set-view.copy(-1))</property>
 			    </object>
 		    </child>
 	    </object>

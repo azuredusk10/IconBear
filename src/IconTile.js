@@ -85,9 +85,11 @@ export const IconTile = GObject.registerClass({
   }
 
   onLeftClick(_self, _n_press, x, y){
+    /*
     if(_n_press == 2){
       this.emit('icon-copied', this.icon.gfile);
     }
+    */
   }
 
 } );

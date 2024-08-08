@@ -78,13 +78,22 @@ export const DetailsPanel = GObject.registerClass({
       GObject.ParamFlags.READWRITE,
       false,
     ),
+    preferredCopyMethod: GObject.ParamSpec.int(
+      'preferredCopyMethod',
+      'Preferred Copy Method',
+      'The user-defined setting for the default copy method',
+      GObject.ParamFlags.READWRITE,
+      0, 1,
+      0
+    ),
   },
-  InternalChildren: ['preview_frame', 'preview_image', 'icons_count', 'icon_size_row', ],
+  InternalChildren: ['preview_frame', 'preview_image', 'icons_count', 'icon_size_row', 'copy_button', 'copy_button_content'],
 }, class extends Gtk.Widget {
   constructor(params){
     super(params);
     this.connect('notify::icon', () => this.#updateIconDetails());
     this.#bindProperties();
+    this.updateSplitButton();
   }
 
   #updateIconDetails(){
@@ -141,7 +150,9 @@ export const DetailsPanel = GObject.registerClass({
     // Appends the word "icons" onto the setIconsCount property and binds it to the label in the empty state
     this.bind_property_full('setIconsCount', this._icons_count, 'label', GObject.BindingFlags.SYNC_CREATE, (binding, value) => [true, value + ' icons'], null);
 
-    // Output the original width and height of the icon as the string "[width] x [height]"
+    // Bind the preferred copy method property to this composite widget
+    settings.bind('preferred-copy-method', this, 'preferredCopyMethod', Gio.SettingsBindFlags.DEFAULT);
+    this.connect('notify::preferredCopyMethod', () => this.updateSplitButton());
 
   }
 
@@ -159,6 +170,28 @@ export const DetailsPanel = GObject.registerClass({
 
   }
   */
+
+  /**
+  * Updates the label, action and menu model of the copy AdwSplitButton to match the preferred copy method setting.
+  *
+  **/
+  updateSplitButton() {
+    console.log('updating split button changed');
+    let menuModel = new Gio.Menu();
+
+    if(this.preferredCopyMethod === 0){
+      // Copy as file is preferred
+      this._copy_button_content.label = 'Copy SVG file';
+      menuModel.append("Copy SVG code", "set-view.copy(1)");
+
+    } else {
+      // Copy as code is preferred
+      this._copy_button_content.label = 'Copy SVG code';
+      menuModel.append("Copy SVG file", "set-view.copy(0)");
+    }
+
+    this._copy_button.set_menu_model(menuModel);
+  }
 
 
 });

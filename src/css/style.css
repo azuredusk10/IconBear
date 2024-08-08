@@ -19,7 +19,9 @@
   border-style: dashed;
   border-width: 2px;
 }
-
+.opacity-80 {
+  opacity: 0.8;
+}
 
 /* Spacing helper classes */
 

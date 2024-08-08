@@ -17,9 +17,8 @@
         </child>
         <child>
           <object class="AdwClamp">
-            <property name="maximum-size">600</property>
+            <property name="maximum-size">450</property>
             <style>
-              <class name="mx-8"/>
               <class name="mt-8"/>
               <class name="mb-16"/>
             </style>
@@ -47,6 +46,16 @@
                         </property>
                       </object>
                     </child>
+                  </object>
+                </child>
+                 <child>
+                  <object class="GtkLabel" id="preferred_copy_method_hint">
+                    <property name="wrap">true</property>
+                    <property name="hexpand">true</property>
+                    <style>
+                      <class name="mt-2"/>
+                      <class name="opacity-80"/>
+                    </style>
                   </object>
                 </child>
               </object>

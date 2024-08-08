@@ -1,8 +1,12 @@
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 import Gio from 'gi://Gio';
+import Gdk from 'gi://Gdk';
+import GLib from 'gi://GLib';
 
-import { drawSvg } from './drawSvg.js';
+import { deleteRecursively, drawSvg } from './helperFunctions.js';
+
+Gio._promisify(Gio.File.prototype, 'make_directory_async');
 
 export const DetailsPanel = GObject.registerClass({
   GTypeName: 'IcoDetailsPanel',
@@ -94,6 +98,7 @@ export const DetailsPanel = GObject.registerClass({
     this.connect('notify::icon', () => this.#updateIconDetails());
     this.#bindProperties();
     this.updateSplitButton();
+    this.initializeDragSource();
   }
 
   #updateIconDetails(){
@@ -191,6 +196,90 @@ export const DetailsPanel = GObject.registerClass({
     }
 
     this._copy_button.set_menu_model(menuModel);
+  }
+
+  initializeDragSource(){
+    const dragSource = new Gtk.DragSource({
+      actions: Gdk.DragAction.MOVE,
+    });
+    this._preview_frame.add_controller(dragSource);
+
+    let drag_x;
+    let drag_y;
+
+    dragSource.connect("prepare", (_source, x, y) => {
+
+    drag_x = x;
+    drag_y = y;
+
+     const method = settings.get_int('preferred-copy-method');
+
+      const dataDir = GLib.get_user_data_dir();
+      const gfile = this.icon.gfile;
+
+      const tempPath = GLib.build_filenamev([dataDir, 'temp']);
+      const tempFolder = Gio.File.new_for_path(tempPath);
+      if (tempFolder.query_exists(null)){
+        // If the "temp" folder already exists, delete the temporary files inside it
+        console.log('clearing contents of temp folder');
+        deleteRecursively(tempPath, false);
+      } else {
+        // Otherwise, create the "temp" folder
+        console.log('creating temp folder');
+        tempFolder.make_directory(null);
+      }
+
+
+      // Open the resource for reading
+      const [, fileContents] = gfile.load_contents(null);
+      const stringContents = new TextDecoder().decode(fileContents);
+
+      /* 1: Create the plain text content provider */
+
+      // Create a GValue of type string, containing the file's contents
+      const textValue = new GObject.Value();
+      textValue.init(GObject.TYPE_STRING);
+      textValue.set_string(stringContents);
+
+      // Create the string content provider
+      const contentProviderString = Gdk.ContentProvider.new_for_value(textValue);
+
+
+      /* 2: Create the file content provider */
+
+      // Convert any em/rem units in the file to pixels. This ensures the size is correctly set in design software. Otherwise, icons are pasted at 12px.
+      const strippedEmRemUnits = stringContents.replaceAll(/1em|1rem/gi, '16px').replaceAll(/2em|2rem/gi, '32px').replaceAll(/3em|3rem/gi, '48px').replaceAll(/4em|4rem/gi, '64px');
+
+      // Create a temporary file with the new contents
+      const tempFile = Gio.File.new_for_path(GLib.build_filenamev([tempPath, gfile.get_basename()]));
+      tempFile.replace_contents(strippedEmRemUnits, null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
+
+      // Create a new GValue with the temp file as its content
+      const fileValue = new GObject.Value();
+      fileValue.init(Gio.File);
+      fileValue.set_object(tempFile);
+
+      // Create the file content provider
+      const contentProviderFile = Gdk.ContentProvider.new_for_value(fileValue);
+
+      if(method === 0){
+       return contentProviderFile;
+      } else if(method === 1){
+        return contentProviderString;
+      }
+    });
+
+    dragSource.connect("drag-begin", (_source, drag) => {
+      const dragWidget = new Gtk.DrawingArea();
+
+      dragWidget.set_size_request(this.icon.width, this.icon.height);
+      dragWidget.set_draw_func((widget, cr, width, height) => drawSvg(widget, cr, width, height, this.icon.gfile));
+
+      const dragIcon = Gtk.DragIcon.get_for_drag(drag);
+      dragIcon.child = dragWidget;
+
+      drag.set_hotspot(drag_x, drag_y);
+    });
   }
 
 

@@ -204,6 +204,7 @@ export const DetailsPanel = GObject.registerClass({
     });
     this._preview_frame.add_controller(dragSource);
 
+
     let drag_x;
     let drag_y;
 
@@ -280,7 +281,23 @@ export const DetailsPanel = GObject.registerClass({
 
       drag.set_hotspot(drag_x, drag_y);
     });
+
+    // Change the cursor while it's over the drag source
+    const motionController = new Gtk.EventControllerMotion();
+    motionController.connect('enter', () => this._onCursorEnter());
+    motionController.connect('leave', () => this._onCursorLeave());
+    this._preview_frame.add_controller(motionController);
   }
 
+  _onCursorEnter(controller) {
+        // Change cursor to open hand when entering the drag zone
+        const handCursor = Gdk.Cursor.new_from_name('grab', null);
+        this.set_cursor(handCursor);
+    }
+
+    _onCursorLeave(controller) {
+        // Reset cursor to default when leaving the drag zone
+        this.set_cursor(null);
+    }
 
 });

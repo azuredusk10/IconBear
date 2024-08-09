@@ -329,7 +329,6 @@ export const Window = GObject.registerClass({
   }
 
   #initializeMainStack(){
-  return;
     // Link the StackPageSidebar in the sidear_panel to the main_stack StackPage
     this._sidebar_panel._main_stack_sidebar.stack = this._main_stack;
 
@@ -342,6 +341,9 @@ export const Window = GObject.registerClass({
 
     // Bind the visible stack page to a setting
     settings.bind('visible-page-name', this._main_stack, 'visible-child-name', Gio.SettingsBindFlags.DEFAULT)
+
+    // Remove the skeleton state
+    this._skeleton_stack_page.destroy();
 
     // Set the header bar for the current stack view
     this.onStackPageChange(this._main_stack);

@@ -329,6 +329,7 @@ export const Window = GObject.registerClass({
   }
 
   #initializeMainStack(){
+  return;
     // Link the StackPageSidebar in the sidear_panel to the main_stack StackPage
     this._sidebar_panel._main_stack_sidebar.stack = this._main_stack;
 

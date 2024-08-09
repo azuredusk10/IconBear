@@ -16,5 +16,6 @@
     <file>helperFunctions.js</file>
     <file>classes.js</file>
     <file>PreferencesDialog.js</file>
+    <file>SkeletonStackView.js</file>
   </gresource>
 </gresources>

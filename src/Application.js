@@ -12,6 +12,7 @@ import './AllSetsStackView.js';
 import './IconSetStackView.js';
 import './AddSetDialog.js';
 import './PreferencesDialog.js';
+import './SkeletonStackView.js';
 import { Window } from './Window.js';
 
 

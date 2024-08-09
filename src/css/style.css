@@ -19,9 +19,36 @@
   border-style: dashed;
   border-width: 2px;
 }
-.opacity-80 {
-  opacity: 0.8;
+.text-color-transparent{
+  color: transparent;
 }
+
+
+/* Skeleton loading state classes */
+
+.skeleton-bg {
+  background-color: var(--window-fg-color);
+  border-radius: 12px;
+}
+.skeleton-opacity-1 {
+  opacity: 0.18;
+}
+.skeleton-opacity-2 {
+  opacity: 0.15;
+}
+.skeleton-opacity-3 {
+  opacity: 0.12;
+}
+.skeleton-opacity-4 {
+  opacity: 0.09;
+}
+.skeleton-opacity-5 {
+  opacity: 0.06;
+}
+.skeleton-opacity-6 {
+  opacity: 0.03;
+}
+
 
 /* Spacing helper classes */
 
@@ -288,4 +315,13 @@
 .px-1 {
   padding-left: 0.25rem;
   padding-right: 0.25rem;
+}
+
+/* Opacity helper classes */
+
+.opacity-80 {
+  opacity: 0.8;
+}
+.opacity-0 {
+  opacity: 0;
 }

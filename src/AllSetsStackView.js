@@ -66,6 +66,9 @@ export const AllSetsStackView = GObject.registerClass({
 }, class extends Gtk.Widget {
   constructor(params){
     super(params);
+
+    // This variable gets set by Window.js to provide this widget with a reference to main_stack
+    let mainStack;
   }
 
   /**
@@ -490,11 +493,6 @@ export const AllSetsStackView = GObject.registerClass({
 
   }
 
-  onSetActivated(_flowbox, _child){
-    this.emit('set-activated', _child.name);
-    _flowbox.unselect_all();
-  }
-
   /**
   * Import a default set from GResource to the user's data directory.
   * @param {Set} set - The set object to import
@@ -617,6 +615,16 @@ export const AllSetsStackView = GObject.registerClass({
 
   hideProcessingState(){
     this._processing_spinner.spinning = false;
+  }
+
+  /**
+  *
+  * This method is called when the user double-clicks on one of the installed set. It takes them to the corresponding set's stack page.
+  * @params {Gtk.FlowBox} flowbox - the parent flowbox
+  * @params {Gtk.FlowBoxChild} activatedChild - the flowbox child that was activated
+  **/
+  onInstalledSetActivated(flowbox, activatedChild) {
+    this.mainStack.set_visible_child_name(activatedChild.name);
   }
 
 });

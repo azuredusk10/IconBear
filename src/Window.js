@@ -339,6 +339,9 @@ export const Window = GObject.registerClass({
 
     });
 
+    // Attach a reference to the main stack from within AllSetsStackView to give that widget the ability to switch stack pages.
+     this._all_sets_view.mainStack = this._main_stack;
+
     // Remove the skeleton state
     this._main_stack.remove(this._skeleton_stack_page.get_child());
 

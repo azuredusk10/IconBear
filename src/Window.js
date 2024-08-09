@@ -20,7 +20,7 @@ Gio._promisify(Gio.File.prototype, 'delete_async');
 export const Window = GObject.registerClass({
 	GTypeName: 'IcoWindow',
 	Template: 'resource:///design/chris_wood/IconBear/ui/Window.ui',
-	InternalChildren: ['search_entry', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button', 'main_toolbar_view', 'main_header_bar', 'add_set_dialog_widget', 'all_sets_view', 'search_controls_wrapper', 'import_button', 'radio_all_styles', 'radio_outline','radio_filled','radio_duotone','radio_color', 'filters_button', 'primary_popover_menu'],
+	InternalChildren: ['search_entry', 'main_stack', 'sidebar_panel', 'show_details_sidebar_button', 'main_toolbar_view', 'main_header_bar', 'add_set_dialog_widget', 'all_sets_view', 'search_controls_wrapper', 'import_button', 'radio_all_styles', 'radio_outline','radio_filled','radio_duotone','radio_color', 'filters_button', 'primary_popover_menu', 'skeleton_stack_page'],
 	Properties: {
 	  sets: GObject.ParamSpec.jsobject(
       'sets',
@@ -339,11 +339,11 @@ export const Window = GObject.registerClass({
 
     });
 
-    // Bind the visible stack page to a setting
-    settings.bind('visible-page-name', this._main_stack, 'visible-child-name', Gio.SettingsBindFlags.DEFAULT)
-
     // Remove the skeleton state
-    this._skeleton_stack_page.destroy();
+    this._main_stack.remove(this._skeleton_stack_page.get_child());
+
+    // Bind the visible stack page to a setting
+    settings.bind('visible-page-name', this._main_stack, 'visible-child-name', Gio.SettingsBindFlags.DEFAULT);
 
     // Set the header bar for the current stack view
     this.onStackPageChange(this._main_stack);

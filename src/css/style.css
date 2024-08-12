@@ -325,3 +325,15 @@
 .opacity-0 {
   opacity: 0;
 }
+
+/* Border */
+
+.border-none {
+  border: none;
+}
+
+/* Font size */
+
+.font-size-medium {
+  font-size: 1.125rem;
+}

@@ -20,6 +20,7 @@
               <object class="GtkBox">
                 <property name="orientation">horizontal</property>
                 <property name="spacing">16</property>
+                <property name="visible" bind-source="IcoAllSetsStackView" bind-property="hasSetsInstalled" bind-flags="sync-create"/>
                 <style>
                   <class name="mb-8"/>
                 </style>
@@ -44,37 +45,59 @@
 
             <child>
               <object class="GtkFrame" id="installed_sets_empty_state">
+                <property name="visible" bind-source="IcoAllSetsStackView" bind-property="hasSetsInstalled" bind-flags="invert-boolean"/>
               <style>
                 <class name="px-8"/>
-                <class name="py-24"/>
-                <class name="dropTargetFrame"/>
+                <class name="py-8"/>
+                <!-- <class name="dropTargetFrame"/> -->
+                <class name="border-none"/>
+                <class name="mb-8"/>
               </style>
                 <property name="child">
                   <object class="GtkBox">
                     <property name="orientation">vertical</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <style>
-                    </style>
                     <child>
-                      <object class="GtkLabel">
-                        <property name="label" translatable="true">Drag a folder of icons here to import them as a new set</property>
+                      <object class="GtkImage">
+                        <property name="width-request">300</property>
+                        <property name="height-request">200</property>
+                        <property name="halign">center</property>
                         <style>
-                          <class name="heading-2"/>
+                          <class name="skeleton-bg"/>
                           <class name="mb-8"/>
                         </style>
                       </object>
                     </child>
                     <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="true">Let's get some icons in here</property>
+                        <style>
+                          <class name="title-1"/>
+                          <class name="mb-4"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="true">Install one of the sets below or import your own</property>
+                        <style>
+                          <!-- <class name="title-2"/> -->
+                          <class name="font-size-medium"/>
+                          <class name="mb-8"/>
+                        </style>
+                      </object>
+                    </child>
+                    <!-- <child>
                       <object class="GtkButton">
-                        <property name="label" translatable="true">Select a folder to import</property>
+                        <property name="label" translatable="true">Import icons</property>
                         <property name="halign">center</property>
                         <property name="action-name">win.add_set</property>
                         <style>
                           <class name="pill" />
                         </style>
                       </object>
-                    </child>
+                    </child> -->
                   </object>
                 </property>
               </object>
@@ -139,8 +162,9 @@
             </child>
 
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="get_more_sets_label">
                 <property name="label">Get more sets</property>
+                <property name="visible" bind-source="IcoAllSetsStackView" bind-property="hasSetsInstalled" bind-flags="sync-create"/>
                 <property name="halign">1</property>
                 <style>
                   <class name="title-2"/>

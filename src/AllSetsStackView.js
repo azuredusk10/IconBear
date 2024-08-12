@@ -6,7 +6,7 @@ import GLib from 'gi://GLib';
 // import { Icon, Set } from './classes.js';
 import { Set } from './classes.js';
 import { Icon } from './Icon.js';
-import { getIconFileDimensions, estimateIconStyle, drawSvg } from './helperFunctions.js';
+import { getIconFileDimensions, estimateIconStyle, drawSvg, deleteRecursively } from './helperFunctions.js';
 
 // Set up async file methods
 Gio._promisify(Gio.File.prototype, 'create_async');
@@ -17,7 +17,7 @@ Gio._promisify(Gio.File.prototype, 'query_info_async');
 export const AllSetsStackView = GObject.registerClass({
   GTypeName: 'IcoAllSetsStackView',
   Template: 'resource:///design/chris_wood/IconBear/ui/AllSetsStackView.ui',
-  InternalChildren: ['default_sets_flowbox', 'installed_sets_flowbox', 'installed_sets_empty_state', 'processing_spinner'],
+  InternalChildren: ['default_sets_flowbox', 'installed_sets_flowbox', 'get_more_sets_label', 'processing_spinner'],
   Properties: {
     searchEntryText: GObject.ParamSpec.string(
       'searchEntryText',
@@ -54,6 +54,13 @@ export const AllSetsStackView = GObject.registerClass({
       0, 20,
       2
     ),
+    hasSetsInstalled: GObject.ParamSpec.boolean(
+      'hasSetsInstalled',
+      'Has Sets Installed',
+      'Whether the user has any icon sets installed',
+      GObject.ParamFlags.READWRITE,
+      false
+    )
   },
   Signals: {
     'set-activated': {
@@ -109,7 +116,6 @@ export const AllSetsStackView = GObject.registerClass({
   }
 
   #initializeInstalledSetsFlowbox(){
-    this._installed_sets_empty_state.visible = false;
 
     // Clear the contents of the Flowbox
     this._installed_sets_flowbox.remove_all();
@@ -211,6 +217,16 @@ export const AllSetsStackView = GObject.registerClass({
     });
     */
 
+
+    if(this.installedSets.length > 0){
+      // If any sets are installed, show the default state
+      this.hasSetsInstalled = true;
+    } else {
+      // Otherwise, show the empty state
+      this.hasSetsInstalled = false;
+    }
+    this.notify('hasSetsInstalled');
+
     this.installedSets.forEach(set => {
 
       // FlowBoxChild -> Box -> (FlowBox -> FlowBoxChild -> DrawingArea * 6), (Box -> (Box -> (Label, Label), Button))
@@ -297,6 +313,7 @@ export const AllSetsStackView = GObject.registerClass({
 
   #initializeDefaultSets(){
     this.defaultSets = [];
+    let defaultSetsAvailable = 0;
 
     // Clear the contents of the flowbox
     this._default_sets_flowbox.remove_all();
@@ -396,8 +413,6 @@ export const AllSetsStackView = GObject.registerClass({
       });
 
 
-      console.log(set);
-
       // Store this set in the defaultSets property
       this.defaultSets.push(set);
 
@@ -412,9 +427,13 @@ export const AllSetsStackView = GObject.registerClass({
       });
 
       // If this set has not already been installed, create a FlowBoxChild for this set with an "Install" button
+
       if(!setIsInstalled){
 
         console.log(set.name + ' has not been installed');
+
+        defaultSetsAvailable++;
+
         // FlowBoxChild -> Box -> (FlowBox -> FlowBoxChild -> DrawingArea * 6), (Box -> (Box -> (Label, Label), Button))
 
         const setTile = new Gtk.Box({
@@ -493,6 +512,13 @@ export const AllSetsStackView = GObject.registerClass({
 
     });
 
+    // Hide the default sets flowbox title if there are no more default sets left to install
+    if(defaultSetsAvailable > 0){
+      this._get_more_sets_label.visible = true;
+    } else {
+      this._get_more_sets_label.visible = false;
+    }
+
   }
 
   /**
@@ -507,11 +533,21 @@ export const AllSetsStackView = GObject.registerClass({
     button.label = 'Installing...';
     button.sensitive = false;
 
-		// Create the set data directory
+	  // Create the set data directory
     const dataDir = GLib.get_user_data_dir();
     const targetPath = dataDir + '/' + set.id;
 
     const targetDir = Gio.File.new_for_path(targetPath);
+
+    try {
+      if(targetDir.query_exists(null)){
+        // Delete the directory if it already exists
+        await deleteRecursively(targetPath, true);
+      }
+    } catch(e){
+      console.log(`Could not delete directory if it already existed: ${e}`);
+    }
+
     await targetDir.make_directory_async(GLib.PRIORITY_DEFAULT, null);
 
     const targetIconsDir = Gio.File.new_for_path(targetPath + '/icons');

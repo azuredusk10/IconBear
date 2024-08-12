@@ -270,7 +270,12 @@ export const Window = GObject.registerClass({
 
         // Get an array of all the files in this bundle resource directory
         const iconsDir = folderPath + '/icons/';
-        const iconFilenames = await Gio.File.new_for_path(iconsDir).enumerate_children_async('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null);
+        try {
+          const iconFilenames = await Gio.File.new_for_path(iconsDir).enumerate_children_async('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null);
+        } catch(e) {
+          console.log(`Couldn't load icons directory for set ${set.name}: ${e}`);
+          return;
+        }
 
         // set.iconsCount = metaJson.icons.length;
 
@@ -308,7 +313,7 @@ export const Window = GObject.registerClass({
 
               iconsArray.push(newIcon);
             } catch(e) {
-              console.log('File ' + iconFile.get_basename() + ' in set ' + set.name + ' could not be found. Skipping file.');
+              console.log(`Couldn't load icon file ${iconFile.get_basename()} in set ${set.name}: ${e}`);
             }
           }
 

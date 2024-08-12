@@ -272,7 +272,7 @@ export const Window = GObject.registerClass({
         const iconsDir = folderPath + '/icons/';
         const iconFilenames = await Gio.File.new_for_path(iconsDir).enumerate_children_async('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null);
 
-        set.iconsCount = metaJson.icons.length;
+        // set.iconsCount = metaJson.icons.length;
 
         let i = 0;
         const iconsArray = [];
@@ -285,28 +285,31 @@ export const Window = GObject.registerClass({
           // Loads all icons in the set
 
 
-          if(i < set.iconsCount){
+          if(i < metaJson.icons.length){
 
             // Create the Gio.File for this icon and get its file info
             const iconFile = Gio.File.new_for_path(iconsDir + iconFilename);
-            const fileInfo = iconFile.query_info('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
 
-            const label = iconFilename.replace(/\.[^/.]+$/, "");
+            try {
+              const fileInfo = iconFile.query_info('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
 
-            // Create a new Icon
-            const newIcon = new Icon({
-              label,
-              filepath: iconsDir + iconFilename,
-              type: fileInfo.get_file_type(),
-              gfile: iconFile,
-              width: icon.width,
-              height: icon.height,
-              style: icon.style,
-            });
+              const label = iconFilename.replace(/\.[^/.]+$/, "");
 
-            iconsArray.push(newIcon);
+              // Create a new Icon
+              const newIcon = new Icon({
+                label,
+                filepath: iconsDir + iconFilename,
+                type: fileInfo.get_file_type(),
+                gfile: iconFile,
+                width: icon.width,
+                height: icon.height,
+                style: icon.style,
+              });
 
-            // console.log(newIcon.label);
+              iconsArray.push(newIcon);
+            } catch(e) {
+              console.log('File ' + iconFile.get_basename() + ' in set ' + set.name + ' could not be found. Skipping file.');
+            }
           }
 
           i++;
@@ -315,6 +318,9 @@ export const Window = GObject.registerClass({
 
         // Add the loaded icons into the list store
         set.icons.splice(0, 0, iconsArray);
+
+        // Set the number of icons loaded
+        set.iconsCount = iconsArray.length;
 
         this.sets.push(set);
 

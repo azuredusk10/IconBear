@@ -267,6 +267,7 @@ export const Window = GObject.registerClass({
         set.license = metaJson.license;
         set.author = metaJson.author;
         set.website = metaJson.website;
+        set.version = metaJson.version;
 
         // Get an array of all the files in this bundle resource directory
         const iconsDir = folderPath + '/icons/';
@@ -274,10 +275,7 @@ export const Window = GObject.registerClass({
           const iconFilenames = await Gio.File.new_for_path(iconsDir).enumerate_children_async('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null);
         } catch(e) {
           console.log(`Couldn't load icons directory for set ${set.name}: ${e}`);
-          return;
         }
-
-        // set.iconsCount = metaJson.icons.length;
 
         let i = 0;
         const iconsArray = [];
@@ -321,15 +319,28 @@ export const Window = GObject.registerClass({
 
         });
 
-        // Add the loaded icons into the list store
-        set.icons.splice(0, 0, iconsArray);
+        if(iconsArray.length > 0){
 
-        // Set the number of icons loaded
-        set.iconsCount = iconsArray.length;
+          // Set the number of icons loaded
+          set.iconsCount = iconsArray.length;
 
-        this.sets.push(set);
+          // Add the loaded icons into the list store
+          set.icons.splice(0, 0, iconsArray);
 
-        this.notify('sets');
+          this.sets.push(set);
+
+          this.notify('sets');
+
+        } else if(set.version) {
+          // If the icon set has no icons in it and is a bundled set, delete the icon directory. This will allow it to be reinstalled from the "My Sets" page.
+          try {
+            await deleteRecursively(folderPath, true);
+            console.log(`Deleted invalid icon set ${set.name}`);
+          } catch(e) {
+            console.log(`Could not delete invalid icon directory: ${e}`);
+          }
+
+        }
 
 
         return set.name;

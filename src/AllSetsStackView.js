@@ -325,6 +325,7 @@ export const AllSetsStackView = GObject.registerClass({
         icons: Gio.ListStore.new(Icon),
         iconsCount: 0,
         website: '',
+        version: null
       };
 
       const metaFile = Gio.File.new_for_uri('resource://' + bundledIconsDir + folderPath + 'meta.json');
@@ -341,6 +342,7 @@ export const AllSetsStackView = GObject.registerClass({
       set.license = metaJson.license;
       set.author = metaJson.author;
       set.website = metaJson.website;
+      set.version = metaJson.version;
 
 
       const resourceDir = bundledIconsDir + setId;
@@ -523,7 +525,8 @@ export const AllSetsStackView = GObject.registerClass({
       website: set.website,
       createdOn: Date.now(),
       icons: [],
-      iconCount: 0
+      iconCount: 0,
+      version: set.version
     }
 
     // Get all the icons

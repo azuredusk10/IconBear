@@ -169,6 +169,14 @@ export const Window = GObject.registerClass({
     openStackPageAction.connect('activate', (action, parameter) => this.openStackPage(parameter));
     this.add_action(openStackPageAction);
 
+    // Open to a specific StackPage based on its position in the sidebar
+    const openStackPageByIndexAction = new Gio.SimpleAction({
+      name: 'open_stack_page_by_index',
+      parameterType: new GLib.VariantType('i')
+    });
+    openStackPageByIndexAction.connect('activate', (action, parameter) => this.openStackPageByIndex(parameter));
+    this.add_action(openStackPageByIndexAction);
+
     // Clear search term and reset style filter
      const clearFiltersAction = new Gio.SimpleAction({
       name: 'clear_filters'
@@ -665,6 +673,15 @@ export const Window = GObject.registerClass({
   openStackPage(stackPageName) {
     const pageToOpen = this._main_stack.get_child_by_name(stackPageName);
     this._main_stack.set_visible_child(pageToOpen);
+  }
+
+   /** Navigate to a particular StackPage based on its position in the sidebar
+  * @param {Number} index - the numerical position of the StackPage in the sidebar
+  **/
+  openStackPageByIndex(index) {
+    const indexInt = index.unpack();
+    const pages = this._main_stack.get_pages();
+    pages.select_item(indexInt, true);
   }
 
   /**

@@ -63,6 +63,16 @@ export const Application = GObject.registerClass({
 	  this.set_accels_for_action('win.increase_icon_preview_scale', [ '<Ctrl>equal' ]);
 	  this.set_accels_for_action('win.decrease_icon_preview_scale', [ '<Ctrl>minus' ]);
 	  this.set_accels_for_action('win.reset_icon_preview_scale', [ '<Ctrl>0' ]);
+	  this.set_accels_for_action('win.open_stack_page_by_index(0)', [ '<Alt>1' ]);
+	  this.set_accels_for_action('win.open_stack_page_by_index(1)', [ '<Alt>2' ]);
+	  this.set_accels_for_action('win.open_stack_page_by_index(2)', [ '<Alt>3' ]);
+	  this.set_accels_for_action('win.open_stack_page_by_index(3)', [ '<Alt>4' ]);
+	  this.set_accels_for_action('win.open_stack_page_by_index(4)', [ '<Alt>5' ]);
+	  this.set_accels_for_action('win.open_stack_page_by_index(5)', [ '<Alt>6' ]);
+	  this.set_accels_for_action('win.open_stack_page_by_index(6)', [ '<Alt>7' ]);
+	  this.set_accels_for_action('win.open_stack_page_by_index(7)', [ '<Alt>8' ]);
+	  this.set_accels_for_action('win.open_stack_page_by_index(8)', [ '<Alt>9' ]);
+	  this.set_accels_for_action('win.open_stack_page_by_index(9)', [ '<Alt>0' ]);
 	}
 
 });

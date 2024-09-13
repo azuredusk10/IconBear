@@ -40,6 +40,12 @@
             <property name="title" translatable="yes" context="shortcut window">View</property>
             <child>
               <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes" context="shortcut window">Jump to a tab</property>
+                <property name="accelerator">&lt;Alt&gt;1...9</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
                 <property name="title" translatable="yes" context="shortcut window">Zoom in</property>
                 <property name="action-name">win.increase_icon_preview_scale</property>
               </object>

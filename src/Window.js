@@ -193,6 +193,34 @@ export const Window = GObject.registerClass({
     openPreferencesDialog.connect('activate', (action) => this.openPreferencesDialog());
     this.add_action(openPreferencesDialog);
 
+    // Focus the search bar
+    const focusSearchEntry = new Gio.SimpleAction({
+      name: 'focus_search_entry'
+    });
+    focusSearchEntry.connect('activate', (action) => this.focusSearchEntry());
+    this.add_action(focusSearchEntry);
+
+    // Increase the icon preview scale
+    const increaseIconPreviewScale = new Gio.SimpleAction({
+      name: 'increase_icon_preview_scale'
+    });
+    increaseIconPreviewScale.connect('activate', (action) => this.increaseIconPreviewScale());
+    this.add_action(increaseIconPreviewScale);
+
+    // Decrease the icon preview scale
+    const decreaseIconPreviewScale = new Gio.SimpleAction({
+      name: 'decrease_icon_preview_scale'
+    });
+    decreaseIconPreviewScale.connect('activate', (action) => this.decreaseIconPreviewScale());
+    this.add_action(decreaseIconPreviewScale);
+
+    // Reset the icon preview scale
+    const resetIconPreviewScale = new Gio.SimpleAction({
+      name: 'reset_icon_preview_scale'
+    });
+    resetIconPreviewScale.connect('activate', (action) => this.resetIconPreviewScale());
+    this.add_action(resetIconPreviewScale);
+
   }
 
 
@@ -666,6 +694,13 @@ export const Window = GObject.registerClass({
       return true;
     });
 
+    // If the icon preview scale was updated another way (e.g. via a keyboard shortcut), update the value of the spin button
+    this.connect('notify::iconPreviewScale', () => {
+      const newValue = this.iconPreviewScale * 100;
+      spinButton.set_text(`${newValue}%`);
+    });
+
+
     spinButton.connect('value-changed', () => this.iconPreviewScale = spinButton.get_value() / 100);
 
     const label = new Gtk.Label({
@@ -714,6 +749,29 @@ export const Window = GObject.registerClass({
 
     preferencesDialog.set_child(dialogChild);
     preferencesDialog.present(this);
+  }
+
+  focusSearchEntry(){
+    this._search_entry.grab_focus();
+  }
+
+  increaseIconPreviewScale(){
+    if(this.iconPreviewScale < 20) {
+      this.iconPreviewScale += 0.25;
+      this.notify('iconPreviewScale');
+    }
+  }
+
+  decreaseIconPreviewScale(){
+    if(this.iconPreviewScale > 0.5) {
+      this.iconPreviewScale -= 0.25;
+      this.notify('iconPreviewScale');
+    }
+  }
+
+  resetIconPreviewScale(){
+    this.iconPreviewScale = 1;
+    this.notify('iconPreviewScale');
   }
 
 });

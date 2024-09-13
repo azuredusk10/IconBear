@@ -11,14 +11,20 @@
             <property name="title" translatable="yes" context="shortcut window">General</property>
             <child>
 		          <object class="GtkShortcutsShortcut">
-			          <property name="title">Copy Selected Icon</property>
+			          <property name="title">Copy selected icon</property>
 			          <property name="accelerator">&lt;Control&gt;c</property>
 		          </object>
 	          </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Show Shortcuts</property>
+                <property name="title" translatable="yes" context="shortcut window">Show shortcuts</property>
                 <property name="action-name">win.show-help-overlay</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes" context="shortcut window">Show preferences</property>
+                <property name="action-name">win.open_preferences_dialog</property>
               </object>
             </child>
             <child>
@@ -31,11 +37,46 @@
         </child>
         <child>
           <object class="GtkShortcutsGroup">
-            <property name="title" translatable="yes" context="shortcut window">Filter by style</property>
+            <property name="title" translatable="yes" context="shortcut window">View</property>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes" context="shortcut window">Zoom in</property>
+                <property name="action-name">win.increase_icon_preview_scale</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes" context="shortcut window">Zoom out</property>
+                <property name="action-name">win.decrease_icon_preview_scale</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes" context="shortcut window">Reset zoom</property>
+                <property name="action-name">win.reset_icon_preview_scale</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="title" translatable="yes" context="shortcut window">Search and filter</property>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes" context="shortcut window">Move focus to search bar</property>
+                <property name="action-name">win.focus_search_entry</property>
+              </object>
+            </child>
             <child>
 		          <object class="GtkShortcutsShortcut">
-			          <property name="title">Clear style filter</property>
+			          <property name="title">Clear filters</property>
 			          <property name="action-name">win.clear_filters</property>
+		          </object>
+	          </child>
+             <child>
+		          <object class="GtkShortcutsShortcut">
+			          <property name="title">Show all icon styles</property>
+			          <property name="action-name">win.filter_by_style(0)</property>
 		          </object>
 	          </child>
             <child>

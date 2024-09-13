@@ -200,7 +200,7 @@ export const DetailsPanel = GObject.registerClass({
 
   initializeDragSource(){
     const dragSource = new Gtk.DragSource({
-      actions: Gdk.DragAction.MOVE,
+      actions: Gdk.DragAction.COPY,
     });
     this._preview_frame.add_controller(dragSource);
 

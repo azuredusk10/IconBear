@@ -52,11 +52,17 @@ export const Application = GObject.registerClass({
 	#initializeAccelerators(){
 	  this.set_accels_for_action('window.close', ['<Control>w']);
 	  this.set_accels_for_action('win.add_set', [ '<Ctrl>o' ]);
-	  this.set_accels_for_action('win.clear_filters', [ '<Ctrl>1' ]);
+	  this.set_accels_for_action('win.clear_filters', [ '<Ctrl>r' ]);
+	  this.set_accels_for_action('win.filter_by_style(0)', [ '<Ctrl>1' ]);
 	  this.set_accels_for_action('win.filter_by_style(1)', [ '<Ctrl>2' ]);
 	  this.set_accels_for_action('win.filter_by_style(2)', [ '<Ctrl>3' ]);
 	  this.set_accels_for_action('win.filter_by_style(3)', [ '<Ctrl>4' ]);
 	  this.set_accels_for_action('win.filter_by_style(4)', [ '<Ctrl>5' ]);
+	  this.set_accels_for_action('win.open_preferences_dialog', [ '<Ctrl>comma' ]);
+	  this.set_accels_for_action('win.focus_search_entry', [ '<Ctrl>f' ]);
+	  this.set_accels_for_action('win.increase_icon_preview_scale', [ '<Ctrl>equal' ]);
+	  this.set_accels_for_action('win.decrease_icon_preview_scale', [ '<Ctrl>minus' ]);
+	  this.set_accels_for_action('win.reset_icon_preview_scale', [ '<Ctrl>0' ]);
 	}
 
 });

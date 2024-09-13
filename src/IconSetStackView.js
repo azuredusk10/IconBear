@@ -121,10 +121,40 @@ export const IconSetStackView = GObject.registerClass({
 		  name: 'copy',
       parameter_type: new GLib.VariantType('i'),
     });
-    copyAction.connect('activate', (_action, _params) => {
-      this.onIconCopied(_action, this.activeIcon.gfile, _params.unpack())
+    copyAction.connect('activate', (action, param) => {
+      this.onIconCopied(action, this.activeIcon.gfile, param.unpack());
     });
+
     actionGroup.insert(copyAction);
+
+    // Copies the icon using the user-defined preferred copy method
+    const copyWithPreferredMethodAction = new Gio.SimpleAction({
+       name: 'copy_with_preferred_method',
+    });
+    copyWithPreferredMethodAction.connect('activate', (action) => {
+      this.onIconCopied(action, this.activeIcon.gfile);
+    });
+
+    actionGroup.insert(copyWithPreferredMethodAction);
+
+    // Copies the icon with the non-preferred copy method
+    const copyWithAltMethodAction = new Gio.SimpleAction({
+       name: 'copy_with_alt_method',
+    });
+    copyWithAltMethodAction.connect('activate', (action) => {
+      let method;
+      let defaultMethod = settings.get_int('preferred-copy-method');
+      if (defaultMethod == 0){
+        method = 1;
+      } else {
+        method = 0;
+      }
+
+      this.onIconCopied(action, this.activeIcon.gfile, method);
+    });
+
+    actionGroup.insert(copyWithAltMethodAction);
+
 
     this.insert_action_group('set-view', actionGroup);
   }

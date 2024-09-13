@@ -43,7 +43,13 @@
 		    <child>
 			    <object class="GtkShortcut">
 				    <property name="trigger">&lt;Control&gt;c</property>
-				    <property name="action">action(set-view.copy(-1))</property>
+				    <property name="action">action(set-view.copy_with_preferred_method)</property>
+			    </object>
+		    </child>
+	      <child>
+			    <object class="GtkShortcut">
+				    <property name="trigger">&lt;Control&gt;&lt;Shift&gt;c</property>
+				    <property name="action">action(set-view.copy_with_alt_method)</property>
 			    </object>
 		    </child>
 	    </object>

@@ -3,7 +3,6 @@ import Gtk from 'gi://Gtk';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
-import { IconTile } from './IconTile.js';
 import { Icon } from './Icon.js';
 import { drawSvg } from './drawSvg.js';
 
@@ -175,10 +174,17 @@ export const MainPanelView = GObject.registerClass({
       });
       leftClickGesture.connect('pressed', (_self, _n_press, x, y) => this.onIconLeftClick(_self, _n_press, x, y));
 
+      /*
+      const rightClickGesture = new Gtk.GestureClick({
+        button: 3
+      });
+      rightClickGesture.connect('pressed', (_self, _n_press, x, y) => this.onIconRightClick(_self, _n_press, x, y));
+      */
+
       topLevelBox.append(drawingArea);
       topLevelBox.append(label);
       topLevelBox.add_controller(leftClickGesture);
-
+      // topLevelBox.add_controller(rightClickGesture);
 
       listItem.set_child(topLevelBox);
     });
@@ -245,6 +251,10 @@ export const MainPanelView = GObject.registerClass({
     if(_n_press == 2){
       this.emit('icon-copied');
     }
+  }
+
+  onIconRightClick(_self, _n_press, x, y){
+    console.log('right clicked');
   }
 
   onIconActivated(selection) {

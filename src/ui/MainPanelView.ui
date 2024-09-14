@@ -19,6 +19,7 @@
             <property name="margin-top">12</property>
             <property name="margin-bottom">12</property>
             <property name="overflow">0</property>
+            <property name="tab-behavior">item</property>
             <style>
               <class name="iconsGridView" />
             </style>
